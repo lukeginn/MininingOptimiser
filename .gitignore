@@ -1,0 +1,9 @@
+*.csv
+*.pyc
+*.png
+shared/model/__pycache__/*
+*.pkl
+notes/*
+*.xlsx
+*.pptx
+*.zip
