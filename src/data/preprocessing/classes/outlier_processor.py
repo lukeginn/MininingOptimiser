@@ -6,7 +6,7 @@ class OutlierProcessor:
     def __init__(self, config):
         self.config = config
 
-    def identifying_outliers(self, data):
+    def run(self, data):
         if self.config.data.identify_outliers.run:
             data = identify_outliers(
                 data=data,

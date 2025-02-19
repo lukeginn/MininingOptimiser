@@ -7,7 +7,7 @@ class MissingDataProcessor:
     def __init__(self, config):
         self.config = config
 
-    def identifying_missing_data(self, data):
+    def run_identifying_missing_data(self, data):
         if self.config.data.identify_missing_data.run:
             data = identify_missing_data(
                 data=data,
@@ -23,7 +23,7 @@ class MissingDataProcessor:
             self.generate_artifacts_for_identifying_missing_data(data)
         return data
 
-    def correcting_missing_data(self, data):
+    def run_correcting_missing_data(self, data):
         if self.config.data.correct_missing_data.run:
             data = missing_data_correction(
                 data=data,
@@ -45,7 +45,7 @@ class MissingDataProcessor:
             self.generate_artifacts_for_correcting_missing_data(data)
         return data
 
-    def correcting_missing_data_post_aggregation(self, data):
+    def run_correcting_missing_data_post_aggregation(self, data):
         if self.config.data.correct_missing_data_after_aggregation.run:
             data = missing_data_correction(
                 data=data,

@@ -58,14 +58,14 @@ def main():
     feature_engineering = FeatureEngineering(config)
     shutdown_filter = ShutdownFilter(config)
 
-    data = data_reader.read_file()
-    data = missing_data_processor.identifying_missing_data(data)
-    data = outlier_processor.identifying_outliers(data)
-    data = missing_data_processor.correcting_missing_data(data)
-    data = lags_processor.introduce_lags(data)
-    data = data_aggregator.aggregate_data(data)
+    data = data_reader.run()
+    data = missing_data_processor.run_identifying_missing_data(data)
+    data = outlier_processor.run(data)
+    data = missing_data_processor.run_correcting_missing_data(data)
+    data = lags_processor.run(data)
+    data = data_aggregator.run(data)
     data = feature_engineering.run(data)
-    data = missing_data_processor.correcting_missing_data_post_aggregation(data)
+    data = missing_data_processor.run_correcting_missing_data_post_aggregation(data)
     data = shutdown_filter.run(data)
 
     # Initial Model Analytics

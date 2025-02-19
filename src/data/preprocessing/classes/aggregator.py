@@ -6,7 +6,7 @@ class DataAggregator:
     def __init__(self, config):
         self.config = config
 
-    def aggregate_data(self, data):
+    def run(self, data):
         data = rolling_aggregate_data_via_timestamp(
             data=data,
             timestamp=self.config.data.timestamp,

@@ -7,7 +7,7 @@ class DataReader:
     def __init__(self, config):
         self.config = config
 
-    def read_file(self):
+    def run(self):
         data = read_csv(file_path=paths.Paths.DATA_FILE_1.value)
         data = initial_preprocessing(data)
         self.generate_artifacts_for_read_file(data)

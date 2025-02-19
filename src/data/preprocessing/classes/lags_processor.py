@@ -6,7 +6,7 @@ class LagsProcessor:
     def __init__(self, config):
         self.config = config
 
-    def introduce_lags(self, data):
+    def run(self, data):
         if self.config.data.introduce_lags.run:
             data = introduce_lags(
                 data=data,
