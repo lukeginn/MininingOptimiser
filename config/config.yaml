@@ -140,7 +140,7 @@ iron_concentrate_perc:
       - 'FLOTATION_COLUMN_07_LEVEL_mean'
     model_choice: 'gbm'
     random_state: 42
-    number_of_models: 100
+    number_of_models: 1
     model_name: 'iron_concentrate_perc'
     metric: 'rmse'
     generate_feature_importance: True
@@ -226,7 +226,7 @@ silica_concentrate_perc:
       - 'FLOTATION_COLUMN_07_LEVEL_mean'
     model_choice: 'gbm'
     random_state: 42
-    number_of_models: 100
+    number_of_models: 1
     model_name: 'silica_concentrate_perc'
     metric: 'rmse'
     generate_feature_importance: True
@@ -303,6 +303,8 @@ clustering:
       - 'FLOTATION_COLUMN_05_LEVEL_mean'
       - 'FLOTATION_COLUMN_06_LEVEL_mean'
       - 'FLOTATION_COLUMN_07_LEVEL_mean'
+      - 'IRON_CONCENTRATE_PERC_mean'
+      - 'SILICA_CONCENTRATE_PERC_mean'
     include_row_count_sum: True
     model_choice: 'kmeans'
     k_means_n_clusters: 10
@@ -341,7 +343,7 @@ clustering:
       - 'SILICA_CONCENTRATE_PERC_mean'
     include_row_count_sum: True
     model_choice: 'kmeans'
-    k_means_n_clusters: 100
+    k_means_n_clusters: 10
     k_means_max_iter: 300
     dbscan_eps: 0.5
     dbscan_min_samples: 5

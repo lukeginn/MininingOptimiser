@@ -1,14 +1,8 @@
-import numpy as np
 import pandas as pd
 import logging as logger
-import matplotlib.pyplot as plt
 import itertools
 
-
-def create_cluster_combinations(feed_blend_clusters, reagent_clusters, feed_blend_training_features, reagent_training_features, path = None):
-
-    feed_blend_clusters_ids = feed_blend_clusters.index
-    reagent_clusters_ids = reagent_clusters.index
+def merging_clusters(feed_blend_clusters, reagent_clusters, feed_blend_training_features, reagent_training_features, path = None):
 
     feed_blend_training_features = [feature + '_historical_actuals' for feature in feed_blend_training_features]
     reagent_training_features = [feature + '_historical_actuals' for feature in reagent_training_features]

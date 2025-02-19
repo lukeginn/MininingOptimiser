@@ -13,34 +13,9 @@ def create_optimised_clusters(cluster_combination_centers,
     
     feature_to_optimize += '_simulated_predictions'
 
-
-
     # Engineer New Feature
-    cluster_combination_centers['tonelaje_delta_t_h_mean_simulated_predictions'] = cluster_combination_centers['linea12_tonelaje_t_h_mean_historical_actuals'] - cluster_combination_centers['flujo_masa_t_h_mean_simulated_predictions']
-    if feature_to_optimize == '_perc_solidos_mean_and_flujo_masa_t_h_mean_simulated_predictions':
-        cluster_combination_centers['_perc_solidos_mean_and_flujo_masa_t_h_mean_simulated_predictions'] = cluster_combination_centers['_perc_solidos_mean_simulated_predictions'] * cluster_combination_centers['flujo_masa_t_h_mean_simulated_predictions']
-
+    # Engineer features that may be useful as informtion variables or constraints or as the feature to optimise
     
-
-    # # Merge controllable_features using 'reagent_cluster_id' and 'cluster' as the joining keys
-    # controllable_features = [feature + '_historical_actuals' for feature in controllable_features]
-    # controllable_features.append('cluster')
-    # cluster_combination_centers = cluster_combination_centers.merge(
-    #     feed_blend_simulations[controllable_features],
-    #     left_on='reagent_cluster_id',
-    #     right_on='cluster',
-    #     how='left'
-    # ).drop(columns=['cluster'])
-
-    # #Bring all of the features with the suffix '_historical_actuals' to the beginning of the dataframe
-    # historical_actuals_features = [col for col in cluster_combination_centers.columns if col.endswith('_historical_actuals')]
-    # cluster_combination_centers = cluster_combination_centers[['feed_blend_cluster_id', 'reagent_cluster_id'] + historical_actuals_features + [col for col in cluster_combination_centers.columns if col not in historical_actuals_features]]
-
-    # # Remove the duplicate 'feed_blend_cluster_id' and 'reagent_cluster_id' columns
-    # cluster_combination_centers = cluster_combination_centers.loc[:, ~cluster_combination_centers.columns.duplicated()]
-
-
-
     # Apply constraints
     constrained_clusters = cluster_combination_centers.copy()
     constraint_features = [feature + '_simulated_predictions' for feature in constraint_features]
@@ -81,14 +56,10 @@ def create_optimised_clusters(cluster_combination_centers,
 
     # Merge with target features from feed_blend_clusters
     features_to_merge = [
-        '_perc_solidos_mean_historical_predictions',
-        'flujo_descarga_m3_h_mean_historical_predictions',
-        'flujo_masa_t_h_mean_historical_predictions',
-        'nivelaguaprocesos_pv_perc_mean_historical_predictions',
-        '_perc_solidos_mean_historical_actuals',
-        'flujo_descarga_m3_h_mean_historical_actuals',
-        'flujo_masa_t_h_mean_historical_actuals',
-        'nivelaguaprocesos_pv_perc_mean_historical_actuals'
+        'IRON_CONCENTRATE_PERC_mean_historical_predictions',
+        'SILICA_CONCENTRATE_PERC_mean_historical_predictions',
+        'IRON_CONCENTRATE_PERC_mean_historical_actuals',
+        'SILICA_CONCENTRATE_PERC_mean_historical_actuals',
     ]
     optimal_clusters = pd.concat([optimal_clusters.reset_index(drop=True), feed_blend_simulations[features_to_merge].reset_index(drop=True)], axis=1)
 
