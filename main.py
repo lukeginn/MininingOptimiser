@@ -1,16 +1,13 @@
 import logging as logger
 import warnings
 from src.setup.setup import setup
-from src.data.reading.data_reader import DataReader
-from src.data.reading.data_reader import DataReader
-from src.data.preprocessing.missing_data import identifying_missing_data
-from src.data.preprocessing.outliers import identifying_outliers
-from src.data.preprocessing.missing_data import correcting_missing_data
-from src.data.preprocessing.lags import introducing_lags
-from src.data.preprocessing.aggregation import aggregating_data
-from src.data.preprocessing.feature_engineering import run_feature_engineering
-from src.data.preprocessing.missing_data import correcting_missing_data_post_aggregation
-from src.data.preprocessing.shutdowns import run_filter_shutdowns
+from src.data.reading.classes.data_reader import DataReader
+from src.data.preprocessing.classes.missing_data_processor import MissingDataProcessor
+from src.data.preprocessing.classes.outlier_processor import OutlierProcessor
+from src.data.preprocessing.classes.lags_processor import LagsProcessor
+from src.data.preprocessing.classes.aggregator import DataAggregator
+from src.data.preprocessing.classes.feature_engineering import FeatureEngineering
+from src.data.preprocessing.classes.shutdowns import ShutdownFilter
 from src.model.univariabe_feature_importance import generating_univariabe_feature_importance_for_iron_concentrate_perc_model
 from src.model.univariabe_feature_importance import generating_univariabe_feature_importance_for_silica_concentrate_perc_model
 from src.model.feature_selection import run_feature_selection_iron_concentrate_perc_feed_blend_model
@@ -54,16 +51,22 @@ def main():
     config = setup()
 
     data_reader = DataReader(config)
+    missing_data_processor = MissingDataProcessor(config)
+    outlier_processor = OutlierProcessor(config)
+    lags_processor = LagsProcessor(config)
+    data_aggregator = DataAggregator(config)
+    feature_engineering = FeatureEngineering(config)
+    shutdown_filter = ShutdownFilter(config)
+
     data = data_reader.read_file()
-    
-    data = identifying_missing_data(data, config)
-    data = identifying_outliers(data, config)
-    data = correcting_missing_data(data, config)
-    data = introducing_lags(data, config)
-    data = aggregating_data(data, config)
-    data = run_feature_engineering(data, config)
-    data = correcting_missing_data_post_aggregation(data, config)
-    data = run_filter_shutdowns(data, config)
+    data = missing_data_processor.identifying_missing_data(data)
+    data = outlier_processor.identifying_outliers(data)
+    data = missing_data_processor.correcting_missing_data(data)
+    data = lags_processor.introduce_lags(data)
+    data = data_aggregator.aggregate_data(data)
+    data = feature_engineering.run(data)
+    data = missing_data_processor.correcting_missing_data_post_aggregation(data)
+    data = shutdown_filter.run(data)
 
     # Initial Model Analytics
     generating_univariabe_feature_importance_for_iron_concentrate_perc_model(data, config)
