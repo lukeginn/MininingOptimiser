@@ -3,7 +3,7 @@ from shared.data.export_data import export_data
 from shared.data.generate_meta_data import generate_meta_data
 from shared.data.generate_time_series_plots import generate_time_series_plots
 from shared.data.generate_histogram_plots import generate_histogram_plots
-from src.data.custom_plots import custom_plots
+from src.visualisation.custom_plots import custom_plots
 from shared.data.aggregate_data import rolling_aggregate_data_via_timestamp
 
 def aggregating_data(data, config):

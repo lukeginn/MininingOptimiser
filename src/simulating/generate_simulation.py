@@ -1,7 +1,6 @@
 import pandas as pd
 import logging as logger
 from shared.model.generate_model import generate_predictions
-#import shap
 import matplotlib.pyplot as plt
 
 

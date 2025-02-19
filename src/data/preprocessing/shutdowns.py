@@ -3,7 +3,7 @@ from shared.data.export_data import export_data
 from shared.data.generate_meta_data import generate_meta_data
 from shared.data.generate_time_series_plots import generate_time_series_plots
 from shared.data.generate_histogram_plots import generate_histogram_plots
-from src.data.custom_plots import custom_plots
+from src.visualisation.custom_plots import custom_plots
 
 def run_filter_shutdowns(data, config):
     if config.data.filter_shutdowns.run:

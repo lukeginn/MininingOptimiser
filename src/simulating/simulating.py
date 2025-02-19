@@ -1,5 +1,5 @@
 import config.paths as paths
-from src.data.generate_simulation import generate_simulations
+from src.simulating.generate_simulation import generate_simulations
 
 def override_values_in_clusters(clusters):
     

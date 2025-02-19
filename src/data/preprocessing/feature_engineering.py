@@ -1,10 +1,10 @@
+import logging as logger
 import config.paths as paths
 from shared.data.export_data import export_data
 from shared.data.generate_meta_data import generate_meta_data
 from shared.data.generate_time_series_plots import generate_time_series_plots
 from shared.data.generate_histogram_plots import generate_histogram_plots
-from src.data.custom_plots import custom_plots
-from src.data.feature_engineering import feature_engineering
+from src.visualisation.custom_plots import custom_plots
 
 def run_feature_engineering(data, config):
     if config.data.feature_engineering.run:
@@ -40,4 +40,13 @@ def run_feature_engineering(data, config):
                 data=data,
                 path=paths.Paths.CUSTOM_PLOTS_FOR_FEATURE_ENGINEERED_DATA_PATH.value
             )
+    return data
+
+def feature_engineering(data):
+    logger.info("Feature engineering started")
+
+    # No feature engineering currently occuring
+
+    logger.info("Feature engineering completed successfully")   
+
     return data

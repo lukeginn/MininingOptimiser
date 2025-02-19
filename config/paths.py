@@ -21,8 +21,8 @@ class Paths(Enum):
     EXPORTED_DATA_FILE = EXPORTED_DATA_PATH / "data.csv"
 
     TIME_SERIES_PLOTS_PATH = OUTPUTS_PATH / "time_series_plots"
-    TIME_SERIES_PLOTS_FOR_RAW_FEATURES_PATH = (
-        TIME_SERIES_PLOTS_PATH / "stage_1_raw_features"
+    TIME_SERIES_PLOTS_FOR_RAW_DATA_PATH = (
+        TIME_SERIES_PLOTS_PATH / "stage_1_raw_data"
     )
     TIME_SERIES_PLOTS_FOR_MISSING_DATA_IDENTIFIED_PATH = (
         TIME_SERIES_PLOTS_PATH / "stage_2_missing_data_identified"
@@ -53,8 +53,8 @@ class Paths(Enum):
     )
 
     HISTOGRAM_PLOTS_PATH = OUTPUTS_PATH / "histogram_plots"
-    HISTOGRAM_PLOTS_FOR_RAW_FEATURES_PATH = (
-        HISTOGRAM_PLOTS_PATH / "stage_1_raw_features"
+    HISTOGRAM_PLOTS_FOR_RAW_DATA_PATH = (
+        HISTOGRAM_PLOTS_PATH / "stage_1_raw_data"
     )
     HISTOGRAM_PLOTS_FOR_MISSING_DATA_IDENTIFIED_PATH = (
         HISTOGRAM_PLOTS_PATH / "stage_2_missing_data_identified"
@@ -85,7 +85,7 @@ class Paths(Enum):
     )
 
     CUSTOM_PLOTS_PATH = OUTPUTS_PATH / "custom_plots"
-    CUSTOM_PLOTS_FOR_RAW_FEATURES_PATH = CUSTOM_PLOTS_PATH / "stage_1_raw_features"
+    CUSTOM_PLOTS_FOR_RAW_DATA_PATH = CUSTOM_PLOTS_PATH / "stage_1_raw_data"
     CUSTOM_PLOTS_FOR_MISSING_DATA_IDENTIFIED_PATH = (
         CUSTOM_PLOTS_PATH / "stage_2_missing_data_identified"
     )

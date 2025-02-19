@@ -1,7 +1,7 @@
 import pandas as pd
 import logging as logger
 
-def preprocess_data(data):
+def initial_preprocessing(data):
 
     data = renaming_columns(data)
     data = clean_data(data)
