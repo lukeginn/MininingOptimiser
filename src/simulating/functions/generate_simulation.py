@@ -15,8 +15,8 @@ def generate_simulations(
     shapley_path=None,
     shapley_plots_path=None,
     informational_features=None,
-    feed_blend_and_reagent_modelling=False,
-    reagent_features = None
+    feed_blend_and_controllables_modelling=False,
+    controllables_features = None
 ):
     logger.info("Generating simulations")
 
@@ -61,11 +61,11 @@ def generate_simulations(
         columns.append('mean_historical_predictions')
         simulation_results = simulation_results[columns]
 
-    if feed_blend_and_reagent_modelling:
+    if feed_blend_and_controllables_modelling:
         simulation_results.columns = [col.replace('_historical_predictions', '_simulated_predictions') for col in simulation_results.columns]
 
-        reagent_features = [feature + '_historical_actuals' for feature in reagent_features]
-        simulation_results.rename(columns={feature: feature.replace('_historical_actuals', '_simulations') for feature in reagent_features}, inplace=True)
+        controllables_features = [feature + '_historical_actuals' for feature in controllables_features]
+        simulation_results.rename(columns={feature: feature.replace('_historical_actuals', '_simulations') for feature in controllables_features}, inplace=True)
 
     if path is not None:
         export_simulation_results(
@@ -195,7 +195,7 @@ def merge_simulation_results_with_cluster_centers(simulation_results, cluster_ce
         cluster_centers = cluster_centers[['cluster', 'row_count', 'row_count_proportion']]
         simulation_results = pd.concat([cluster_centers, simulation_results], axis=1)
 
-    columns_to_modify = [col for col in simulation_results.columns if col not in ['cluster', 'row_count', 'row_count_proportion', 'mean', 'feed_blend_cluster_id', 'reagent_cluster_id']]
+    columns_to_modify = [col for col in simulation_results.columns if col not in ['cluster', 'row_count', 'row_count_proportion', 'mean', 'feed_blend_cluster_id', 'controllables_cluster_id']]
     simulation_results.rename(columns={col: col + '_historical_actuals' for col in columns_to_modify}, inplace=True)
     simulation_results.rename(columns={'mean': 'mean_historical_predictions'}, inplace=True)
 

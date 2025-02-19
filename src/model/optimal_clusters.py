@@ -35,7 +35,7 @@ def create_optimised_clusters(cluster_combination_centers,
             constrained_clusters.groupby('feed_blend_cluster_id')[feature_to_optimize].idxmin()
         ]
 
-    # Merge controllable_features using 'reagent_cluster_id' and 'cluster' as the joining keys
+    # Merge controllable_features using 'controllables_cluster_id' and 'cluster' as the joining keys
     controllable_features = [feature + '_historical_actuals' for feature in controllable_features]
     controllable_features.append('cluster')
 
@@ -48,9 +48,9 @@ def create_optimised_clusters(cluster_combination_centers,
 
     #Bring all of the features with the suffix '_historical_actuals' to the beginning of the dataframe
     historical_actuals_features = [col for col in optimal_clusters.columns if col.endswith('_historical_actuals')]
-    optimal_clusters = optimal_clusters[['feed_blend_cluster_id', 'reagent_cluster_id'] + historical_actuals_features + [col for col in optimal_clusters.columns if col not in historical_actuals_features]]
+    optimal_clusters = optimal_clusters[['feed_blend_cluster_id', 'controllables_cluster_id'] + historical_actuals_features + [col for col in optimal_clusters.columns if col not in historical_actuals_features]]
 
-    # Remove the duplicate 'feed_blend_cluster_id' and 'reagent_cluster_id' columns
+    # Remove the duplicate 'feed_blend_cluster_id' and 'controllables_cluster_id' columns
     optimal_clusters = optimal_clusters.loc[:, ~optimal_clusters.columns.duplicated()]
 
 

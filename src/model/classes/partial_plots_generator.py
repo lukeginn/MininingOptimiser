@@ -1,0 +1,62 @@
+import config.paths as paths
+from shared.model.generate_partial_plots import generate_partial_plots
+
+class PartialPlotsGenerator:
+    def __init__(self, config):
+        self.config = config
+
+    def run_for_iron_concentrate_perc(self, best_models, data, training_features):
+        generate_partial_plots(
+            model_choice=self.config.iron_concentrate_perc.model.model_choice,
+            models=best_models,
+            data=data[training_features],
+            features=training_features,
+            path=paths.Paths.IRON_CONCENTRATE_PERC_PARTIAL_PLOTS_PATH.value,
+            plot_confidence_interval=self.config.iron_concentrate_perc.partial_plots.plot_confidence_interval,
+            plot_feature_density=self.config.iron_concentrate_perc.partial_plots.plot_feature_density,
+            plot_feature_density_as_histogram=self.config.iron_concentrate_perc.partial_plots.plot_feature_density_as_histogram,
+            number_of_bins_in_histogram=self.config.iron_concentrate_perc.partial_plots.number_of_bins_in_histogram,
+            grid_resolution=self.config.iron_concentrate_perc.partial_plots.grid_resolution,
+        )
+
+    def run_for_iron_concentrate_perc_feed_blend(self, best_models, data, training_features):
+        generate_partial_plots(
+            model_choice=self.config.iron_concentrate_perc.model.model_choice,
+            models=best_models,
+            data=data[training_features],
+            features=training_features,
+            path=paths.Paths.IRON_CONCENTRATE_PERC_FEED_BLEND_PARTIAL_PLOTS_PATH.value,
+            plot_confidence_interval=self.config.iron_concentrate_perc.partial_plots.plot_confidence_interval,
+            plot_feature_density=self.config.iron_concentrate_perc.partial_plots.plot_feature_density,
+            plot_feature_density_as_histogram=self.config.iron_concentrate_perc.partial_plots.plot_feature_density_as_histogram,
+            number_of_bins_in_histogram=self.config.iron_concentrate_perc.partial_plots.number_of_bins_in_histogram,
+            grid_resolution=self.config.iron_concentrate_perc.partial_plots.grid_resolution,
+        )
+
+    def run_for_silica_concentrate_perc(self, best_models, data, training_features):
+        generate_partial_plots(
+            model_choice=self.config.silica_concentrate_perc.model.model_choice,
+            models=best_models,
+            data=data[training_features],
+            features=training_features,
+            path=paths.Paths.SILICA_CONCENTRATE_PERC_PARTIAL_PLOTS_PATH.value,
+            plot_confidence_interval=self.config.silica_concentrate_perc.partial_plots.plot_confidence_interval,
+            plot_feature_density=self.config.silica_concentrate_perc.partial_plots.plot_feature_density,
+            plot_feature_density_as_histogram=self.config.silica_concentrate_perc.partial_plots.plot_feature_density_as_histogram,
+            number_of_bins_in_histogram=self.config.silica_concentrate_perc.partial_plots.number_of_bins_in_histogram,
+            grid_resolution=self.config.silica_concentrate_perc.partial_plots.grid_resolution,
+        )
+
+    def run_for_silica_concentrate_perc_feed_blend(self, best_models, data, training_features):
+        generate_partial_plots(
+            model_choice=self.config.silica_concentrate_perc.model.model_choice,
+            models=best_models,
+            data=data[training_features],
+            features=training_features,
+            path=paths.Paths.SILICA_CONCENTRATE_PERC_FEED_BLEND_PARTIAL_PLOTS_PATH.value,
+            plot_confidence_interval=self.config.silica_concentrate_perc.partial_plots.plot_confidence_interval,
+            plot_feature_density=self.config.silica_concentrate_perc.partial_plots.plot_feature_density,
+            plot_feature_density_as_histogram=self.config.silica_concentrate_perc.partial_plots.plot_feature_density_as_histogram,
+            number_of_bins_in_histogram=self.config.silica_concentrate_perc.partial_plots.number_of_bins_in_histogram,
+            grid_resolution=self.config.silica_concentrate_perc.partial_plots.grid_resolution,
+        )

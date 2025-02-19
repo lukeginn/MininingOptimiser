@@ -8,39 +8,15 @@ from src.data.preprocessing.classes.lags_processor import LagsProcessor
 from src.data.preprocessing.classes.aggregator import DataAggregator
 from src.data.preprocessing.classes.feature_engineering import FeatureEngineering
 from src.data.preprocessing.classes.shutdowns import ShutdownFilter
-from src.model.univariabe_feature_importance import generating_univariabe_feature_importance_for_iron_concentrate_perc_model
-from src.model.univariabe_feature_importance import generating_univariabe_feature_importance_for_silica_concentrate_perc_model
-from src.model.feature_selection import run_feature_selection_iron_concentrate_perc_feed_blend_model
-from src.model.feature_selection import run_feature_selection_iron_concentrate_perc_model
-from src.model.feature_selection import run_feature_selection_silica_concentrate_perc_feed_blend_model
-from src.model.feature_selection import run_feature_selection_silica_concentrate_perc_model
-from src.model.correlation_matrix import generating_correlation_matrix_iron_concentrate_perc_feed_blend_model
-from src.model.correlation_matrix import generating_correlation_matrix_iron_concentrate_perc_model
-from src.model.correlation_matrix import generating_correlation_matrix_silica_concentrate_perc_feed_blend_model
-from src.model.correlation_matrix import generating_correlation_matrix_silica_concentrate_perc_model
-from src.model.train_model import generating_model_iron_concentrate_perc_feed_blend_model
-from src.model.train_model import generating_model_iron_concentrate_perc_model
-from src.model.train_model import generating_model_silica_concentrate_perc_feed_blend_model
-from src.model.train_model import generating_model_silica_concentrate_perc_model
-from src.model.save_model import saving_models_iron_concentrate_perc_feed_blend_model
-from src.model.save_model import saving_models_iron_concentrate_perc_model
-from src.model.save_model import saving_models_silica_concentrate_perc_feed_blend_model
-from src.model.save_model import saving_models_silica_concentrate_perc_model
-from src.model.partial_plots import generating_partial_plots_iron_concentrate_perc_feed_blend_model
-from src.model.partial_plots import generating_partial_plots_iron_concentrate_perc_model
-from src.model.partial_plots import generating_partial_plots_silica_concentrate_perc_feed_blend_model
-from src.model.partial_plots import generating_partial_plots_silica_concentrate_perc_model
-from src.clustering.clustering import generating_clusters_feed_blend_model
-from src.clustering.clustering import generating_clusters_controllables_model
-from src.clustering.clustering import merging_feed_blend_and_controllables_clusters
-from src.simulating.simulating import override_values_in_clusters
-from src.simulating.simulating import generating_simulations_iron_concentrate_perc_feed_blend_model
-from src.simulating.simulating import generating_simulations_silica_concentrate_perc_feed_blend_model
-from src.simulating.simulating import combine_feed_blend_simulations
-from src.simulating.simulating import generating_simulations_iron_concentrate_perc_model
-from src.simulating.simulating import generating_simulations_silica_concentrate_perc_model
-from src.simulating.simulating import combine_feed_blend_and_controllables_simulations
-from src.optimising.optimising import optimise_clusters
+from src.model.classes.univariable_feature_importance_generator import UnivariableFeatureImportanceGenerator
+from src.model.classes.feature_selection import FeatureSelection
+from src.model.classes.correlation_matrix_generator import CorrelationMatrixGenerator
+from src.model.classes.model_generator import ModelGenerator
+from src.model.classes.model_saver import ModelSaver
+from src.model.classes.partial_plots_generator import PartialPlotsGenerator
+from src.clustering.classes.clustering import Clustering
+from src.simulating.classes.simulation_generator import SimulationGenerator
+from src.optimising.classes.cluster_optimiser import ClusterOptimiser
 
 logger.basicConfig(level=logger.INFO)
 warnings.filterwarnings("ignore")
@@ -57,6 +33,15 @@ def main():
     data_aggregator = DataAggregator(config)
     feature_engineering = FeatureEngineering(config)
     shutdown_filter = ShutdownFilter(config)
+    univariable_feature_importance_generator = UnivariableFeatureImportanceGenerator(config)
+    feature_selection = FeatureSelection(config)
+    correlation_matrix_generator = CorrelationMatrixGenerator(config)
+    model_generator = ModelGenerator(config)  
+    model_saver = ModelSaver(config)
+    partial_plots_generator = PartialPlotsGenerator(config)
+    clustering = Clustering(config)
+    simulation_generator = SimulationGenerator(config)
+    cluster_optimiser = ClusterOptimiser(config)
 
     data = data_reader.run()
     data = missing_data_processor.run_identifying_missing_data(data)
@@ -69,82 +54,76 @@ def main():
     data = shutdown_filter.run(data)
 
     # Initial Model Analytics
-    generating_univariabe_feature_importance_for_iron_concentrate_perc_model(data, config)
-    generating_univariabe_feature_importance_for_silica_concentrate_perc_model(data, config)
+    univariable_feature_importance_generator.run_for_iron_concentrate_perc(data)
+    univariable_feature_importance_generator.run_for_silica_concentrate_perc(data)
 
     # Model Training and Evaluation For Iron Concentrate Model (Feed Blend)
-    iron_concentrate_perc_feed_blend_model_training_features, iron_concentrate_perc_feed_blend_model_training_features_per_method = run_feature_selection_iron_concentrate_perc_feed_blend_model(
-        data, config
+    iron_concentrate_perc_feed_blend_training_features, iron_concentrate_perc_feed_blend_training_features_per_method = feature_selection.run_for_iron_concentrate_perc_feed_blend(data)
+
+    correlation_matrix_generator.run_for_iron_concentrate_perc_feed_blend(data, iron_concentrate_perc_feed_blend_training_features_per_method)
+    iron_concentrate_perc_feed_blend_model, best_params, best_rmse, feature_importance = model_generator.run_for_iron_concentrate_perc_feed_blend(
+        data, iron_concentrate_perc_feed_blend_training_features
     )
-    generating_correlation_matrix_iron_concentrate_perc_feed_blend_model(data, iron_concentrate_perc_feed_blend_model_training_features_per_method, config)
-    iron_concentrate_perc_feed_blend_model, best_params, best_rmse, feature_importance = generating_model_iron_concentrate_perc_feed_blend_model(
-        data, iron_concentrate_perc_feed_blend_model_training_features, config
-    )
-    saving_models_iron_concentrate_perc_feed_blend_model(iron_concentrate_perc_feed_blend_model, config)
-    generating_partial_plots_iron_concentrate_perc_feed_blend_model(iron_concentrate_perc_feed_blend_model, data, iron_concentrate_perc_feed_blend_model_training_features, config)
+    model_saver.run_for_iron_concentrate_perc_feed_blend(iron_concentrate_perc_feed_blend_model)
+    partial_plots_generator.run_for_iron_concentrate_perc_feed_blend(iron_concentrate_perc_feed_blend_model, data, iron_concentrate_perc_feed_blend_training_features)
 
 
     # Model Training and Evaluation For Iron Concentrate Model
-    iron_concentrate_perc_model_training_features, iron_concentrate_perc_model_training_features_per_method = run_feature_selection_iron_concentrate_perc_model(
-        data, config
+    iron_concentrate_perc_training_features, iron_concentrate_perc_training_features_per_method = feature_selection.run_for_iron_concentrate_perc(data)
+    correlation_matrix_generator.run_for_iron_concentrate_perc(data, iron_concentrate_perc_training_features_per_method)
+    iron_concentrate_perc_model, best_params, best_rmse, feature_importance = model_generator.run_for_iron_concentrate_perc(
+        data, iron_concentrate_perc_training_features
     )
-    generating_correlation_matrix_iron_concentrate_perc_model(data, iron_concentrate_perc_model_training_features_per_method, config)
-    iron_concentrate_perc_model, best_params, best_rmse, feature_importance = generating_model_iron_concentrate_perc_model(
-        data, iron_concentrate_perc_model_training_features, config
-    )
-    saving_models_iron_concentrate_perc_model(iron_concentrate_perc_model, config)
-    generating_partial_plots_iron_concentrate_perc_model(iron_concentrate_perc_model, data, iron_concentrate_perc_model_training_features, config)
+    model_saver.run_for_iron_concentrate_perc(iron_concentrate_perc_model)
+    partial_plots_generator.run_for_iron_concentrate_perc(iron_concentrate_perc_model, data, iron_concentrate_perc_training_features)
 
 
     # Model Training and Evaluation For Silica Concentrate Model (Feed Blend)
-    silica_concentrate_perc_feed_blend_model_training_features, silica_concentrate_perc_feed_blend_model_training_features_per_method = run_feature_selection_silica_concentrate_perc_feed_blend_model(
-        data, config
+    silica_concentrate_perc_feed_blend_training_features, silica_concentrate_perc_feed_blend_training_features_per_method = feature_selection.run_for_silica_concentrate_perc_feed_blend(
+        data
     )
-    generating_correlation_matrix_silica_concentrate_perc_feed_blend_model(data, silica_concentrate_perc_feed_blend_model_training_features_per_method, config)
-    silica_concentrate_perc_feed_blend_model, best_params, best_rmse, feature_importance = generating_model_silica_concentrate_perc_feed_blend_model(
-        data, silica_concentrate_perc_feed_blend_model_training_features, config
+    correlation_matrix_generator.run_for_silica_concentrate_perc_feed_blend(data, silica_concentrate_perc_feed_blend_training_features_per_method)
+    silica_concentrate_perc_feed_blend_model, best_params, best_rmse, feature_importance = model_generator.run_for_silica_concentrate_perc_feed_blend(
+        data, silica_concentrate_perc_feed_blend_training_features
     )
-    saving_models_silica_concentrate_perc_feed_blend_model(silica_concentrate_perc_feed_blend_model, config)
-    generating_partial_plots_silica_concentrate_perc_feed_blend_model(silica_concentrate_perc_feed_blend_model, data, silica_concentrate_perc_feed_blend_model_training_features, config)
+    model_saver.run_for_silica_concentrate_perc_feed_blend(silica_concentrate_perc_feed_blend_model)
+    partial_plots_generator.run_for_silica_concentrate_perc_feed_blend(silica_concentrate_perc_feed_blend_model, data, silica_concentrate_perc_feed_blend_training_features)
 
 
     # Model Training and Evaluation For Silica Concentrate Model
-    silica_concentrate_perc_model_training_features, silica_concentrate_perc_model_training_features_per_method = run_feature_selection_silica_concentrate_perc_model(
-        data, config
+    silica_concentrate_perc_training_features, silica_concentrate_perc_training_features_per_method = feature_selection.run_for_silica_concentrate_perc(
+        data
     )
-    generating_correlation_matrix_silica_concentrate_perc_model(data, silica_concentrate_perc_model_training_features_per_method, config)
-    silica_concentrate_perc_model, best_params, best_rmse, feature_importance = generating_model_silica_concentrate_perc_model(
-        data, silica_concentrate_perc_model_training_features, config
+    correlation_matrix_generator.run_for_silica_concentrate_perc(data, silica_concentrate_perc_training_features_per_method)
+    silica_concentrate_perc_model, best_params, best_rmse, feature_importance = model_generator.run_for_silica_concentrate_perc(
+        data, silica_concentrate_perc_training_features
     )
-    saving_models_silica_concentrate_perc_model(silica_concentrate_perc_model, config)
-    generating_partial_plots_silica_concentrate_perc_model(silica_concentrate_perc_model, data, silica_concentrate_perc_model_training_features, config)
+    model_saver.run_for_silica_concentrate_perc(silica_concentrate_perc_model)
+    partial_plots_generator.run_for_silica_concentrate_perc(silica_concentrate_perc_model, data, silica_concentrate_perc_training_features)
 
     # Clustering
-    feed_blend_clusters = generating_clusters_feed_blend_model(data, config)
-    controllables_clusters = generating_clusters_controllables_model(data, config)
-    combined_clusters = merging_feed_blend_and_controllables_clusters(feed_blend_clusters, controllables_clusters, config)
-    combined_clusters = override_values_in_clusters(combined_clusters)
+    feed_blend_clusters = clustering.run_for_feed_blends(data)
+    controllables_clusters = clustering.run_for_controllables(data)
+    merged_clusters = clustering.run_to_merge_clusters(feed_blend_clusters, controllables_clusters)
 
     # Simulating Feed Blends Only (To Understand The Impact Of Feed Blends)
-    iron_concentrate_perc_feed_blend_simulation_results = generating_simulations_iron_concentrate_perc_feed_blend_model(iron_concentrate_perc_feed_blend_model, feed_blend_clusters, config)
-    silica_concentrate_perc_feed_blend_simulation_results = generating_simulations_silica_concentrate_perc_feed_blend_model(silica_concentrate_perc_feed_blend_model, feed_blend_clusters, config)
-    combined_feed_blend_simulation_results = combine_feed_blend_simulations(
-        iron_concentrate_perc_feed_blend_simulation_results,
-        silica_concentrate_perc_feed_blend_simulation_results,
-        config
+    iron_concentrate_perc_feed_blend_simulations = simulation_generator.run_for_iron_concentrate_perc_feed_blend(iron_concentrate_perc_feed_blend_model, feed_blend_clusters)
+    silica_concentrate_perc_feed_blend_simulations = simulation_generator.run_for_silica_concentrate_perc_feed_blend(silica_concentrate_perc_feed_blend_model, feed_blend_clusters)
+    merged_feed_blend_simulations = simulation_generator.run_to_merge_feed_blend_simulations(
+        iron_concentrate_perc_feed_blend_simulations,
+        silica_concentrate_perc_feed_blend_simulations
     )
 
     # Simulating Feed Blends And Controllables (To Identify Optimal Controllables Per Feed Blend)
-    iron_concentrate_perc_simulation_results = generating_simulations_iron_concentrate_perc_model(iron_concentrate_perc_model, combined_clusters, config)
-    silica_concentrate_perc_simulation_results = generating_simulations_silica_concentrate_perc_model(silica_concentrate_perc_model, combined_clusters, config)
-    combined_simulation_results = combine_feed_blend_and_controllables_simulations(
-        iron_concentrate_perc_simulation_results,
-        silica_concentrate_perc_simulation_results,
-        config
+    iron_concentrate_perc_simulations = simulation_generator.run_for_iron_concentrate_perc(iron_concentrate_perc_model, merged_clusters)
+    silica_concentrate_perc_simulations = simulation_generator.run_for_silica_concentrate_perc(silica_concentrate_perc_model, merged_clusters)
+    merged_simulations = simulation_generator.run_to_merge_feed_blend_and_controllables_simulations(
+        iron_concentrate_perc_simulations,
+        silica_concentrate_perc_simulations
     )
 
     # Optimising The Simulation Results
-    optimised_clusters = optimise_clusters(combined_simulation_results, combined_feed_blend_simulation_results, controllables_clusters, config)
+    optimised_clusters = cluster_optimiser.run(merged_simulations, merged_feed_blend_simulations, controllables_clusters)
 
     logger.info("Pipeline completed successfully")
 
