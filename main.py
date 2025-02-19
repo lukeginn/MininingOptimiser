@@ -1,7 +1,8 @@
 import logging as logger
 import warnings
 from src.setup.setup import setup
-from src.data.reading.read_data import read_data
+from src.data.reading.data_reader import DataReader
+from src.data.reading.data_reader import DataReader
 from src.data.preprocessing.missing_data import identifying_missing_data
 from src.data.preprocessing.outliers import identifying_outliers
 from src.data.preprocessing.missing_data import correcting_missing_data
@@ -52,7 +53,9 @@ def main():
     logger.info("Pipeline started")
     config = setup()
 
-    data = read_data(config)
+    data_reader = DataReader(config)
+    data = data_reader.read_file()
+    
     data = identifying_missing_data(data, config)
     data = identifying_outliers(data, config)
     data = correcting_missing_data(data, config)
