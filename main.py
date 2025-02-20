@@ -27,36 +27,32 @@ warnings.filterwarnings("ignore")
 
 def main() -> None:
     """Main function to run the data processing and model pipeline."""
-    try:
-        logger.info("Pipeline started")
+    logger.info("Pipeline started")
 
-        setup_instance = Setup()
-        general_config = setup_instance.general_config
-        data_config = setup_instance.data_config
-        model_config = setup_instance.model_config
-        clustering_config = setup_instance.clustering_config
-        simulation_config = setup_instance.simulation_config
-        optimisation_config = setup_instance.optimisation_config
+    setup_instance = Setup()
+    general_config = setup_instance.general_config
+    data_config = setup_instance.data_config
+    model_config = setup_instance.model_config
+    clustering_config = setup_instance.clustering_config
+    simulation_config = setup_instance.simulation_config
+    optimisation_config = setup_instance.optimisation_config
 
-        data = run_data_processing(general_config, data_config)
-        models = run_model_training_and_evaluation(data, model_config)
-        merged_simulations, merged_feed_blend_simulations, controllables_clusters = (
-            run_clustering_and_simulation(
-                data, models, clustering_config, simulation_config, model_config
-            )
+    data = run_data_processing(general_config, data_config)
+    models = run_model_training_and_evaluation(data, model_config)
+    merged_simulations, merged_feed_blend_simulations, controllables_clusters = (
+        run_clustering_and_simulation(
+            data, models, clustering_config, simulation_config, model_config
         )
-        run_optimisation(
-            merged_simulations,
-            merged_feed_blend_simulations,
-            controllables_clusters,
-            clustering_config,
-            optimisation_config,
-        )
+    )
+    run_optimisation(
+        merged_simulations,
+        merged_feed_blend_simulations,
+        controllables_clusters,
+        clustering_config,
+        optimisation_config,
+    )
 
-        logger.info("Pipeline completed successfully")
-    except Exception as e:
-        logger.error(f"An error occurred: {e}")
-        raise
+    logger.info("Pipeline completed successfully")
 
 
 def run_data_processing(
