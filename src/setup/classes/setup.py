@@ -3,18 +3,19 @@ import logging as logger
 import config.paths as paths
 from shared.utils.config import read_config
 from dataclasses import dataclass, field
+from typing import Dict
 
 
 @dataclass
 class Setup:
-    general_config: dict = field(init=False)
-    data_config: dict = field(init=False)
-    model_config: dict = field(init=False)
-    clustering_config: dict = field(init=False)
-    simulation_config: dict = field(init=False)
-    optimisation_config: dict = field(init=False)
+    general_config: Dict[str, any] = field(init=False)
+    data_config: Dict[str, any] = field(init=False)
+    model_config: Dict[str, any] = field(init=False)
+    clustering_config: Dict[str, any] = field(init=False)
+    simulation_config: Dict[str, any] = field(init=False)
+    optimisation_config: Dict[str, any] = field(init=False)
 
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         logger.info("Setting up paths and configurations")
         paths.create_directories()
         self.general_config = read_config(

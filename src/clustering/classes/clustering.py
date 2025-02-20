@@ -2,13 +2,15 @@ import config.paths as paths
 from shared.model.generate_clusters import run_clustering
 from src.clustering.functions.merging import merging_clusters
 from dataclasses import dataclass
+from typing import Dict, Any
+import pandas as pd
 
 
 @dataclass
 class Clustering:
-    clustering_config: dict
+    clustering_config: Dict[str, Any]
 
-    def run_for_feed_blends(self, data):
+    def run_for_feed_blends(self, data: pd.DataFrame) -> pd.DataFrame:
         clusters = run_clustering(
             data=data,
             training_features=self.clustering_config.feed_blend_model.training_features,
@@ -25,7 +27,7 @@ class Clustering:
         )
         return clusters
 
-    def run_for_controllables(self, data):
+    def run_for_controllables(self, data: pd.DataFrame) -> pd.DataFrame:
         clusters = run_clustering(
             data=data,
             training_features=self.clustering_config.controllables_model.training_features,
@@ -42,7 +44,9 @@ class Clustering:
         )
         return clusters
 
-    def run_to_merge_clusters(self, feed_blend_clusters, controllables_clusters):
+    def run_to_merge_clusters(
+        self, feed_blend_clusters: pd.DataFrame, controllables_clusters: pd.DataFrame
+    ) -> pd.DataFrame:
         merged_clusters = merging_clusters(
             feed_blend_clusters=feed_blend_clusters,
             controllables_clusters=controllables_clusters,

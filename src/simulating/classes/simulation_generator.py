@@ -1,15 +1,19 @@
 import config.paths as paths
 from src.simulating.functions.generate_simulation import generate_simulations
 from dataclasses import dataclass
+from typing import List, Dict, Any
+import pandas as pd
 
 
 @dataclass
 class SimulationGenerator:
-    model_config: dict
-    clustering_config: dict
-    simulation_config: dict
+    model_config: Dict[str, Any]
+    clustering_config: Dict[str, Any]
+    simulation_config: Dict[str, Any]
 
-    def run_for_iron_concentrate_perc(self, best_models, cluster_centers):
+    def run_for_iron_concentrate_perc(
+        self, best_models: List[Any], cluster_centers: pd.DataFrame
+    ) -> pd.DataFrame:
         # If needed, we override the values in the clusters to ensure that the simulations are tailored to answer the business questions
         cluster_centers = self.override_values_in_clusters(cluster_centers)
 
@@ -25,7 +29,9 @@ class SimulationGenerator:
         )
         return simulation_results
 
-    def run_for_iron_concentrate_perc_feed_blend(self, best_models, cluster_centers):
+    def run_for_iron_concentrate_perc_feed_blend(
+        self, best_models: List[Any], cluster_centers: pd.DataFrame
+    ) -> pd.DataFrame:
         simulation_results = generate_simulations(
             features=self.model_config.iron_concentrate_perc.model.feed_blend_training_features,
             feature_values_to_simulate=self.simulation_config.feed_blend_model.feature_values_to_simulate,
@@ -38,7 +44,9 @@ class SimulationGenerator:
         )
         return simulation_results
 
-    def run_for_silica_concentrate_perc(self, best_models, cluster_centers):
+    def run_for_silica_concentrate_perc(
+        self, best_models: List[Any], cluster_centers: pd.DataFrame
+    ) -> pd.DataFrame:
         # If needed, we override the values in the clusters to ensure that the simulations are tailored to answer the business questions
         cluster_centers = self.override_values_in_clusters(cluster_centers)
 
@@ -54,7 +62,9 @@ class SimulationGenerator:
         )
         return simulation_results
 
-    def run_for_silica_concentrate_perc_feed_blend(self, best_models, cluster_centers):
+    def run_for_silica_concentrate_perc_feed_blend(
+        self, best_models: List[Any], cluster_centers: pd.DataFrame
+    ) -> pd.DataFrame:
         simulation_results = generate_simulations(
             features=self.model_config.silica_concentrate_perc.model.feed_blend_training_features,
             feature_values_to_simulate=self.simulation_config.feed_blend_model.feature_values_to_simulate,
@@ -69,9 +79,9 @@ class SimulationGenerator:
 
     def run_to_merge_feed_blend_and_controllables_simulations(
         self,
-        iron_concentrate_perc_simulation_results,
-        silica_concentrate_perc_simulation_results,
-    ):
+        iron_concentrate_perc_simulation_results: pd.DataFrame,
+        silica_concentrate_perc_simulation_results: pd.DataFrame,
+    ) -> pd.DataFrame:
         # Merging the simulations
         iron_concentrate_perc_simulation_results = iron_concentrate_perc_simulation_results.rename(
             columns={
@@ -99,9 +109,9 @@ class SimulationGenerator:
 
     def run_to_merge_feed_blend_simulations(
         self,
-        iron_concentrate_perc_feed_blend_simulation_results,
-        silica_concentrate_perc_feed_blend_simulation_results,
-    ):
+        iron_concentrate_perc_feed_blend_simulation_results: pd.DataFrame,
+        silica_concentrate_perc_feed_blend_simulation_results: pd.DataFrame,
+    ) -> pd.DataFrame:
         # Identifying the historical predictions from each of the feed blend simulations
         iron_concentrate_perc_feed_blend_simulation_results = iron_concentrate_perc_feed_blend_simulation_results.rename(
             columns={
@@ -128,6 +138,6 @@ class SimulationGenerator:
 
         return iron_concentrate_perc_feed_blend_simulation_results
 
-    def override_values_in_clusters(self, clusters):
+    def override_values_in_clusters(self, clusters: pd.DataFrame) -> pd.DataFrame:
         # No overrides are currently occurring
         return clusters

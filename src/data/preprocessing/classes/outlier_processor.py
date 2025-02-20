@@ -2,14 +2,16 @@ import config.paths as paths
 from shared.data.outlier_identifier import identify_outliers
 from src.utils.generate_artifacts import generate_artifacts
 from dataclasses import dataclass
+from typing import Dict, Any
+import pandas as pd
 
 
 @dataclass
 class OutlierProcessor:
-    general_config: dict
-    data_config: dict
+    general_config: Dict[str, Any]
+    data_config: Dict[str, Any]
 
-    def run(self, data):
+    def run(self, data: pd.DataFrame) -> pd.DataFrame:
         if self.data_config.identify_outliers.run:
             data = identify_outliers(
                 data=data,
@@ -25,7 +27,7 @@ class OutlierProcessor:
             self.generate_artifacts_for_identifying_outliers(data)
         return data
 
-    def generate_artifacts_for_identifying_outliers(self, data):
+    def generate_artifacts_for_identifying_outliers(self, data: pd.DataFrame) -> None:
         paths_dict = {
             "time_series_plots": paths.Paths.TIME_SERIES_PLOTS_FOR_OUTLIERS_IDENTIFIED_PATH.value,
             "histogram_plots": paths.Paths.HISTOGRAM_PLOTS_FOR_OUTLIERS_IDENTIFIED_PATH.value,

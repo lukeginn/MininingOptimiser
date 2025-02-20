@@ -3,14 +3,16 @@ from shared.data.missing_data_identifier import identify_missing_data
 from shared.data.missing_data_correction import missing_data_correction
 from src.utils.generate_artifacts import generate_artifacts
 from dataclasses import dataclass
+from typing import Dict, Any
+import pandas as pd
 
 
 @dataclass
 class MissingDataProcessor:
-    general_config: dict
-    data_config: dict
+    general_config: Dict[str, Any]
+    data_config: Dict[str, Any]
 
-    def run_identifying_missing_data(self, data):
+    def run_identifying_missing_data(self, data: pd.DataFrame) -> pd.DataFrame:
         if self.data_config.identify_missing_data.run:
             data = identify_missing_data(
                 data=data,
@@ -26,7 +28,7 @@ class MissingDataProcessor:
             self.generate_artifacts_for_identifying_missing_data(data)
         return data
 
-    def run_correcting_missing_data(self, data):
+    def run_correcting_missing_data(self, data: pd.DataFrame) -> pd.DataFrame:
         if self.data_config.correct_missing_data.run:
             data = missing_data_correction(
                 data=data,
@@ -48,7 +50,9 @@ class MissingDataProcessor:
             self.generate_artifacts_for_correcting_missing_data(data)
         return data
 
-    def run_correcting_missing_data_post_aggregation(self, data):
+    def run_correcting_missing_data_post_aggregation(
+        self, data: pd.DataFrame
+    ) -> pd.DataFrame:
         if self.data_config.correct_missing_data_after_aggregation.run:
             data = missing_data_correction(
                 data=data,
@@ -70,7 +74,9 @@ class MissingDataProcessor:
             self.generate_artifacts_for_correcting_missing_data_post_aggregation(data)
         return data
 
-    def generate_artifacts_for_identifying_missing_data(self, data):
+    def generate_artifacts_for_identifying_missing_data(
+        self, data: pd.DataFrame
+    ) -> None:
         paths_dict = {
             "time_series_plots": paths.Paths.TIME_SERIES_PLOTS_FOR_AGGREGATED_FEATURES_PATH.value,
             "histogram_plots": paths.Paths.HISTOGRAM_PLOTS_FOR_AGGREGATED_FEATURES_PATH.value,
@@ -80,7 +86,9 @@ class MissingDataProcessor:
             self.general_config, data, "stage_2_missing_data_identified", paths_dict
         )
 
-    def generate_artifacts_for_correcting_missing_data(self, data):
+    def generate_artifacts_for_correcting_missing_data(
+        self, data: pd.DataFrame
+    ) -> None:
         paths_dict = {
             "time_series_plots": paths.Paths.TIME_SERIES_PLOTS_FOR_MISSING_DATA_CORRECTED_PATH.value,
             "histogram_plots": paths.Paths.HISTOGRAM_PLOTS_FOR_MISSING_DATA_CORRECTED_PATH.value,
@@ -90,7 +98,9 @@ class MissingDataProcessor:
             self.general_config, data, "stage_5_missing_data_corrected", paths_dict
         )
 
-    def generate_artifacts_for_correcting_missing_data_post_aggregation(self, data):
+    def generate_artifacts_for_correcting_missing_data_post_aggregation(
+        self, data: pd.DataFrame
+    ) -> None:
         paths_dict = {
             "time_series_plots": paths.Paths.TIME_SERIES_PLOTS_FOR_MISSING_DATA_CORRECTED_POST_AGGREGATION_PATH.value,
             "histogram_plots": paths.Paths.HISTOGRAM_PLOTS_FOR_MISSING_DATA_CORRECTED_POST_AGGREGATION_PATH.value,
