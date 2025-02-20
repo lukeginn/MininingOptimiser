@@ -2,6 +2,7 @@ import config.paths as paths
 from shared.model.generate_clusters import run_clustering
 from src.clustering.functions.merging import merging_clusters
 
+
 class Clustering:
     def __init__(self, clustering_config):
         self.clustering_config = clustering_config
@@ -19,7 +20,7 @@ class Clustering:
             dbscan_eps=self.clustering_config.feed_blend_model.dbscan_eps,
             dbscan_min_samples=self.clustering_config.feed_blend_model.dbscan_min_samples,
             agglomerative_n_clusters=self.clustering_config.feed_blend_model.agglomerative_n_clusters,
-            random_state=self.clustering_config.feed_blend_model.random_state
+            random_state=self.clustering_config.feed_blend_model.random_state,
         )
         return clusters
 
@@ -36,7 +37,7 @@ class Clustering:
             dbscan_eps=self.clustering_config.controllables_model.dbscan_eps,
             dbscan_min_samples=self.clustering_config.controllables_model.dbscan_min_samples,
             agglomerative_n_clusters=self.clustering_config.controllables_model.agglomerative_n_clusters,
-            random_state=self.clustering_config.controllables_model.random_state
+            random_state=self.clustering_config.controllables_model.random_state,
         )
         return clusters
 
@@ -46,6 +47,6 @@ class Clustering:
             controllables_clusters=controllables_clusters,
             feed_blend_training_features=self.clustering_config.feed_blend_model.training_features,
             controllables_training_features=self.clustering_config.controllables_model.training_features,
-            path=paths.Paths.COMBINED_CLUSTERING_FILE.value
+            path=paths.Paths.COMBINED_CLUSTERING_FILE.value,
         )
         return merged_clusters

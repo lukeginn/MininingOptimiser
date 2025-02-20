@@ -10,7 +10,8 @@ import joblib
 import pandas as pd
 from sklearn.inspection import permutation_importance
 from sklearn.ensemble import GradientBoostingRegressor, HistGradientBoostingRegressor
-#import shap
+
+# import shap
 
 
 def generate_model(
@@ -26,7 +27,7 @@ def generate_model(
     test_size=0.2,
     random_state=42,
     n_models=5,
-    path=None
+    path=None,
 ):
     if training_features is None:
         logger.info("No training features provided. Using all numeric features")
@@ -56,7 +57,7 @@ def generate_model(
         metric=metric,
         evaluation_results_path=evaluation_results_path,
         path=path,
-        n_models=n_models
+        n_models=n_models,
     )
     logger.info("Models generated successfully")
 
@@ -95,7 +96,16 @@ def split_data(X, y, test_size, random_state):
 
 
 def find_best_hyperparameters(
-    model_choice, X_train, X_test, y_train, y_test, param_grid, metric, evaluation_results_path, path, n_models
+    model_choice,
+    X_train,
+    X_test,
+    y_train,
+    y_test,
+    param_grid,
+    metric,
+    evaluation_results_path,
+    path,
+    n_models,
 ):
 
     best_metric_score = float("inf")
@@ -106,11 +116,18 @@ def find_best_hyperparameters(
     for params in ParameterGrid(param_grid):
         logger.info(f"Training {model_choice} model with parameters: {params}")
         training_function = get_model_training_function(model_choice=model_choice)
-        models = [training_function(data=X_train, target=y_train, params=params) for _ in range(n_models)]
+        models = [
+            training_function(data=X_train, target=y_train, params=params)
+            for _ in range(n_models)
+        ]
 
         logger.info(f"Evaluating {model_choice} models")
         metrics = evaluate_model(
-            model_choice=model_choice, models=models, X_test=X_test, y_test=y_test, path=path
+            model_choice=model_choice,
+            models=models,
+            X_test=X_test,
+            y_test=y_test,
+            path=path,
         )
         metric_score = metrics[metric]
 
@@ -123,7 +140,7 @@ def find_best_hyperparameters(
 
     export_evaluation_results(
         evaluation_results=pd.DataFrame(evaluation_results),
-        path=evaluation_results_path
+        path=evaluation_results_path,
     )
 
     logger.info("Best hyperparameters found")
@@ -132,9 +149,11 @@ def find_best_hyperparameters(
 
     return best_models, best_params, best_metric_score
 
+
 def export_evaluation_results(evaluation_results, path):
     evaluation_results.to_csv(path, index=False)
     logger.info(f"Evaluation results exported to {path}")
+
 
 def get_model_training_function(model_choice):
 
@@ -157,23 +176,30 @@ def get_model_training_function(model_choice):
             model = LinearGAM(term_list)
             model.fit(data, target)
             return model
-        
+
     if model_choice == "gbm":
 
         def training_function(data, target, params):
             if "monotonic_cst" in params:
                 monotonic_cst = params["monotonic_cst"]
-                params_without_monotonic_cst = {k: v for k, v in params.items() if k != "monotonic_cst"}
-                model = HistGradientBoostingRegressor(**params_without_monotonic_cst, monotonic_cst=monotonic_cst[:data.shape[1]])
+                params_without_monotonic_cst = {
+                    k: v for k, v in params.items() if k != "monotonic_cst"
+                }
+                model = HistGradientBoostingRegressor(
+                    **params_without_monotonic_cst,
+                    monotonic_cst=monotonic_cst[: data.shape[1]],
+                )
             else:
                 model = GradientBoostingRegressor(**params)
             model.fit(data, target)
             return model
-        
 
     return training_function
 
-def get_model_prediction_function(model_choice, return_confidence_interval=False, return_shapley_values=False):
+
+def get_model_prediction_function(
+    model_choice, return_confidence_interval=False, return_shapley_values=False
+):
 
     if model_choice == "linear_regression":
 
@@ -194,23 +220,27 @@ def get_model_prediction_function(model_choice, return_confidence_interval=False
                 for i in range(data.shape[1]):
                     shapley_values[:, i] = model.partial_dependence(term=i, X=data)
                 shapley_values_df = pd.DataFrame(shapley_values, columns=data.columns)
-                shapley_values_df['intercept'] =  model.predict(data) - shapley_values_df.sum(axis=1)
-                shapley_values_df['final_prediction'] = model.predict(data)
+                shapley_values_df["intercept"] = model.predict(
+                    data
+                ) - shapley_values_df.sum(axis=1)
+                shapley_values_df["final_prediction"] = model.predict(data)
                 return shapley_values_df
             else:
                 return model.predict(data)
-            
+
     if model_choice == "gbm":
-            
+
         def prediction_function(model, data):
             if return_confidence_interval:
-            # GradientBoostingRegressor does not support prediction intervals natively
-                raise NotImplementedError("Confidence intervals are not supported for GradientBoostingRegressor")
+                # GradientBoostingRegressor does not support prediction intervals natively
+                raise NotImplementedError(
+                    "Confidence intervals are not supported for GradientBoostingRegressor"
+                )
             if return_shapley_values:
                 explainer = shap.TreeExplainer(model)
                 shap_values = explainer.shap_values(data)
                 shap_values_df = pd.DataFrame(shap_values, columns=data.columns)
-                shap_values_df['final_prediction'] = model.predict(data)
+                shap_values_df["final_prediction"] = model.predict(data)
                 return shap_values_df
             else:
                 return model.predict(data)
@@ -220,7 +250,9 @@ def get_model_prediction_function(model_choice, return_confidence_interval=False
 
 def evaluate_model(model_choice, models, X_test, y_test, path):
     prediction_function = get_model_prediction_function(model_choice=model_choice)
-    predictions = np.mean([prediction_function(model=model, data=X_test) for model in models], axis=0)
+    predictions = np.mean(
+        [prediction_function(model=model, data=X_test) for model in models], axis=0
+    )
 
     plot_predictions(y_test, predictions, path)
 
@@ -228,17 +260,15 @@ def evaluate_model(model_choice, models, X_test, y_test, path):
     mae = np.mean(np.abs(predictions - y_test))
     r2 = np.corrcoef(predictions, y_test)[0, 1] ** 2
 
-    metrics = {
-        "rmse": rmse,
-        "mae": mae,
-        "r2": r2
-    }
+    metrics = {"rmse": rmse, "mae": mae, "r2": r2}
     return metrics
+
 
 def plot_predictions(y_test, predictions, path):
     import matplotlib.pyplot as plt
-    plt.scatter(predictions, y_test, marker='.', color='black', s=10)
-    plt.plot([y_test.min(), y_test.max()], [y_test.min(), y_test.max()], 'r--', lw=2)
+
+    plt.scatter(predictions, y_test, marker=".", color="black", s=10)
+    plt.plot([y_test.min(), y_test.max()], [y_test.min(), y_test.max()], "r--", lw=2)
     plt.ylabel("True Values")
     plt.xlabel("Predictions")
     plt.title("True vs Predicted Values")
@@ -247,11 +277,19 @@ def plot_predictions(y_test, predictions, path):
     logger.info(f"Predictions plot saved to {path}")
 
 
-def generate_predictions(model_choice, models, data, return_confidence_interval=False, return_shapley_values=False):
+def generate_predictions(
+    model_choice,
+    models,
+    data,
+    return_confidence_interval=False,
+    return_shapley_values=False,
+):
     prediction_function = get_model_prediction_function(
         model_choice, return_confidence_interval, return_shapley_values
     )
-    predictions = np.mean([prediction_function(model, data) for model in models], axis=0)
+    predictions = np.mean(
+        [prediction_function(model, data) for model in models], axis=0
+    )
 
     return predictions
 
@@ -265,17 +303,23 @@ def generate_feature_importance_dataframe(
         feature_importance_scores = model.statistics_["p_values"]
         if np.all(feature_importance_scores == feature_importance_scores[0]):
             # Use permutation importance as a fallback
-            result = permutation_importance(model, X_train, y_train, n_repeats=10, random_state=42)
+            result = permutation_importance(
+                model, X_train, y_train, n_repeats=10, random_state=42
+            )
             feature_importance_scores = result.importances_mean
     elif model_choice == "gbm":
         if isinstance(model, GradientBoostingRegressor):
             feature_importance_scores = model.feature_importances_
         elif isinstance(model, HistGradientBoostingRegressor):
-            result = permutation_importance(model, X_train, y_train, n_repeats=10, random_state=42)
+            result = permutation_importance(
+                model, X_train, y_train, n_repeats=10, random_state=42
+            )
             feature_importance_scores = result.importances_mean
         else:
-            raise ValueError(f"Model type {type(model)} not supported for feature importance extraction")
-        
+            raise ValueError(
+                f"Model type {type(model)} not supported for feature importance extraction"
+            )
+
     else:
         raise ValueError(f"Model choice {model_choice} not supported")
 

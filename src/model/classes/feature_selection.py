@@ -1,5 +1,6 @@
 from shared.model.feature_selection import feature_selection
 
+
 class FeatureSelection:
     def __init__(self, model_config):
         self.model_config = model_config
@@ -26,7 +27,9 @@ class FeatureSelection:
                 training_features=self.model_config.iron_concentrate_perc.model.training_features,
             )
         else:
-            training_features = self.model_config.iron_concentrate_perc.model.training_features
+            training_features = (
+                self.model_config.iron_concentrate_perc.model.training_features
+            )
             training_features_per_method = None
 
         return training_features, training_features_per_method
@@ -53,7 +56,9 @@ class FeatureSelection:
                 training_features=self.model_config.iron_concentrate_perc.model.feed_blend_training_features,
             )
         else:
-            training_features = self.model_config.iron_concentrate_perc.model.feed_blend_training_features
+            training_features = (
+                self.model_config.iron_concentrate_perc.model.feed_blend_training_features
+            )
             training_features_per_method = None
 
         return training_features, training_features_per_method
@@ -80,7 +85,9 @@ class FeatureSelection:
                 training_features=self.model_config.silica_concentrate_perc.model.training_features,
             )
         else:
-            training_features = self.model_config.silica_concentrate_perc.model.training_features
+            training_features = (
+                self.model_config.silica_concentrate_perc.model.training_features
+            )
             training_features_per_method = None
 
         return training_features, training_features_per_method
@@ -107,7 +114,9 @@ class FeatureSelection:
                 training_features=self.model_config.silica_concentrate_perc.model.feed_blend_training_features,
             )
         else:
-            training_features = self.model_config.silica_concentrate_perc.model.feed_blend_training_features
+            training_features = (
+                self.model_config.silica_concentrate_perc.model.feed_blend_training_features
+            )
             training_features_per_method = None
 
         return training_features, training_features_per_method

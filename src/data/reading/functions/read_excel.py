@@ -2,6 +2,7 @@ import numpy as np
 import pandas as pd
 import logging as logger
 
+
 # TO-DO: Clean up and turn into a class
 def reading_preprocessing_and_merging_multiple_excel_workbooks(config, file_paths):
     data = read_multiple_excel_workbooks(file_paths=[file_paths[0]])
@@ -43,9 +44,14 @@ def reading_preprocessing_and_merging_multiple_excel_workbooks(config, file_path
         timestamp_column_for_merging=data_config.timestamp,
     )
 
-    data = merge_excel_workbooks(data=data, extra_data=extra_data, extra_data2=extra_data2, timestamp_column=data_config.timestamp)
+    data = merge_excel_workbooks(
+        data=data,
+        extra_data=extra_data,
+        extra_data2=extra_data2,
+        timestamp_column=data_config.timestamp,
+    )
     data = apply_custom_filters(data=data)
-    
+
     return data
 
 
@@ -166,6 +172,7 @@ def merge_excel_workbooks(data, extra_data, extra_data2, timestamp_column="times
     data = data.merge(extra_data2, on=timestamp_column, how="outer")
 
     return data
+
 
 def remove_empty_columns(data, min_non_null_values):
     logger.info("Removing empty columns")
@@ -425,17 +432,22 @@ def remove_duplicate_rows(data):
     data = data.drop_duplicates()
     return data
 
+
 def apply_custom_filters(data):
     logger.info("Applying custom filters")
 
     print()
     second_column_name = data.columns[1]
     first_non_null_value = data[second_column_name].dropna().iloc[0]
-    first_non_null_timestamp = data.loc[data[second_column_name] == first_non_null_value, 'estampa_de_tiempo'].iloc[0]
+    first_non_null_timestamp = data.loc[
+        data[second_column_name] == first_non_null_value, "estampa_de_tiempo"
+    ].iloc[0]
     logger.info(f"The first non-null estampa_de_tiempo is: {first_non_null_timestamp}")
 
     last_non_null_value = data[second_column_name].dropna().iloc[-1]
-    last_non_null_timestamp = data.loc[data[second_column_name] == last_non_null_value, 'estampa_de_tiempo'].iloc[-1]
+    last_non_null_timestamp = data.loc[
+        data[second_column_name] == last_non_null_value, "estampa_de_tiempo"
+    ].iloc[-1]
     logger.info(f"The last non-null estampa_de_tiempo is: {last_non_null_timestamp}")
 
     data = data[data["estampa_de_tiempo"] >= first_non_null_timestamp]
@@ -443,107 +455,193 @@ def apply_custom_filters(data):
 
     return data
 
+
 def custom_preprocessing(data):
     logger.info("Applying custom preprocessing")
 
     for sheet_name, df in data.items():
-        if 'estampa_de_tiempo' in df.columns:
-            df['estampa_de_tiempo'] = pd.to_datetime(df['estampa_de_tiempo'])
-            df['estampa_de_tiempo'] = df['estampa_de_tiempo'].apply(lambda x: x.replace(second=0))
+        if "estampa_de_tiempo" in df.columns:
+            df["estampa_de_tiempo"] = pd.to_datetime(df["estampa_de_tiempo"])
+            df["estampa_de_tiempo"] = df["estampa_de_tiempo"].apply(
+                lambda x: x.replace(second=0)
+            )
             data[sheet_name] = df
 
     for sheet_name, df in data.items():
-        if 'estampa_de_tiempo' in df.columns:
-            df['estampa_de_tiempo'] = pd.to_datetime(df['estampa_de_tiempo'])
-            df['estampa_de_tiempo'] = df['estampa_de_tiempo'].apply(lambda x: x.replace(second=0, minute=0) if x.minute < 30 else x.replace(second=0, minute=30))
+        if "estampa_de_tiempo" in df.columns:
+            df["estampa_de_tiempo"] = pd.to_datetime(df["estampa_de_tiempo"])
+            df["estampa_de_tiempo"] = df["estampa_de_tiempo"].apply(
+                lambda x: (
+                    x.replace(second=0, minute=0)
+                    if x.minute < 30
+                    else x.replace(second=0, minute=30)
+                )
+            )
             data[sheet_name] = df
 
     for sheet_name, df in data.items():
-        df['valvula_hacia_este'] = df['valvula_hacia_este'].replace('Open', 1)
-        df['valvula_hacia_este'] = df['valvula_hacia_este'].replace('Off', 0)
-        df['valvula_hacia_este'] = df['valvula_hacia_este'].astype(bool).astype(int)
+        df["valvula_hacia_este"] = df["valvula_hacia_este"].replace("Open", 1)
+        df["valvula_hacia_este"] = df["valvula_hacia_este"].replace("Off", 0)
+        df["valvula_hacia_este"] = df["valvula_hacia_este"].astype(bool).astype(int)
 
-        df['valvula_hacia_oeste'] = df['valvula_hacia_oeste'].replace('Open', 1)
-        df['valvula_hacia_oeste'] = df['valvula_hacia_oeste'].replace('Off', 0)
-        df['valvula_hacia_oeste'] = df['valvula_hacia_oeste'].astype(bool).astype(int)
+        df["valvula_hacia_oeste"] = df["valvula_hacia_oeste"].replace("Open", 1)
+        df["valvula_hacia_oeste"] = df["valvula_hacia_oeste"].replace("Off", 0)
+        df["valvula_hacia_oeste"] = df["valvula_hacia_oeste"].astype(bool).astype(int)
 
         data[sheet_name] = df
 
     return data
+
 
 def custom_preprocessing_for_extra_data(data):
     logger.info("Applying custom preprocessing for extra data")
 
     if "turno" in data.columns and "estampa_de_tiempo" in data.columns:
         data["estampa_de_tiempo"] = data.apply(
-            lambda row: f"{row['estampa_de_tiempo']} 12:00:00" if row["turno"] == "Dia" else f"{row['estampa_de_tiempo']} 00:00:00" if row["turno"] == "Noche" else row["estampa_de_tiempo"],
-            axis=1
+            lambda row: (
+                f"{row['estampa_de_tiempo']} 12:00:00"
+                if row["turno"] == "Dia"
+                else (
+                    f"{row['estampa_de_tiempo']} 00:00:00"
+                    if row["turno"] == "Noche"
+                    else row["estampa_de_tiempo"]
+                )
+            ),
+            axis=1,
         )
     data = data.drop(columns=["año", "mes", "turno"], errors="ignore")
 
     # Clean up the estampa_de_tiempo column
-    data['estampa_de_tiempo'] = pd.to_datetime(data['estampa_de_tiempo'].astype(str).str.replace(r' 00:00:00 00:00:00', ' 00:00:00'))
-    data['estampa_de_tiempo'] = pd.to_datetime(data['estampa_de_tiempo'].astype(str).str.replace(r' 00:00:00 12:00:00', ' 12:00:00'))
+    data["estampa_de_tiempo"] = pd.to_datetime(
+        data["estampa_de_tiempo"]
+        .astype(str)
+        .str.replace(r" 00:00:00 00:00:00", " 00:00:00")
+    )
+    data["estampa_de_tiempo"] = pd.to_datetime(
+        data["estampa_de_tiempo"]
+        .astype(str)
+        .str.replace(r" 00:00:00 12:00:00", " 12:00:00")
+    )
 
     # Calculate the proportions of each category in 'tipo_de_mineral' and save it to a CSV file
-    proportions = data['tipo_de_mineral'].value_counts(normalize=True).reset_index()
-    proportions.columns = ['tipo_de_mineral', 'proporción_de_tipo_de_mineral']
-    proportions.to_csv('outputs/proporción_de_tipo_de_mineral.csv', index=False)
+    proportions = data["tipo_de_mineral"].value_counts(normalize=True).reset_index()
+    proportions.columns = ["tipo_de_mineral", "proporción_de_tipo_de_mineral"]
+    proportions.to_csv("outputs/proporción_de_tipo_de_mineral.csv", index=False)
 
     # Calculate the proportions of tonelaje for each tipo_de_mineral and save it to a CSV file
-    proportions_tonelaje = data.groupby('tipo_de_mineral')['tonelaje'].sum().reset_index()
-    proportions_tonelaje['proporción_de_tonelaje_del_tipo_de_mineral'] = proportions_tonelaje['tonelaje'] / proportions_tonelaje['tonelaje'].sum()
-    proportions_tonelaje = proportions_tonelaje[['tipo_de_mineral', 'proporción_de_tonelaje_del_tipo_de_mineral']]
-    proportions_tonelaje = proportions_tonelaje.sort_values(by='proporción_de_tonelaje_del_tipo_de_mineral', ascending=False)
-    proportions_tonelaje.to_csv('outputs/proporción_de_tonelaje_del_tipo_de_mineral.csv', index=False)
+    proportions_tonelaje = (
+        data.groupby("tipo_de_mineral")["tonelaje"].sum().reset_index()
+    )
+    proportions_tonelaje["proporción_de_tonelaje_del_tipo_de_mineral"] = (
+        proportions_tonelaje["tonelaje"] / proportions_tonelaje["tonelaje"].sum()
+    )
+    proportions_tonelaje = proportions_tonelaje[
+        ["tipo_de_mineral", "proporción_de_tonelaje_del_tipo_de_mineral"]
+    ]
+    proportions_tonelaje = proportions_tonelaje.sort_values(
+        by="proporción_de_tonelaje_del_tipo_de_mineral", ascending=False
+    )
+    proportions_tonelaje.to_csv(
+        "outputs/proporción_de_tonelaje_del_tipo_de_mineral.csv", index=False
+    )
 
     # Feed Blend Combination 1 Clean-up
-    data['tipo_de_mineral_copy'] = data['tipo_de_mineral']
-    data['tipo_de_mineral_copy'] = data['tipo_de_mineral_copy'].replace(
-        data['tipo_de_mineral_copy'][data['tipo_de_mineral_copy'].str.contains('p', case=False, na=False)].unique(), 'ORE_PAMPACANCHA'
+    data["tipo_de_mineral_copy"] = data["tipo_de_mineral"]
+    data["tipo_de_mineral_copy"] = data["tipo_de_mineral_copy"].replace(
+        data["tipo_de_mineral_copy"][
+            data["tipo_de_mineral_copy"].str.contains("p", case=False, na=False)
+        ].unique(),
+        "ORE_PAMPACANCHA",
     )
-    data['tipo_de_mineral_copy'] = data['tipo_de_mineral_copy'].replace(
-        data['tipo_de_mineral_copy'][~data['tipo_de_mineral_copy'].str.contains('p', case=False, na=False)].unique(), 'ORE_CONSTANCIA'
+    data["tipo_de_mineral_copy"] = data["tipo_de_mineral_copy"].replace(
+        data["tipo_de_mineral_copy"][
+            ~data["tipo_de_mineral_copy"].str.contains("p", case=False, na=False)
+        ].unique(),
+        "ORE_CONSTANCIA",
     )
 
     # Feed Blend Combination 2 Clean-up
-    data['tipo_de_mineral'] = data['tipo_de_mineral'].replace(['ORE_K', 'ORE_K_P', 'ORE_K_p', 'STK01_K', 'STK1_K_PC', 'STK02_K', 'STK03_K', 'STK4_K'], 'ORE_K')
-    data['tipo_de_mineral'] = data['tipo_de_mineral'].replace(['ORE_M',	'ORE_M_P'], 'ORE_M')
-    data['tipo_de_mineral'] = data['tipo_de_mineral'].replace(['ORE_H',	'ORE_H_P', 'STK4_H'], 'ORE_H')
-    data['tipo_de_mineral'] = data['tipo_de_mineral'].replace(['STK01_S'], 'ORE_S')
-    data['tipo_de_mineral'] = data['tipo_de_mineral'].replace(['-HIZN', '_HIZN', '_HIZN_P'], 'HIZN')
-    data['tipo_de_mineral'] = data['tipo_de_mineral'].replace(['_HIAU',	'_HIAU_P'], 'HIAU')
-    data['tipo_de_mineral'] = data['tipo_de_mineral'].replace(['STK02', 'STK2-'], 'STK02')
-    data['tipo_de_mineral'] = data['tipo_de_mineral'].replace(['STK03',	'STK3-'], 'STK03')
-    data['tipo_de_mineral'] = data['tipo_de_mineral'].replace(['STK4-',	'STK4_CS', 'STK4_P', 'STK4_PC'], 'STK04') #This only appears in 2024
-    data['tipo_de_mineral'] = data['tipo_de_mineral'].replace(['STK-O', 'STKOS', 'STK0', 'STK02', 'STK03', 'STK04'], 'STK')
-    data['tipo_de_mineral'] = data['tipo_de_mineral'].replace(['NAG-1',	'NAG-1_P', 'ORE-1_P', 'ore_H_P', '<NA>', 'HIAU'], 'OTHER')
+    data["tipo_de_mineral"] = data["tipo_de_mineral"].replace(
+        [
+            "ORE_K",
+            "ORE_K_P",
+            "ORE_K_p",
+            "STK01_K",
+            "STK1_K_PC",
+            "STK02_K",
+            "STK03_K",
+            "STK4_K",
+        ],
+        "ORE_K",
+    )
+    data["tipo_de_mineral"] = data["tipo_de_mineral"].replace(
+        ["ORE_M", "ORE_M_P"], "ORE_M"
+    )
+    data["tipo_de_mineral"] = data["tipo_de_mineral"].replace(
+        ["ORE_H", "ORE_H_P", "STK4_H"], "ORE_H"
+    )
+    data["tipo_de_mineral"] = data["tipo_de_mineral"].replace(["STK01_S"], "ORE_S")
+    data["tipo_de_mineral"] = data["tipo_de_mineral"].replace(
+        ["-HIZN", "_HIZN", "_HIZN_P"], "HIZN"
+    )
+    data["tipo_de_mineral"] = data["tipo_de_mineral"].replace(
+        ["_HIAU", "_HIAU_P"], "HIAU"
+    )
+    data["tipo_de_mineral"] = data["tipo_de_mineral"].replace(
+        ["STK02", "STK2-"], "STK02"
+    )
+    data["tipo_de_mineral"] = data["tipo_de_mineral"].replace(
+        ["STK03", "STK3-"], "STK03"
+    )
+    data["tipo_de_mineral"] = data["tipo_de_mineral"].replace(
+        ["STK4-", "STK4_CS", "STK4_P", "STK4_PC"], "STK04"
+    )  # This only appears in 2024
+    data["tipo_de_mineral"] = data["tipo_de_mineral"].replace(
+        ["STK-O", "STKOS", "STK0", "STK02", "STK03", "STK04"], "STK"
+    )
+    data["tipo_de_mineral"] = data["tipo_de_mineral"].replace(
+        ["NAG-1", "NAG-1_P", "ORE-1_P", "ore_H_P", "<NA>", "HIAU"], "OTHER"
+    )
 
     # Finding the total tonnes per shift
-    tonelaje_total = data.groupby("estampa_de_tiempo")['tonelaje'].sum().reset_index()
-    data = data.merge(tonelaje_total, on="estampa_de_tiempo", suffixes=('', '_total'))
-    data['proporción_de_tonelaje'] = data['tonelaje'] / data['tonelaje_total']
+    tonelaje_total = data.groupby("estampa_de_tiempo")["tonelaje"].sum().reset_index()
+    data = data.merge(tonelaje_total, on="estampa_de_tiempo", suffixes=("", "_total"))
+    data["proporción_de_tonelaje"] = data["tonelaje"] / data["tonelaje_total"]
 
     # Weighted averaging all of the samples from repeated day and night to a single day and night respectively
     logger.info("Weighted averaging all of the samples to day and night")
-    numeric_columns = data.select_dtypes(include=['number']).columns
-    numeric_columns = numeric_columns.difference(['tonelaje', 'proporción_de_tonelaje', 'tonelaje_total'])
-    data_aggregated = data.groupby("estampa_de_tiempo").apply(
-        lambda x: pd.Series(
-            {col: (x[col] * x["proporción_de_tonelaje"]).sum() / x["proporción_de_tonelaje"].sum() for col in numeric_columns}
+    numeric_columns = data.select_dtypes(include=["number"]).columns
+    numeric_columns = numeric_columns.difference(
+        ["tonelaje", "proporción_de_tonelaje", "tonelaje_total"]
+    )
+    data_aggregated = (
+        data.groupby("estampa_de_tiempo")
+        .apply(
+            lambda x: pd.Series(
+                {
+                    col: (x[col] * x["proporción_de_tonelaje"]).sum()
+                    / x["proporción_de_tonelaje"].sum()
+                    for col in numeric_columns
+                }
+            )
         )
-    ).reset_index()
-    data_aggregated["estampa_de_tiempo"] = pd.to_datetime(data_aggregated["estampa_de_tiempo"], errors="coerce")
+        .reset_index()
+    )
+    data_aggregated["estampa_de_tiempo"] = pd.to_datetime(
+        data_aggregated["estampa_de_tiempo"], errors="coerce"
+    )
     data_aggregated = data_aggregated.sort_values(by="estampa_de_tiempo")
 
     # Pivot the data to get the total sum of proporción_de_tonelaje per shift for each tipo_de_mineral
-    logger.info("Pivoting data to get the total sum of proporción_de_tonelaje per shift for each tipo_de_mineral")
+    logger.info(
+        "Pivoting data to get the total sum of proporción_de_tonelaje per shift for each tipo_de_mineral"
+    )
     feed_blend_data_combination_1 = data.pivot_table(
         index="estampa_de_tiempo",
         columns="tipo_de_mineral_copy",
         values="proporción_de_tonelaje",
         aggfunc="sum",
-        fill_value=0
+        fill_value=0,
     ).reset_index()
 
     feed_blend_data_combination_2 = data.pivot_table(
@@ -551,14 +649,21 @@ def custom_preprocessing_for_extra_data(data):
         columns="tipo_de_mineral",
         values="proporción_de_tonelaje",
         aggfunc="sum",
-        fill_value=0
+        fill_value=0,
     ).reset_index()
 
-    data_aggregated = tonelaje_total.merge(data_aggregated, on="estampa_de_tiempo", how="outer")
-    data_aggregated = data_aggregated.merge(feed_blend_data_combination_1, on="estampa_de_tiempo", how="outer")
-    data_aggregated = data_aggregated.merge(feed_blend_data_combination_2, on="estampa_de_tiempo", how="outer")
+    data_aggregated = tonelaje_total.merge(
+        data_aggregated, on="estampa_de_tiempo", how="outer"
+    )
+    data_aggregated = data_aggregated.merge(
+        feed_blend_data_combination_1, on="estampa_de_tiempo", how="outer"
+    )
+    data_aggregated = data_aggregated.merge(
+        feed_blend_data_combination_2, on="estampa_de_tiempo", how="outer"
+    )
 
     return data_aggregated
+
 
 def custom_preprocessing_for_extra_data_2(data):
     logger.info("Applying custom preprocessing for extra data 2")
@@ -568,9 +673,25 @@ def custom_preprocessing_for_extra_data_2(data):
     key2 = list(data.keys())[0]
     data = data[key2]
 
-    data.iloc[1:, 0] = pd.to_datetime(data.iloc[1:, 0], format='mixed').dt.strftime('%Y-%m-%d %H:%M:%S')
-    data.iloc[1:, 0] = pd.to_datetime(data.iloc[1:, 0]).apply(lambda x: x.replace(second=0)).dt.strftime('%Y-%m-%d %H:%M:%S')
-    data.iloc[1:, 0] = pd.to_datetime(data.iloc[1:, 0]).apply(lambda x: x.replace(second=0, minute=0) if x.minute < 30 else x.replace(second=0, minute=30)).dt.strftime('%Y-%m-%d %H:%M:%S')
+    data.iloc[1:, 0] = pd.to_datetime(data.iloc[1:, 0], format="mixed").dt.strftime(
+        "%Y-%m-%d %H:%M:%S"
+    )
+    data.iloc[1:, 0] = (
+        pd.to_datetime(data.iloc[1:, 0])
+        .apply(lambda x: x.replace(second=0))
+        .dt.strftime("%Y-%m-%d %H:%M:%S")
+    )
+    data.iloc[1:, 0] = (
+        pd.to_datetime(data.iloc[1:, 0])
+        .apply(
+            lambda x: (
+                x.replace(second=0, minute=0)
+                if x.minute < 30
+                else x.replace(second=0, minute=30)
+            )
+        )
+        .dt.strftime("%Y-%m-%d %H:%M:%S")
+    )
 
     data = {key1: {key2: data}}
 

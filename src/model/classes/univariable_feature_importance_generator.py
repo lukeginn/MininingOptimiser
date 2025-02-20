@@ -1,12 +1,17 @@
 import config.paths as paths
-from shared.model.univariable_feature_importance import generate_univariable_feature_importance
+from shared.model.univariable_feature_importance import (
+    generate_univariable_feature_importance,
+)
+
 
 class UnivariableFeatureImportanceGenerator:
     def __init__(self, model_config):
         self.model_config = model_config
 
     def run_for_iron_concentrate_perc(self, data):
-        if self.model_config.iron_concentrate_perc.model.univariable_feature_importance.run:
+        if (
+            self.model_config.iron_concentrate_perc.model.univariable_feature_importance.run
+        ):
             univariable_feature_importance = generate_univariable_feature_importance(
                 data=data,
                 target_feature=self.model_config.iron_concentrate_perc.model.target,
@@ -16,7 +21,9 @@ class UnivariableFeatureImportanceGenerator:
             return univariable_feature_importance
 
     def run_for_silica_concentrate_perc(self, data):
-        if self.model_config.silica_concentrate_perc.model.univariable_feature_importance.run:
+        if (
+            self.model_config.silica_concentrate_perc.model.univariable_feature_importance.run
+        ):
             univariable_feature_importance = generate_univariable_feature_importance(
                 data=data,
                 target_feature=self.model_config.silica_concentrate_perc.model.target,

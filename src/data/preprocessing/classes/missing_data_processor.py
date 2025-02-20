@@ -3,6 +3,7 @@ from shared.data.missing_data_identifier import identify_missing_data
 from shared.data.missing_data_correction import missing_data_correction
 from src.utils.generate_artifacts import generate_artifacts
 
+
 class MissingDataProcessor:
     def __init__(self, general_config, data_config):
         self.general_config = general_config
@@ -70,24 +71,33 @@ class MissingDataProcessor:
 
     def generate_artifacts_for_identifying_missing_data(self, data):
         paths_dict = {
-            'time_series_plots': paths.Paths.TIME_SERIES_PLOTS_FOR_AGGREGATED_FEATURES_PATH.value,
-            'histogram_plots': paths.Paths.HISTOGRAM_PLOTS_FOR_AGGREGATED_FEATURES_PATH.value,
-            'custom_plots': paths.Paths.CUSTOM_PLOTS_FOR_AGGREGATED_FEATURES_PATH.value
+            "time_series_plots": paths.Paths.TIME_SERIES_PLOTS_FOR_AGGREGATED_FEATURES_PATH.value,
+            "histogram_plots": paths.Paths.HISTOGRAM_PLOTS_FOR_AGGREGATED_FEATURES_PATH.value,
+            "custom_plots": paths.Paths.CUSTOM_PLOTS_FOR_AGGREGATED_FEATURES_PATH.value,
         }
-        generate_artifacts(self.general_config, data, "stage_2_missing_data_identified", paths_dict)
+        generate_artifacts(
+            self.general_config, data, "stage_2_missing_data_identified", paths_dict
+        )
 
     def generate_artifacts_for_correcting_missing_data(self, data):
         paths_dict = {
-            'time_series_plots': paths.Paths.TIME_SERIES_PLOTS_FOR_MISSING_DATA_CORRECTED_PATH.value,
-            'histogram_plots': paths.Paths.HISTOGRAM_PLOTS_FOR_MISSING_DATA_CORRECTED_PATH.value,
-            'custom_plots': paths.Paths.CUSTOM_PLOTS_FOR_MISSING_DATA_CORRECTED_PATH.value
+            "time_series_plots": paths.Paths.TIME_SERIES_PLOTS_FOR_MISSING_DATA_CORRECTED_PATH.value,
+            "histogram_plots": paths.Paths.HISTOGRAM_PLOTS_FOR_MISSING_DATA_CORRECTED_PATH.value,
+            "custom_plots": paths.Paths.CUSTOM_PLOTS_FOR_MISSING_DATA_CORRECTED_PATH.value,
         }
-        generate_artifacts(self.general_config, data, "stage_5_missing_data_corrected", paths_dict)
+        generate_artifacts(
+            self.general_config, data, "stage_5_missing_data_corrected", paths_dict
+        )
 
     def generate_artifacts_for_correcting_missing_data_post_aggregation(self, data):
         paths_dict = {
-            'time_series_plots': paths.Paths.TIME_SERIES_PLOTS_FOR_MISSING_DATA_CORRECTED_POST_AGGREGATION_PATH.value,
-            'histogram_plots': paths.Paths.HISTOGRAM_PLOTS_FOR_MISSING_DATA_CORRECTED_POST_AGGREGATION_PATH.value,
-            'custom_plots': paths.Paths.CUSTOM_PLOTS_FOR_MISSING_DATA_CORRECTED_POST_AGGREGATION_PATH.value
+            "time_series_plots": paths.Paths.TIME_SERIES_PLOTS_FOR_MISSING_DATA_CORRECTED_POST_AGGREGATION_PATH.value,
+            "histogram_plots": paths.Paths.HISTOGRAM_PLOTS_FOR_MISSING_DATA_CORRECTED_POST_AGGREGATION_PATH.value,
+            "custom_plots": paths.Paths.CUSTOM_PLOTS_FOR_MISSING_DATA_CORRECTED_POST_AGGREGATION_PATH.value,
         }
-        generate_artifacts(self.general_config, data, "stage_9_missing_data_corrected_post_aggregation", paths_dict)
+        generate_artifacts(
+            self.general_config,
+            data,
+            "stage_9_missing_data_corrected_post_aggregation",
+            paths_dict,
+        )

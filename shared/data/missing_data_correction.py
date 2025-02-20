@@ -184,7 +184,6 @@ def interpolate_one_feature(data, feature, method, limit_direction, max_gap):
     # Make a copy of the original feature
     original_feature = data[feature].copy()
 
-
     # Interpolate the missing values
     if method == "bfill":
         data[feature] = data[feature].fillna(method="bfill")

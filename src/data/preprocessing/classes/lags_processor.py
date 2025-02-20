@@ -2,6 +2,7 @@ import config.paths as paths
 from shared.data.introduce_lags import introduce_lags
 from src.utils.generate_artifacts import generate_artifacts
 
+
 class LagsProcessor:
     def __init__(self, general_config, data_config):
         self.general_config = general_config
@@ -21,11 +22,13 @@ class LagsProcessor:
             )
             self.generate_artifacts_for_introduce_lags(data)
         return data
-    
+
     def generate_artifacts_for_introduce_lags(self, data):
         paths_dict = {
-            'time_series_plots': paths.Paths.TIME_SERIES_PLOTS_FOR_LAGGED_FEATURES_PATH.value,
-            'histogram_plots': paths.Paths.HISTOGRAM_PLOTS_FOR_LAGGED_FEATURES_PATH.value,
-            'custom_plots': paths.Paths.CUSTOM_PLOTS_FOR_LAGGED_FEATURES_PATH.value
+            "time_series_plots": paths.Paths.TIME_SERIES_PLOTS_FOR_LAGGED_FEATURES_PATH.value,
+            "histogram_plots": paths.Paths.HISTOGRAM_PLOTS_FOR_LAGGED_FEATURES_PATH.value,
+            "custom_plots": paths.Paths.CUSTOM_PLOTS_FOR_LAGGED_FEATURES_PATH.value,
         }
-        generate_artifacts(self.general_config, data, "stage_6_lags_introduced", paths_dict)
+        generate_artifacts(
+            self.general_config, data, "stage_6_lags_introduced", paths_dict
+        )

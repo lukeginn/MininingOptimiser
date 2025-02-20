@@ -2,6 +2,7 @@ import config.paths as paths
 from shared.data.outlier_identifier import identify_outliers
 from src.utils.generate_artifacts import generate_artifacts
 
+
 class OutlierProcessor:
     def __init__(self, general_config, data_config):
         self.general_config = general_config
@@ -22,11 +23,13 @@ class OutlierProcessor:
             )
             self.generate_artifacts_for_identifying_outliers(data)
         return data
-    
+
     def generate_artifacts_for_identifying_outliers(self, data):
         paths_dict = {
-            'time_series_plots': paths.Paths.TIME_SERIES_PLOTS_FOR_OUTLIERS_IDENTIFIED_PATH.value,
-            'histogram_plots': paths.Paths.HISTOGRAM_PLOTS_FOR_OUTLIERS_IDENTIFIED_PATH.value,
-            'custom_plots': paths.Paths.CUSTOM_PLOTS_FOR_OUTLIERS_IDENTIFIED_PATH.value
+            "time_series_plots": paths.Paths.TIME_SERIES_PLOTS_FOR_OUTLIERS_IDENTIFIED_PATH.value,
+            "histogram_plots": paths.Paths.HISTOGRAM_PLOTS_FOR_OUTLIERS_IDENTIFIED_PATH.value,
+            "custom_plots": paths.Paths.CUSTOM_PLOTS_FOR_OUTLIERS_IDENTIFIED_PATH.value,
         }
-        generate_artifacts(self.general_config, data, "stage_3_outliers_identified", paths_dict)
+        generate_artifacts(
+            self.general_config, data, "stage_3_outliers_identified", paths_dict
+        )

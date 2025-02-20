@@ -1,6 +1,7 @@
 import config.paths as paths
 from shared.model.generate_model import save_models
 
+
 class ModelSaver:
     def __init__(self, model_config):
         self.model_config = model_config

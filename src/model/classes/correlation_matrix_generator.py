@@ -1,6 +1,7 @@
 import config.paths as paths
 from shared.model.generate_correlation_matrix import generate_correlation_matrix
 
+
 class CorrelationMatrixGenerator:
     def __init__(self, model_config):
         self.model_config = model_config
@@ -8,9 +9,14 @@ class CorrelationMatrixGenerator:
     def run_for_iron_concentrate_perc(self, data, training_features_per_method):
         if self.model_config.iron_concentrate_perc.model.correlation_matrix.run:
             if training_features_per_method is None:
-                training_features = self.model_config.iron_concentrate_perc.model.training_features + [self.model_config.iron_concentrate_perc.model.target]
+                training_features = (
+                    self.model_config.iron_concentrate_perc.model.training_features
+                    + [self.model_config.iron_concentrate_perc.model.target]
+                )
             else:
-                training_features = training_features_per_method[-1] + [self.model_config.iron_concentrate_perc.model.target]
+                training_features = training_features_per_method[-1] + [
+                    self.model_config.iron_concentrate_perc.model.target
+                ]
 
             correlation_matrix = generate_correlation_matrix(
                 data=data,
@@ -21,12 +27,19 @@ class CorrelationMatrixGenerator:
             )
             return correlation_matrix
 
-    def run_for_iron_concentrate_perc_feed_blend(self, data, training_features_per_method):
+    def run_for_iron_concentrate_perc_feed_blend(
+        self, data, training_features_per_method
+    ):
         if self.model_config.iron_concentrate_perc.model.correlation_matrix.run:
             if training_features_per_method is None:
-                training_features = self.model_config.iron_concentrate_perc.model.feed_blend_training_features + [self.model_config.iron_concentrate_perc.model.target]
+                training_features = (
+                    self.model_config.iron_concentrate_perc.model.feed_blend_training_features
+                    + [self.model_config.iron_concentrate_perc.model.target]
+                )
             else:
-                training_features = training_features_per_method[-1] + [self.model_config.iron_concentrate_perc.model.target]
+                training_features = training_features_per_method[-1] + [
+                    self.model_config.iron_concentrate_perc.model.target
+                ]
 
             correlation_matrix = generate_correlation_matrix(
                 data=data,
@@ -40,9 +53,14 @@ class CorrelationMatrixGenerator:
     def run_for_silica_concentrate_perc(self, data, training_features_per_method):
         if self.model_config.silica_concentrate_perc.model.correlation_matrix.run:
             if training_features_per_method is None:
-                training_features = self.model_config.silica_concentrate_perc.model.training_features + [self.model_config.silica_concentrate_perc.model.target]
+                training_features = (
+                    self.model_config.silica_concentrate_perc.model.training_features
+                    + [self.model_config.silica_concentrate_perc.model.target]
+                )
             else:
-                training_features = training_features_per_method[-1] + [self.model_config.silica_concentrate_perc.model.target]
+                training_features = training_features_per_method[-1] + [
+                    self.model_config.silica_concentrate_perc.model.target
+                ]
 
             correlation_matrix = generate_correlation_matrix(
                 data=data,
@@ -53,12 +71,19 @@ class CorrelationMatrixGenerator:
             )
             return correlation_matrix
 
-    def run_for_silica_concentrate_perc_feed_blend(self, data, training_features_per_method):
+    def run_for_silica_concentrate_perc_feed_blend(
+        self, data, training_features_per_method
+    ):
         if self.model_config.silica_concentrate_perc.model.correlation_matrix.run:
             if training_features_per_method is None:
-                training_features = self.model_config.silica_concentrate_perc.model.feed_blend_training_features + [self.model_config.silica_concentrate_perc.model.target]
+                training_features = (
+                    self.model_config.silica_concentrate_perc.model.feed_blend_training_features
+                    + [self.model_config.silica_concentrate_perc.model.target]
+                )
             else:
-                training_features = training_features_per_method[-1] + [self.model_config.silica_concentrate_perc.model.target]
+                training_features = training_features_per_method[-1] + [
+                    self.model_config.silica_concentrate_perc.model.target
+                ]
 
             correlation_matrix = generate_correlation_matrix(
                 data=data,

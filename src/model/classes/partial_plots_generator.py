@@ -1,6 +1,7 @@
 import config.paths as paths
 from shared.model.generate_partial_plots import generate_partial_plots
 
+
 class PartialPlotsGenerator:
     def __init__(self, model_config):
         self.model_config = model_config
@@ -19,7 +20,9 @@ class PartialPlotsGenerator:
             grid_resolution=self.model_config.iron_concentrate_perc.partial_plots.grid_resolution,
         )
 
-    def run_for_iron_concentrate_perc_feed_blend(self, best_models, data, training_features):
+    def run_for_iron_concentrate_perc_feed_blend(
+        self, best_models, data, training_features
+    ):
         generate_partial_plots(
             model_choice=self.model_config.iron_concentrate_perc.model.model_choice,
             models=best_models,
@@ -47,7 +50,9 @@ class PartialPlotsGenerator:
             grid_resolution=self.model_config.silica_concentrate_perc.partial_plots.grid_resolution,
         )
 
-    def run_for_silica_concentrate_perc_feed_blend(self, best_models, data, training_features):
+    def run_for_silica_concentrate_perc_feed_blend(
+        self, best_models, data, training_features
+    ):
         generate_partial_plots(
             model_choice=self.model_config.silica_concentrate_perc.model.model_choice,
             models=best_models,

@@ -18,7 +18,7 @@ def generate_partial_plots(
     degree_of_smoothing=3,
     plot_feature_density_as_histogram=True,
     number_of_bins_in_histogram=10,
-    grid_resolution=100
+    grid_resolution=100,
 ):
 
     partial_dependence_df_per_feature = generating_partial_dependence_data(
@@ -28,7 +28,7 @@ def generate_partial_plots(
         features=features,
         generate_feature_density=plot_feature_density,
         degree_of_smoothing=degree_of_smoothing,
-        grid_resolution=grid_resolution
+        grid_resolution=grid_resolution,
     )
 
     writing_partial_dependence_data(
@@ -49,14 +49,23 @@ def generate_partial_plots(
 
 
 def generating_partial_dependence_data(
-    model_choice, models, data, features, generate_feature_density, degree_of_smoothing, grid_resolution
+    model_choice,
+    models,
+    data,
+    features,
+    generate_feature_density,
+    degree_of_smoothing,
+    grid_resolution,
 ):
 
     logger.info(f"Generating partial dependence data for model choice: {model_choice}")
     if model_choice == "linear_regression":
         partial_dependence_df_per_feature = (
             generate_partial_dependence_for_linear_regression(
-                models=models, data=data, features=features, grid_resolution=grid_resolution
+                models=models,
+                data=data,
+                features=features,
+                grid_resolution=grid_resolution,
             )
         )
     elif model_choice == "gam":
@@ -105,11 +114,15 @@ def generating_feature_density(
     return partial_dependence_df_per_feature
 
 
-def generate_partial_dependence_for_linear_regression(models, data, features, grid_resolution):
+def generate_partial_dependence_for_linear_regression(
+    models, data, features, grid_resolution
+):
     partial_dependence_df_per_feature = []
 
     for feature in features:
-        feature_values = np.linspace(data[feature].min(), data[feature].max(), num=grid_resolution)
+        feature_values = np.linspace(
+            data[feature].min(), data[feature].max(), num=grid_resolution
+        )
         partial_dependence_ = np.zeros_like(feature_values)
 
         for model in models:
@@ -153,8 +166,8 @@ def generate_partial_dependence_for_gam(models, features, grid_resolution):
 
         for model in models:
             generated_feature_values = model.generate_X_grid(term=i, n=grid_resolution)
-            model_partial_dependence, model_confidence_interval = model.partial_dependence(
-                term=i, X=generated_feature_values, width=0.95
+            model_partial_dependence, model_confidence_interval = (
+                model.partial_dependence(term=i, X=generated_feature_values, width=0.95)
             )
 
             if feature_values is None:
@@ -198,12 +211,17 @@ def generate_partial_dependence_for_gbm(models, features, data, grid_resolution)
         partial_dependence_ = np.zeros(grid_resolution)
 
         for model in models:
-            partial_dependence_results = partial_dependence(model, X=data, features=[feature], grid_resolution=grid_resolution)
-            model_feature_values = partial_dependence_results['grid_values'][0]
-            model_partial_dependence_values = partial_dependence_results['average'][0]
+            partial_dependence_results = partial_dependence(
+                model, X=data, features=[feature], grid_resolution=grid_resolution
+            )
+            model_feature_values = partial_dependence_results["grid_values"][0]
+            model_partial_dependence_values = partial_dependence_results["average"][0]
 
             # This resolves a bug where a feature doesn't contain many unique values and cannot go to grid_resolution
-            if np.all(partial_dependence_ == 0) & len(model_partial_dependence_values) < grid_resolution:
+            if (
+                np.all(partial_dependence_ == 0) & len(model_partial_dependence_values)
+                < grid_resolution
+            ):
                 partial_dependence_ = np.zeros_like(model_partial_dependence_values)
 
             if feature_values is None:
@@ -211,14 +229,11 @@ def generate_partial_dependence_for_gbm(models, features, data, grid_resolution)
 
             partial_dependence_ += model_partial_dependence_values
 
-        #partial_dependence_ /= len(models)
+        # partial_dependence_ /= len(models)
 
         # Creating a DataFrame for the partial dependence
         partial_dependence_df = pd.DataFrame(
-            {
-                feature: feature_values,
-                "partial_dependence": partial_dependence_
-            }
+            {feature: feature_values, "partial_dependence": partial_dependence_}
         )
 
         partial_dependence_df_per_feature.append(partial_dependence_df)

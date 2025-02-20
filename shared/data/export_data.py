@@ -1,5 +1,6 @@
 import logging as logger
 
+
 def export_data(data, path, path_suffix):
     path = str(path)
     path = path.replace(".csv", "")
