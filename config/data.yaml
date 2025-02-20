@@ -1,0 +1,96 @@
+timestamp: 'DATE'
+
+identify_missing_data:
+  run: False
+  unique_values:
+    run: True
+    threshold: 5
+  explicit_missing_values:
+    run: True
+    indicators: ['NA', 'na', 'nan', 'NAN', 'NaN', 'null', 'NULL', 'None', 'none', -999, -9999, '?']
+  repeating_values:
+    run: True
+    threshold: 18
+    proportion_threshold: 0.5
+
+identify_outliers:
+  run: True
+  method: 'iqr'
+  iqr_threshold: 4
+  z_score_threshold: 3
+  mad_threshold: 3
+  dbscan_eps: 0.5
+  dbscan_min_samples: 5
+  isolation_forest_threshold: 0.001
+  lof_threshold: 0.001
+
+identify_shutdowns:
+  run: False
+  shutdown_features:
+    - 'EMPTY_FEATURE'
+  cutoff_values:
+    - 10000
+
+correct_missing_data:
+  run: True
+  interpolate_time_series:
+    run: True
+    method: 'bfill'
+    limit_direction: 'both'
+    max_gap: 6
+  interpolate_highly_regular_time_series:
+    run: True
+    method: 'bfill'
+    limit_direction: 'both'
+    regular_interval_min: 24
+  replace_missing_values_with_x:
+    run: False
+    x: 0
+  replace_missing_values_with_last_known_value:
+    run: False
+    backfill: False
+  delete_all_rows_with_missing_values:
+    run: False
+
+introduce_lags:
+  run: False
+  features: ['FAKE_FEATURE']
+  lags: [1]
+  optimise_lags: True
+  target: 'FAKE_FEATURE'
+  max_lag: 144
+  overwrite_existing_features: True
+
+rolling_aggregation:
+  aggregation_types:
+    - 'mean'
+  window: 24
+  min_periods: 24
+  window_selection_frequency: 1
+
+feature_engineering:
+  run: True
+
+correct_missing_data_after_aggregation:
+  run: True
+  interpolate_time_series:
+    run: True
+    method: 'bfill'
+    limit_direction: 'both'
+    max_gap: 6
+  interpolate_highly_regular_time_series:
+    run: False
+    method: 'bfill'
+    limit_direction: 'both'
+    regular_interval_min: 24
+  replace_missing_values_with_x:
+    run: True
+    x: 0
+  replace_missing_values_with_last_known_value:
+    run: True
+    backfill: True
+  delete_all_rows_with_missing_values:
+    run: True
+
+filter_shutdowns:
+  run: True

@@ -2,34 +2,36 @@ import config.paths as paths
 from src.simulating.functions.generate_simulation import generate_simulations
 
 class SimulationGenerator:
-    def __init__(self, config):
-        self.config = config
+    def __init__(self, model_config, clustering_config, simulation_config):
+        self.model_config = model_config
+        self.clustering_config = clustering_config
+        self.simulation_config = simulation_config
 
     def run_for_iron_concentrate_perc(self, best_models, cluster_centers):
         # If needed, we override the values in the clusters to ensure that the simulations are tailored to answer the business questions
         cluster_centers = self.override_values_in_clusters(cluster_centers)
 
         simulation_results = generate_simulations(
-            features=self.config.iron_concentrate_perc.model.training_features,
-            feature_values_to_simulate=self.config.simulation.feed_blend_and_controllables_model.feature_values_to_simulate,
-            model_choice=self.config.iron_concentrate_perc.model.model_choice,
+            features=self.model_config.iron_concentrate_perc.model.training_features,
+            feature_values_to_simulate=self.simulation_config.feed_blend_and_controllables_model.feature_values_to_simulate,
+            model_choice=self.model_config.iron_concentrate_perc.model.model_choice,
             best_models=best_models,
-            confidence_interval=self.config.simulation.feed_blend_and_controllables_model.confidence_interval,
+            confidence_interval=self.simulation_config.feed_blend_and_controllables_model.confidence_interval,
             cluster_centers=cluster_centers,
             feed_blend_and_controllables_modelling=True,
-            controllables_features=self.config.clustering.controllables_model.training_features
+            controllables_features=self.clustering_config.controllables_model.training_features
         )
         return simulation_results
 
     def run_for_iron_concentrate_perc_feed_blend(self, best_models, cluster_centers):
         simulation_results = generate_simulations(
-            features=self.config.iron_concentrate_perc.model.feed_blend_training_features,
-            feature_values_to_simulate=self.config.simulation.feed_blend_model.feature_values_to_simulate,
-            model_choice=self.config.iron_concentrate_perc.model.model_choice,
+            features=self.model_config.iron_concentrate_perc.model.feed_blend_training_features,
+            feature_values_to_simulate=self.simulation_config.feed_blend_model.feature_values_to_simulate,
+            model_choice=self.model_config.iron_concentrate_perc.model.model_choice,
             best_models=best_models,
-            confidence_interval=self.config.simulation.feed_blend_model.confidence_interval,
+            confidence_interval=self.simulation_config.feed_blend_model.confidence_interval,
             cluster_centers=cluster_centers,
-            informational_features=self.config.clustering.feed_blend_model.informational_features,
+            informational_features=self.clustering_config.feed_blend_model.informational_features,
             feed_blend_and_controllables_modelling=False
         )
         return simulation_results
@@ -39,26 +41,26 @@ class SimulationGenerator:
         cluster_centers = self.override_values_in_clusters(cluster_centers)
 
         simulation_results = generate_simulations(
-            features=self.config.silica_concentrate_perc.model.training_features,
-            feature_values_to_simulate=self.config.simulation.feed_blend_and_controllables_model.feature_values_to_simulate,
-            model_choice=self.config.silica_concentrate_perc.model.model_choice,
+            features=self.model_config.silica_concentrate_perc.model.training_features,
+            feature_values_to_simulate=self.simulation_config.feed_blend_and_controllables_model.feature_values_to_simulate,
+            model_choice=self.model_config.silica_concentrate_perc.model.model_choice,
             best_models=best_models,
-            confidence_interval=self.config.simulation.feed_blend_and_controllables_model.confidence_interval,
+            confidence_interval=self.simulation_config.feed_blend_and_controllables_model.confidence_interval,
             cluster_centers=cluster_centers,
             feed_blend_and_controllables_modelling=True,
-            controllables_features=self.config.clustering.controllables_model.training_features
+            controllables_features=self.clustering_config.controllables_model.training_features
         )
         return simulation_results
 
     def run_for_silica_concentrate_perc_feed_blend(self, best_models, cluster_centers):
         simulation_results = generate_simulations(
-            features=self.config.silica_concentrate_perc.model.feed_blend_training_features,
-            feature_values_to_simulate=self.config.simulation.feed_blend_model.feature_values_to_simulate,
-            model_choice=self.config.silica_concentrate_perc.model.model_choice,
+            features=self.model_config.silica_concentrate_perc.model.feed_blend_training_features,
+            feature_values_to_simulate=self.simulation_config.feed_blend_model.feature_values_to_simulate,
+            model_choice=self.model_config.silica_concentrate_perc.model.model_choice,
             best_models=best_models,
-            confidence_interval=self.config.simulation.feed_blend_model.confidence_interval,
+            confidence_interval=self.simulation_config.feed_blend_model.confidence_interval,
             cluster_centers=cluster_centers,
-            informational_features=self.config.clustering.feed_blend_model.informational_features,
+            informational_features=self.clustering_config.feed_blend_model.informational_features,
             feed_blend_and_controllables_modelling=False
         )
         return simulation_results

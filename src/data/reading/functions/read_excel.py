@@ -2,31 +2,31 @@ import numpy as np
 import pandas as pd
 import logging as logger
 
-
+# TO-DO: Clean up and turn into a class
 def reading_preprocessing_and_merging_multiple_excel_workbooks(config, file_paths):
     data = read_multiple_excel_workbooks(file_paths=[file_paths[0]])
     data = preprocess_multiple_excel_workbooks(
         data=data,
-        min_non_null_values_for_empty_columns=config.data.preprocessing_excel_workbook.min_non_null_values_for_empty_columns,
-        min_non_null_values_for_empty_rows=config.data.preprocessing_excel_workbook.min_non_null_values_for_empty_rows,
-        exclude_sheets_for_combining_first_two_rows=config.data.preprocessing_excel_workbook.exclude_sheets_for_combining_first_two_rows,
-        missing_value_words=config.data.preprocessing_excel_workbook.missing_value_words,
-        unique_phrases_to_replace_threshold=config.data.preprocessing_excel_workbook.unique_phrases_to_replace_threshold,
-        unique_values_to_stop_replacement_threshold=config.data.preprocessing_excel_workbook.unique_values_to_stop_replacement_threshold,
-        timestamp_column_for_merging=config.data.timestamp,
+        min_non_null_values_for_empty_columns=data_config.preprocessing_excel_workbook.min_non_null_values_for_empty_columns,
+        min_non_null_values_for_empty_rows=data_config.preprocessing_excel_workbook.min_non_null_values_for_empty_rows,
+        exclude_sheets_for_combining_first_two_rows=data_config.preprocessing_excel_workbook.exclude_sheets_for_combining_first_two_rows,
+        missing_value_words=data_config.preprocessing_excel_workbook.missing_value_words,
+        unique_phrases_to_replace_threshold=data_config.preprocessing_excel_workbook.unique_phrases_to_replace_threshold,
+        unique_values_to_stop_replacement_threshold=data_config.preprocessing_excel_workbook.unique_values_to_stop_replacement_threshold,
+        timestamp_column_for_merging=data_config.timestamp,
     )
     data = custom_preprocessing(data)
 
     extra_data = read_multiple_excel_workbooks(file_paths=[file_paths[1]])
     extra_data = preprocess_excel_workbook(
         data=extra_data[file_paths[1]],
-        min_non_null_values_for_empty_columns=config.data.preprocessing_excel_workbook.min_non_null_values_for_empty_columns,
-        min_non_null_values_for_empty_rows=config.data.preprocessing_excel_workbook.min_non_null_values_for_empty_rows,
-        exclude_sheets_for_combining_first_two_rows=config.data.preprocessing_excel_workbook.exclude_sheets_for_combining_first_two_rows,
-        missing_value_words=config.data.preprocessing_excel_workbook.missing_value_words,
-        unique_phrases_to_replace_threshold=config.data.preprocessing_excel_workbook.unique_phrases_to_replace_threshold,
-        unique_values_to_stop_replacement_threshold=config.data.preprocessing_excel_workbook.unique_values_to_stop_replacement_threshold,
-        timestamp_column_for_merging=config.data.timestamp,
+        min_non_null_values_for_empty_columns=data_config.preprocessing_excel_workbook.min_non_null_values_for_empty_columns,
+        min_non_null_values_for_empty_rows=data_config.preprocessing_excel_workbook.min_non_null_values_for_empty_rows,
+        exclude_sheets_for_combining_first_two_rows=data_config.preprocessing_excel_workbook.exclude_sheets_for_combining_first_two_rows,
+        missing_value_words=data_config.preprocessing_excel_workbook.missing_value_words,
+        unique_phrases_to_replace_threshold=data_config.preprocessing_excel_workbook.unique_phrases_to_replace_threshold,
+        unique_values_to_stop_replacement_threshold=data_config.preprocessing_excel_workbook.unique_values_to_stop_replacement_threshold,
+        timestamp_column_for_merging=data_config.timestamp,
     )
     extra_data = custom_preprocessing_for_extra_data(extra_data)
 
@@ -34,16 +34,16 @@ def reading_preprocessing_and_merging_multiple_excel_workbooks(config, file_path
     extra_data2 = custom_preprocessing_for_extra_data_2(extra_data2)
     extra_data2 = preprocess_excel_workbook(
         data=extra_data2[file_paths[2]],
-        min_non_null_values_for_empty_columns=config.data.preprocessing_excel_workbook.min_non_null_values_for_empty_columns,
-        min_non_null_values_for_empty_rows=config.data.preprocessing_excel_workbook.min_non_null_values_for_empty_rows,
-        exclude_sheets_for_combining_first_two_rows=config.data.preprocessing_excel_workbook.exclude_sheets_for_combining_first_two_rows,
-        missing_value_words=config.data.preprocessing_excel_workbook.missing_value_words,
-        unique_phrases_to_replace_threshold=config.data.preprocessing_excel_workbook.unique_phrases_to_replace_threshold,
-        unique_values_to_stop_replacement_threshold=config.data.preprocessing_excel_workbook.unique_values_to_stop_replacement_threshold,
-        timestamp_column_for_merging=config.data.timestamp,
+        min_non_null_values_for_empty_columns=data_config.preprocessing_excel_workbook.min_non_null_values_for_empty_columns,
+        min_non_null_values_for_empty_rows=data_config.preprocessing_excel_workbook.min_non_null_values_for_empty_rows,
+        exclude_sheets_for_combining_first_two_rows=data_config.preprocessing_excel_workbook.exclude_sheets_for_combining_first_two_rows,
+        missing_value_words=data_config.preprocessing_excel_workbook.missing_value_words,
+        unique_phrases_to_replace_threshold=data_config.preprocessing_excel_workbook.unique_phrases_to_replace_threshold,
+        unique_values_to_stop_replacement_threshold=data_config.preprocessing_excel_workbook.unique_values_to_stop_replacement_threshold,
+        timestamp_column_for_merging=data_config.timestamp,
     )
 
-    data = merge_excel_workbooks(data=data, extra_data=extra_data, extra_data2=extra_data2, timestamp_column=config.data.timestamp)
+    data = merge_excel_workbooks(data=data, extra_data=extra_data, extra_data2=extra_data2, timestamp_column=data_config.timestamp)
     data = apply_custom_filters(data=data)
     
     return data

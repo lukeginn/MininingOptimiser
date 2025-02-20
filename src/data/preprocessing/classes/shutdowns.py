@@ -2,11 +2,12 @@ import config.paths as paths
 from src.utils.generate_artifacts import generate_artifacts
 
 class ShutdownFilter:
-    def __init__(self, config):
-        self.config = config
+    def __init__(self, general_config, data_config):
+        self.general_config = general_config
+        self.data_config = data_config
 
     def run(self, data):
-        if self.config.data.filter_shutdowns.run:   
+        if self.data_config.filter_shutdowns.run:   
             data = self.filter_shutdowns(data)
             self.generate_artifacts_for_run(data)
         return data
@@ -17,7 +18,7 @@ class ShutdownFilter:
             'histogram_plots': paths.Paths.HISTOGRAM_PLOTS_FOR_FILTERING_SHUTDOWN_PATH.value,
             'custom_plots': paths.Paths.CUSTOM_PLOTS_FOR_FILTERING_SHUTDOWN_PATH.value
         }
-        generate_artifacts(self.config, data, "stage_10_filter_shutdowns", paths_dict)
+        generate_artifacts(self.general_config, data, "stage_10_filter_shutdowns", paths_dict)
 
     def filter_shutdowns(self, data):
         shutdown_dates = self.identify_shutdown_times(data)

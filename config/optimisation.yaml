@@ -1,0 +1,5 @@
+feature_to_optimise: 'IRON_CONCENTRATE_PERC_mean'
+direction_to_optimise: 'maximise'
+constraints:
+  features: ['SILICA_CONCENTRATE_PERC_mean']
+  limits: [[0,100]]

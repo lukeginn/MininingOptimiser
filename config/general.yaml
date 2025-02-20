@@ -1,0 +1,8 @@
+random_state: 42
+export_data: False
+generate_meta_data: False
+generate_time_series_plots: False
+generate_histogram_plots:
+  run: False
+  number_of_bins: 30
+generate_custom_plots: False

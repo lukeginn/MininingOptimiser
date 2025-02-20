@@ -6,7 +6,12 @@ class Paths(Enum):
     BASE_PATH = Path().resolve()
 
     CONFIG_PATH = BASE_PATH / "config"
-    CONFIG_FILE_PATH = CONFIG_PATH / "config.yaml"
+    GENERAL_CONFIG_FILE_PATH = CONFIG_PATH / "general.yaml"
+    DATA_CONFIG_FILE_PATH = CONFIG_PATH / "data.yaml"
+    MODEL_CONFIG_FILE_PATH = CONFIG_PATH / "model.yaml"
+    CLUSTERING_CONFIG_FILE_PATH = CONFIG_PATH / "clustering.yaml"
+    SIMULATION_CONFIG_FILE_PATH = CONFIG_PATH / "simulation.yaml"
+    OPTIMISATION_CONFIG_FILE_PATH = CONFIG_PATH / "optimisation.yaml"
 
     INPUTS_PATH = BASE_PATH / "inputs"
     DATA_INPUTS_PATH = INPUTS_PATH / "data"

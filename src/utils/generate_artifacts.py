@@ -21,7 +21,7 @@ def generate_artifacts(config, data, stage_suffix, paths_dict):
     if config.generate_time_series_plots:
         generate_time_series_plots(
             data=data,
-            timestamp=config.data.timestamp,
+            timestamp=data_config.timestamp,
             path=paths_dict['time_series_plots'],
         )
     if config.generate_histogram_plots.run:

@@ -1,0 +1,71 @@
+feed_blend_model:
+  run: True
+  training_features:
+    - 'IRON_FEED_PERC_mean'
+    - 'SILICA_FEED_PERC_mean'
+    - 'STARCH_FLOW_mean'
+    - 'AMINA_FLOW_mean'
+    - 'ORE_PULP_FLOW_mean'
+    - 'ORE_PULP_PH_mean'
+    - 'ORE_PULP_DENSITY_mean'
+  informational_features:
+    - 'FLOTATION_COLUMN_01_AIR_FLOW_mean'
+    - 'FLOTATION_COLUMN_02_AIR_FLOW_mean'
+    - 'FLOTATION_COLUMN_03_AIR_FLOW_mean'
+    - 'FLOTATION_COLUMN_04_AIR_FLOW_mean'
+    - 'FLOTATION_COLUMN_05_AIR_FLOW_mean'
+    - 'FLOTATION_COLUMN_06_AIR_FLOW_mean'
+    - 'FLOTATION_COLUMN_07_AIR_FLOW_mean'
+    - 'FLOTATION_COLUMN_01_LEVEL_mean'
+    - 'FLOTATION_COLUMN_02_LEVEL_mean'
+    - 'FLOTATION_COLUMN_03_LEVEL_mean'
+    - 'FLOTATION_COLUMN_04_LEVEL_mean'
+    - 'FLOTATION_COLUMN_05_LEVEL_mean'
+    - 'FLOTATION_COLUMN_06_LEVEL_mean'
+    - 'FLOTATION_COLUMN_07_LEVEL_mean'
+    - 'IRON_CONCENTRATE_PERC_mean'
+    - 'SILICA_CONCENTRATE_PERC_mean'
+  include_row_count_sum: True
+  model_choice: 'kmeans'
+  k_means_n_clusters: 10
+  k_means_max_iter: 300
+  dbscan_eps: 0.5
+  dbscan_min_samples: 5
+  agglomerative_n_clusters: 3
+  random_state: 42
+  
+controllables_model:
+  run: True
+  training_features:
+    - 'FLOTATION_COLUMN_01_AIR_FLOW_mean'
+    - 'FLOTATION_COLUMN_02_AIR_FLOW_mean'
+    - 'FLOTATION_COLUMN_03_AIR_FLOW_mean'
+    - 'FLOTATION_COLUMN_04_AIR_FLOW_mean'
+    - 'FLOTATION_COLUMN_05_AIR_FLOW_mean'
+    - 'FLOTATION_COLUMN_06_AIR_FLOW_mean'
+    - 'FLOTATION_COLUMN_07_AIR_FLOW_mean'
+    - 'FLOTATION_COLUMN_01_LEVEL_mean'
+    - 'FLOTATION_COLUMN_02_LEVEL_mean'
+    - 'FLOTATION_COLUMN_03_LEVEL_mean'
+    - 'FLOTATION_COLUMN_04_LEVEL_mean'
+    - 'FLOTATION_COLUMN_05_LEVEL_mean'
+    - 'FLOTATION_COLUMN_06_LEVEL_mean'
+    - 'FLOTATION_COLUMN_07_LEVEL_mean'
+  informational_features:
+    - 'IRON_FEED_PERC_mean'
+    - 'SILICA_FEED_PERC_mean'
+    - 'STARCH_FLOW_mean'
+    - 'AMINA_FLOW_mean'
+    - 'ORE_PULP_FLOW_mean'
+    - 'ORE_PULP_PH_mean'
+    - 'ORE_PULP_DENSITY_mean'
+    - 'IRON_CONCENTRATE_PERC_mean'
+    - 'SILICA_CONCENTRATE_PERC_mean'
+  include_row_count_sum: True
+  model_choice: 'kmeans'
+  k_means_n_clusters: 10
+  k_means_max_iter: 300
+  dbscan_eps: 0.5
+  dbscan_min_samples: 5
+  agglomerative_n_clusters: 3
+  random_state: 42

@@ -1,0 +1,171 @@
+iron_concentrate_perc:
+  model:
+    target: 'IRON_CONCENTRATE_PERC_mean'
+    feed_blend_training_features:
+      - 'IRON_FEED_PERC_mean'
+      - 'SILICA_FEED_PERC_mean'
+      - 'STARCH_FLOW_mean'
+      - 'AMINA_FLOW_mean'
+      - 'ORE_PULP_FLOW_mean'
+      - 'ORE_PULP_PH_mean'
+      - 'ORE_PULP_DENSITY_mean'
+    training_features:
+      - 'IRON_FEED_PERC_mean'
+      - 'SILICA_FEED_PERC_mean'
+      - 'STARCH_FLOW_mean'
+      - 'AMINA_FLOW_mean'
+      - 'ORE_PULP_FLOW_mean'
+      - 'ORE_PULP_PH_mean'
+      - 'ORE_PULP_DENSITY_mean'
+      - 'FLOTATION_COLUMN_01_AIR_FLOW_mean'
+      - 'FLOTATION_COLUMN_02_AIR_FLOW_mean'
+      - 'FLOTATION_COLUMN_03_AIR_FLOW_mean'
+      - 'FLOTATION_COLUMN_04_AIR_FLOW_mean'
+      - 'FLOTATION_COLUMN_05_AIR_FLOW_mean'
+      - 'FLOTATION_COLUMN_06_AIR_FLOW_mean'
+      - 'FLOTATION_COLUMN_07_AIR_FLOW_mean'
+      - 'FLOTATION_COLUMN_01_LEVEL_mean'
+      - 'FLOTATION_COLUMN_02_LEVEL_mean'
+      - 'FLOTATION_COLUMN_03_LEVEL_mean'
+      - 'FLOTATION_COLUMN_04_LEVEL_mean'
+      - 'FLOTATION_COLUMN_05_LEVEL_mean'
+      - 'FLOTATION_COLUMN_06_LEVEL_mean'
+      - 'FLOTATION_COLUMN_07_LEVEL_mean'
+    model_choice: 'gbm'
+    random_state: 42
+    number_of_models: 1
+    model_name: 'iron_concentrate_perc'
+    metric: 'rmse'
+    generate_feature_importance: True
+
+    hyperparameters:
+      learning_rate: 
+        - 0.1
+      max_depth:
+        - 3
+      min_samples_leaf:
+        - 1
+      max_iter:
+        - 100
+      max_leaf_nodes:
+        - 31
+      l2_regularization:
+        - 0.0
+      max_bins:
+        - 255
+      monotonic_cst:
+        - [0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0]
+
+    univariable_feature_importance:
+      run: True
+      method: 'kendall'
+
+    feature_selection:
+      run: False
+      filter_low_variance:
+        run: True
+        threshold: 0.01
+      filter_univariable_feature_importance:
+        run: True
+        method: 'kendall'
+        threshold: 0.05
+      filter_feature_importance:
+        run: False
+        threshold: 1
+
+    correlation_matrix:
+      run: True
+      method: 'kendall'
+
+  partial_plots:
+    plot_confidence_interval: True
+    plot_feature_density: True
+    plot_feature_density_as_histogram: False
+    number_of_bins_in_histogram: 10
+    grid_resolution: 200
+
+silica_concentrate_perc:
+  model:
+    target: 'SILICA_CONCENTRATE_PERC_mean'
+    feed_blend_training_features:
+      - 'IRON_FEED_PERC_mean'
+      - 'SILICA_FEED_PERC_mean'
+      - 'STARCH_FLOW_mean'
+      - 'AMINA_FLOW_mean'
+      - 'ORE_PULP_FLOW_mean'
+      - 'ORE_PULP_PH_mean'
+      - 'ORE_PULP_DENSITY_mean'
+    training_features:
+      - 'IRON_FEED_PERC_mean'
+      - 'SILICA_FEED_PERC_mean'
+      - 'STARCH_FLOW_mean'
+      - 'AMINA_FLOW_mean'
+      - 'ORE_PULP_FLOW_mean'
+      - 'ORE_PULP_PH_mean'
+      - 'ORE_PULP_DENSITY_mean'
+      - 'FLOTATION_COLUMN_01_AIR_FLOW_mean'
+      - 'FLOTATION_COLUMN_02_AIR_FLOW_mean'
+      - 'FLOTATION_COLUMN_03_AIR_FLOW_mean'
+      - 'FLOTATION_COLUMN_04_AIR_FLOW_mean'
+      - 'FLOTATION_COLUMN_05_AIR_FLOW_mean'
+      - 'FLOTATION_COLUMN_06_AIR_FLOW_mean'
+      - 'FLOTATION_COLUMN_07_AIR_FLOW_mean'
+      - 'FLOTATION_COLUMN_01_LEVEL_mean'
+      - 'FLOTATION_COLUMN_02_LEVEL_mean'
+      - 'FLOTATION_COLUMN_03_LEVEL_mean'
+      - 'FLOTATION_COLUMN_04_LEVEL_mean'
+      - 'FLOTATION_COLUMN_05_LEVEL_mean'
+      - 'FLOTATION_COLUMN_06_LEVEL_mean'
+      - 'FLOTATION_COLUMN_07_LEVEL_mean'
+    model_choice: 'gbm'
+    random_state: 42
+    number_of_models: 1
+    model_name: 'silica_concentrate_perc'
+    metric: 'rmse'
+    generate_feature_importance: True
+
+    hyperparameters:
+      learning_rate: 
+        - 0.1
+      max_depth:
+        - 3
+      min_samples_leaf:
+        - 1
+      max_iter:
+        - 100
+      max_leaf_nodes:
+        - 31
+      l2_regularization:
+        - 0.0
+      max_bins:
+        - 255
+      monotonic_cst:
+        - [0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0]
+
+    univariable_feature_importance:
+      run: True
+      method: 'kendall'
+
+    feature_selection:
+      run: False
+      filter_low_variance:
+        run: True
+        threshold: 0.01
+      filter_univariable_feature_importance:
+        run: True
+        method: 'kendall'
+        threshold: 0.05
+      filter_feature_importance:
+        run: False
+        threshold: 1
+
+    correlation_matrix:
+      run: True
+      method: 'kendall'
+
+  partial_plots:
+    plot_confidence_interval: True
+    plot_feature_density: True
+    plot_feature_density_as_histogram: False
+    number_of_bins_in_histogram: 10
+    grid_resolution: 200
