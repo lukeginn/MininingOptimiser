@@ -1,12 +1,13 @@
 import config.paths as paths
 from shared.data.aggregate_data import rolling_aggregate_data_via_timestamp
 from src.utils.generate_artifacts import generate_artifacts
+from dataclasses import dataclass
 
 
+@dataclass
 class DataAggregator:
-    def __init__(self, general_config, data_config):
-        self.general_config = general_config
-        self.data_config = data_config
+    general_config: dict
+    data_config: dict
 
     def run(self, data):
         data = rolling_aggregate_data_via_timestamp(

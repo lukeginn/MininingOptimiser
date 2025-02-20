@@ -2,11 +2,12 @@ import config.paths as paths
 from src.data.reading.functions.read_csv import read_csv
 from src.data.preprocessing.functions.initial_preprocessing import initial_preprocessing
 from src.utils.generate_artifacts import generate_artifacts
+from dataclasses import dataclass
 
 
+@dataclass
 class DataReader:
-    def __init__(self, general_config):
-        self.general_config = general_config
+    general_config: dict
 
     def run(self):
         data = read_csv(file_path=paths.Paths.DATA_FILE_1.value)

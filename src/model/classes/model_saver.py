@@ -1,10 +1,11 @@
 import config.paths as paths
 from shared.model.generate_model import save_models
+from dataclasses import dataclass
 
 
+@dataclass
 class ModelSaver:
-    def __init__(self, model_config):
-        self.model_config = model_config
+    model_config: dict
 
     def run_for_iron_concentrate_perc(self, best_models):
         save_models(

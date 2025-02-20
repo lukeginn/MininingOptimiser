@@ -2,12 +2,13 @@ import config.paths as paths
 from shared.data.missing_data_identifier import identify_missing_data
 from shared.data.missing_data_correction import missing_data_correction
 from src.utils.generate_artifacts import generate_artifacts
+from dataclasses import dataclass
 
 
+@dataclass
 class MissingDataProcessor:
-    def __init__(self, general_config, data_config):
-        self.general_config = general_config
-        self.data_config = data_config
+    general_config: dict
+    data_config: dict
 
     def run_identifying_missing_data(self, data):
         if self.data_config.identify_missing_data.run:

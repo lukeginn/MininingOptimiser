@@ -1,11 +1,12 @@
 import config.paths as paths
 from src.optimising.functions.optimal_clusters import create_optimised_clusters
+from dataclasses import dataclass
 
 
+@dataclass
 class ClusterOptimiser:
-    def __init__(self, clustering_config, optimisation_config):
-        self.clustering_config = clustering_config
-        self.optimisation_config = optimisation_config
+    clustering_config: dict
+    optimisation_config: dict
 
     def run(
         self,

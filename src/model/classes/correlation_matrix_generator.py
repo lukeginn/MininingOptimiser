@@ -1,10 +1,11 @@
 import config.paths as paths
 from shared.model.generate_correlation_matrix import generate_correlation_matrix
+from dataclasses import dataclass
 
 
+@dataclass
 class CorrelationMatrixGenerator:
-    def __init__(self, model_config):
-        self.model_config = model_config
+    model_config: dict
 
     def run_for_iron_concentrate_perc(self, data, training_features_per_method):
         if self.model_config.iron_concentrate_perc.model.correlation_matrix.run:

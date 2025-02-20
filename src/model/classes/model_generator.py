@@ -1,10 +1,11 @@
 import config.paths as paths
 from shared.model.generate_model import generate_model
+from dataclasses import dataclass
 
 
+@dataclass
 class ModelGenerator:
-    def __init__(self, model_config):
-        self.model_config = model_config
+    model_config: dict
 
     def run_for_iron_concentrate_perc(self, data, training_features):
         best_models, best_params, best_rmse, feature_importance = generate_model(

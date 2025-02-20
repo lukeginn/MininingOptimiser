@@ -1,11 +1,12 @@
 import config.paths as paths
 from shared.model.generate_clusters import run_clustering
 from src.clustering.functions.merging import merging_clusters
+from dataclasses import dataclass
 
 
+@dataclass
 class Clustering:
-    def __init__(self, clustering_config):
-        self.clustering_config = clustering_config
+    clustering_config: dict
 
     def run_for_feed_blends(self, data):
         clusters = run_clustering(

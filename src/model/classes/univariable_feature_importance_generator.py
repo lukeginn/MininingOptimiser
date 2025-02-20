@@ -2,11 +2,12 @@ import config.paths as paths
 from shared.model.univariable_feature_importance import (
     generate_univariable_feature_importance,
 )
+from dataclasses import dataclass
 
 
+@dataclass
 class UnivariableFeatureImportanceGenerator:
-    def __init__(self, model_config):
-        self.model_config = model_config
+    model_config: dict
 
     def run_for_iron_concentrate_perc(self, data):
         if (

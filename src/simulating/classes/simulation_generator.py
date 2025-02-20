@@ -1,12 +1,13 @@
 import config.paths as paths
 from src.simulating.functions.generate_simulation import generate_simulations
+from dataclasses import dataclass
 
 
+@dataclass
 class SimulationGenerator:
-    def __init__(self, model_config, clustering_config, simulation_config):
-        self.model_config = model_config
-        self.clustering_config = clustering_config
-        self.simulation_config = simulation_config
+    model_config: dict
+    clustering_config: dict
+    simulation_config: dict
 
     def run_for_iron_concentrate_perc(self, best_models, cluster_centers):
         # If needed, we override the values in the clusters to ensure that the simulations are tailored to answer the business questions

@@ -1,9 +1,10 @@
 from shared.model.feature_selection import feature_selection
+from dataclasses import dataclass
 
 
+@dataclass
 class FeatureSelection:
-    def __init__(self, model_config):
-        self.model_config = model_config
+    model_config: dict
 
     def run_for_iron_concentrate_perc(self, data):
         if self.model_config.iron_concentrate_perc.model.feature_selection.run:

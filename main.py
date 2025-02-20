@@ -1,6 +1,6 @@
 import logging as logger
 import warnings
-from src.setup.setup import setup
+from src.setup.classes.setup import Setup
 from src.data.reading.classes.data_reader import DataReader
 from src.data.preprocessing.classes.missing_data_processor import MissingDataProcessor
 from src.data.preprocessing.classes.outlier_processor import OutlierProcessor
@@ -26,14 +26,14 @@ warnings.filterwarnings("ignore")
 
 def main():
     logger.info("Pipeline started")
-    (
-        general_config,
-        data_config,
-        model_config,
-        clustering_config,
-        simulation_config,
-        optimisation_config,
-    ) = setup()
+
+    setup_instance = Setup()
+    general_config = setup_instance.general_config
+    data_config = setup_instance.data_config
+    model_config = setup_instance.model_config
+    clustering_config = setup_instance.clustering_config
+    simulation_config = setup_instance.simulation_config
+    optimisation_config = setup_instance.optimisation_config
 
     data_reader = DataReader(general_config)
     missing_data_processor = MissingDataProcessor(general_config, data_config)
