@@ -10,8 +10,7 @@ This repository contains the code and configuration files for the Kaggle Mining 
 - [Introduction](#introduction)
 - [Installation](#installation)
 - [Configuration](#configuration)
-- [Results](#results)
-- [Contributing](#contributing)
+- [Discussion](#discussion)
 - [License](#license)
 
 ## Introduction
@@ -30,15 +29,35 @@ pip install -r requirements.txt
 
 You can configure the project by editing the following files in the `config` folder: `general.yaml`, `data.yaml`, `model.yaml`, `clustering.yaml`, `simulation.yaml`, and `optimisation.yaml`.
 
-## Results
+## Discussion
 
-Here are some example results from the model:
+There are five stages to this project:
 
-!Results
+### 1. Data Preprocessing
 
-## Contributing
+In this stage, we clean and prepare the data for analysis. This includes handling missing values, normalizing data, and feature engineering to create new variables that can improve model performance. The preprocessing steps are as follows:
 
-We welcome contributions! Please see our contributing guidelines for more details.
+- **Initial Preprocessing**: Standardizes column names, cleans data by replacing commas with dots, converts specific columns to datetime and numeric types, and aggregates data by grouping it from half-secondly to hourly.
+- **Missing Data Processing**: Identifies and corrects missing data by deleting rows with missing values, interpolating time series, and replacing missing values with specified values.
+- **Outlier Processing**: Identifies and handles outliers using various methods such as IQR, Z-score, MAD, DBSCAN, Isolation Forest, and LOF.
+- **Lag Introduction**: Introduces lags for specified features and automatically optimizes lags for the target feature.
+- **Data Aggregation**: Performs rolling aggregation on the data. This ensures the data volume is lost, whilst the lag propagation times in the processing facility are effectively negligible.
+- **Feature Engineering**: Creates new features that can improve model performance or can aid in the optimisation procedure.
+- **Shutdown Filtering**: Filters out shutdown periods from the data.
+
+These steps ensure that the data is cleaned, transformed, and ready for model training, evaluation and optimisation.
+
+### 2. Machine Learning Model Training
+
+Here, we train various machine learning models using the preprocessed data. We experiment with different algorithms and hyperparameters to find the best-performing model for predicting the concentration of iron and silica.
+
+### 3. Clustering
+
+We use clustering techniques to group similar data points together. This helps in identifying patterns and trends in the data, which can be useful for further analysis and decision-making.
+
+### 4. Simulation and Optimisation
+
+In this final stage, we simulate different mining scenarios using the trained models and optimize the operations to achieve the best possible outcomes. This involves running simulations, analyzing results, and making adjustments to improve efficiency and productivity.
 
 ## License
 
