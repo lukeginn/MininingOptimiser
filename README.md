@@ -3,7 +3,7 @@
 ![Project Logo](path/to/logo.png)
 
 [![Build Status](https://img.shields.io/travis/username/repo.svg)](https://travis-ci.org/username/repo)
-[![License](https://img.shields.io/badge/license-AGPL-blue.svg)](LICENSE)
+[![License](https://img.shields.io/badge/license-CC--BY--NC--ND-blue.svg)](LICENSE)
 [![Version](https://img.shields.io/badge/version-1.0.0-brightgreen.svg)](https://github.com/username/repo/releases)
 
 This repository contains the code and configuration files for the Kaggle Mining Optimiser project. The project aims to optimize mining operations using machine learning models.
@@ -50,19 +50,13 @@ We welcome contributions! Please see our contributing guidelines for more detail
 
 ## License
 
-This project is licensed under the GNU Affero General Public License v3.0. See the LICENSE file for more details.
-
-And here is the content for the `LICENSE` file:
+This project is licensed under the Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License. See the LICENSE file for more details.
 
 ```plaintext
-GNU AFFERO GENERAL PUBLIC LICENSE
-Version 3, 19 November 2007
+Creative Commons Attribution-NonCommercial-NoDerivs 4.0 International Public License
 
-Copyright (C) 2025 Luke Ginn
-
-Everyone is permitted to copy and distribute verbatim copies
-of this license document, but changing it is not allowed.
+By exercising the Licensed Rights (defined below), You accept and agree to be bound by the terms and conditions of this Creative Commons Attribution-NonCommercial-NoDerivs 4.0 International Public License ("Public License"). To the extent this Public License may be interpreted as a contract, You are granted the Licensed Rights in consideration of Your acceptance of these terms and conditions, and the Licensor grants You such rights in consideration of benefits the Licensor receives from making the Licensed Material available under these terms and conditions.
 
 ...
 
-For the full license text, please refer to https://www.gnu.org/licenses/agpl-3.0.en.html
+For the full license text, please refer to https://creativecommons.org/licenses/by-nc-nd/4.0/legalcode
