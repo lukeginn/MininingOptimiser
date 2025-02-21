@@ -3,6 +3,7 @@ import pandas as pd
 from dataclasses import dataclass, field
 from typing import List, Optional
 
+
 @dataclass
 class UnivariableFeatureImportanceProcessor:
     data: pd.DataFrame
@@ -26,7 +27,11 @@ class UnivariableFeatureImportanceProcessor:
         return univariable_feature_importance
 
     def _numeric_only_training_features(self) -> List[str]:
-        return self.data.drop(columns=[self.target_feature]).select_dtypes(include="number").columns.tolist()
+        return (
+            self.data.drop(columns=[self.target_feature])
+            .select_dtypes(include="number")
+            .columns.tolist()
+        )
 
     def _univariable_feature_importance_analysis(self) -> pd.DataFrame:
         if self.target_feature not in self.training_features:
@@ -61,7 +66,9 @@ class UnivariableFeatureImportanceProcessor:
                 self.target_feature
             ].reindex(univariable_feature_importance.index)
         else:
-            raise ValueError("Unsupported method. Use 'pearson', 'spearman', or 'kendall'.")
+            raise ValueError(
+                "Unsupported method. Use 'pearson', 'spearman', or 'kendall'."
+            )
 
         univariable_feature_importance = univariable_feature_importance.reset_index()
         univariable_feature_importance.columns = ["FEATURES", "IMPORTANCE"]
@@ -71,6 +78,8 @@ class UnivariableFeatureImportanceProcessor:
 
         return univariable_feature_importance
 
-    def _write_univariable_corr_to_file(self, univariable_feature_importance: pd.DataFrame) -> None:
+    def _write_univariable_corr_to_file(
+        self, univariable_feature_importance: pd.DataFrame
+    ) -> None:
         univariable_feature_importance.to_csv(self.path, index=False)
         logger.info(f"Univariable correlation written to {self.path}")

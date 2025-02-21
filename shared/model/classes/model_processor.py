@@ -12,6 +12,7 @@ from shared.model.classes.inference_processor import InferenceProcessor
 from dataclasses import dataclass, field
 from typing import List, Optional, Dict, Any, Tuple
 
+
 @dataclass
 class ModelProcessor:
     data: pd.DataFrame
@@ -41,30 +42,50 @@ class ModelProcessor:
 
         logger.info("Generating models")
         np.random.seed(self.random_state)
-        models, best_params, best_rmse = self._find_best_hyperparameters(X_train, X_test, y_train, y_test)
+        models, best_params, best_rmse = self._find_best_hyperparameters(
+            X_train, X_test, y_train, y_test
+        )
 
         logger.info("Models generated successfully")
 
         if self.generate_feature_importance:
             logger.info("Generating feature importance")
-            feature_importance = self._generate_feature_importance_dataframe(models[0], X_train, y_train)
+            feature_importance = self._generate_feature_importance_dataframe(
+                models[0], X_train, y_train
+            )
         else:
             feature_importance = None
 
         return models, best_params, best_rmse, feature_importance
 
     def _numeric_only_training_features(self) -> List[str]:
-        return self.data.drop(columns=[self.target_feature]).select_dtypes(include="number").columns.tolist()
+        return (
+            self.data.drop(columns=[self.target_feature])
+            .select_dtypes(include="number")
+            .columns.tolist()
+        )
 
-    def _split_data_into_target_and_training_features(self) -> Tuple[pd.DataFrame, pd.Series]:
+    def _split_data_into_target_and_training_features(
+        self,
+    ) -> Tuple[pd.DataFrame, pd.Series]:
         return self.data[self.training_features], self.data[self.target_feature]
 
-    def _split_data(self, X: pd.DataFrame, y: pd.Series) -> Tuple[pd.DataFrame, pd.DataFrame, pd.Series, pd.Series]:
-        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=self.test_size, random_state=self.random_state)
+    def _split_data(
+        self, X: pd.DataFrame, y: pd.Series
+    ) -> Tuple[pd.DataFrame, pd.DataFrame, pd.Series, pd.Series]:
+        X_train, X_test, y_train, y_test = train_test_split(
+            X, y, test_size=self.test_size, random_state=self.random_state
+        )
         logger.info("Data split successfully")
         return X_train, X_test, y_train, y_test
 
-    def _find_best_hyperparameters(self, X_train: pd.DataFrame, X_test: pd.DataFrame, y_train: pd.Series, y_test: pd.Series) -> Tuple[List[Any], Dict[str, Any], float]:
+    def _find_best_hyperparameters(
+        self,
+        X_train: pd.DataFrame,
+        X_test: pd.DataFrame,
+        y_train: pd.Series,
+        y_test: pd.Series,
+    ) -> Tuple[List[Any], Dict[str, Any], float]:
         best_metric_score = float("inf")
         best_params = None
         best_models = []
@@ -73,7 +94,10 @@ class ModelProcessor:
         for params in ParameterGrid(self.param_grid):
             logger.info(f"Training {self.model_choice} model with parameters: {params}")
             training_function = self._get_model_training_function()
-            models = [training_function(X_train, y_train, params) for _ in range(self.n_models)]
+            models = [
+                training_function(X_train, y_train, params)
+                for _ in range(self.n_models)
+            ]
 
             logger.info(f"Evaluating {self.model_choice} models")
             metrics = self._evaluate_model(models, X_test, y_test)
@@ -97,7 +121,9 @@ class ModelProcessor:
     def _export_evaluation_results(self, evaluation_results: pd.DataFrame) -> None:
         if self.evaluation_results_path:
             evaluation_results.to_csv(self.evaluation_results_path, index=False)
-            logger.info(f"Evaluation results exported to {self.evaluation_results_path}")
+            logger.info(
+                f"Evaluation results exported to {self.evaluation_results_path}"
+            )
 
     def _get_model_training_function(self):
         if self.model_choice == "linear_regression":
@@ -109,12 +135,16 @@ class ModelProcessor:
         else:
             raise ValueError(f"Model choice {self.model_choice} not supported")
 
-    def _train_linear_regression(self, data: pd.DataFrame, target: pd.Series, params: Dict[str, Any]) -> LinearRegression:
+    def _train_linear_regression(
+        self, data: pd.DataFrame, target: pd.Series, params: Dict[str, Any]
+    ) -> LinearRegression:
         model = LinearRegression(**params)
         model.fit(data, target)
         return model
 
-    def _train_gam(self, data: pd.DataFrame, target: pd.Series, params: Dict[str, Any]) -> LinearGAM:
+    def _train_gam(
+        self, data: pd.DataFrame, target: pd.Series, params: Dict[str, Any]
+    ) -> LinearGAM:
         term_list = TermList()
         for i in range(data.shape[1]):
             constraint = params["constraints"][i]
@@ -125,17 +155,26 @@ class ModelProcessor:
         model.fit(data, target)
         return model
 
-    def _train_gbm(self, data: pd.DataFrame, target: pd.Series, params: Dict[str, Any]) -> GradientBoostingRegressor:
+    def _train_gbm(
+        self, data: pd.DataFrame, target: pd.Series, params: Dict[str, Any]
+    ) -> GradientBoostingRegressor:
         if "monotonic_cst" in params:
             monotonic_cst = params["monotonic_cst"]
-            params_without_monotonic_cst = {k: v for k, v in params.items() if k != "monotonic_cst"}
-            model = HistGradientBoostingRegressor(**params_without_monotonic_cst, monotonic_cst=monotonic_cst[:data.shape[1]])
+            params_without_monotonic_cst = {
+                k: v for k, v in params.items() if k != "monotonic_cst"
+            }
+            model = HistGradientBoostingRegressor(
+                **params_without_monotonic_cst,
+                monotonic_cst=monotonic_cst[: data.shape[1]],
+            )
         else:
             model = GradientBoostingRegressor(**params)
         model.fit(data, target)
         return model
-    
-    def _evaluate_model(self, models: List[Any], X_test: pd.DataFrame, y_test: pd.Series) -> Dict[str, float]:
+
+    def _evaluate_model(
+        self, models: List[Any], X_test: pd.DataFrame, y_test: pd.Series
+    ) -> Dict[str, float]:
         inference_processor = InferenceProcessor(model_choice=self.model_choice)
 
         predictions = inference_processor.run(models, X_test)
@@ -154,7 +193,9 @@ class ModelProcessor:
             import matplotlib.pyplot as plt
 
             plt.scatter(predictions, y_test, marker=".", color="black", s=10)
-            plt.plot([y_test.min(), y_test.max()], [y_test.min(), y_test.max()], "r--", lw=2)
+            plt.plot(
+                [y_test.min(), y_test.max()], [y_test.min(), y_test.max()], "r--", lw=2
+            )
             plt.ylabel("True Values")
             plt.xlabel("Predictions")
             plt.title("True vs Predicted Values")
@@ -162,40 +203,62 @@ class ModelProcessor:
             plt.close()
             logger.info(f"Predictions plot saved to {self.path}")
 
-    def _generate_feature_importance_dataframe(self, model: Any, X_train: pd.DataFrame, y_train: pd.Series) -> pd.DataFrame:
+    def _generate_feature_importance_dataframe(
+        self, model: Any, X_train: pd.DataFrame, y_train: pd.Series
+    ) -> pd.DataFrame:
         if self.model_choice == "linear_regression":
             feature_importance_scores = model.coef_
         elif self.model_choice == "gam":
             feature_importance_scores = model.statistics_["p_values"]
             if np.all(feature_importance_scores == feature_importance_scores[0]):
-                result = permutation_importance(model, X_train, y_train, n_repeats=10, random_state=42)
+                result = permutation_importance(
+                    model, X_train, y_train, n_repeats=10, random_state=42
+                )
                 feature_importance_scores = result.importances_mean
         elif self.model_choice == "gbm":
             if isinstance(model, GradientBoostingRegressor):
                 feature_importance_scores = model.feature_importances_
             elif isinstance(model, HistGradientBoostingRegressor):
-                result = permutation_importance(model, X_train, y_train, n_repeats=10, random_state=42)
+                result = permutation_importance(
+                    model, X_train, y_train, n_repeats=10, random_state=42
+                )
                 feature_importance_scores = result.importances_mean
             else:
-                raise ValueError(f"Model type {type(model)} not supported for feature importance extraction")
+                raise ValueError(
+                    f"Model type {type(model)} not supported for feature importance extraction"
+                )
         else:
             raise ValueError(f"Model choice {self.model_choice} not supported")
 
-        feature_importance = self._formatting_feature_importance(feature_importance_scores)
+        feature_importance = self._formatting_feature_importance(
+            feature_importance_scores
+        )
         self._write_feature_importance_to_file(feature_importance)
 
         return feature_importance
 
-    def _formatting_feature_importance(self, feature_importance_scores: np.ndarray) -> pd.DataFrame:
-        feature_importance = dict(zip(self.training_features, feature_importance_scores))
-        feature_importance = pd.DataFrame(list(feature_importance.items()), columns=["FEATURES", "IMPORTANCE"])
-        feature_importance = feature_importance.sort_values(by="IMPORTANCE", ascending=False)
+    def _formatting_feature_importance(
+        self, feature_importance_scores: np.ndarray
+    ) -> pd.DataFrame:
+        feature_importance = dict(
+            zip(self.training_features, feature_importance_scores)
+        )
+        feature_importance = pd.DataFrame(
+            list(feature_importance.items()), columns=["FEATURES", "IMPORTANCE"]
+        )
+        feature_importance = feature_importance.sort_values(
+            by="IMPORTANCE", ascending=False
+        )
         max_importance = feature_importance["IMPORTANCE"].max()
-        feature_importance["IMPORTANCE"] = (feature_importance["IMPORTANCE"] / max_importance) * 100
+        feature_importance["IMPORTANCE"] = (
+            feature_importance["IMPORTANCE"] / max_importance
+        ) * 100
 
         return feature_importance
 
-    def _write_feature_importance_to_file(self, feature_importance: pd.DataFrame) -> None:
+    def _write_feature_importance_to_file(
+        self, feature_importance: pd.DataFrame
+    ) -> None:
         if self.feature_importance_path:
             feature_importance.to_csv(self.feature_importance_path, index=False)
             logger.info(f"Feature importance written to {self.feature_importance_path}")

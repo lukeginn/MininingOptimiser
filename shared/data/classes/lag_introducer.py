@@ -7,6 +7,7 @@ from dataclasses import dataclass, field
 from typing import List, Optional
 import pandas as pd
 
+
 @dataclass
 class LagIntroducer:
     data: pd.DataFrame
@@ -20,7 +21,9 @@ class LagIntroducer:
 
     def run(self) -> pd.DataFrame:
         logger.info("Starting lag introduction process.")
-        logger.info("Lags to be introduced: %s", ", ".join([str(lag) for lag in self.lags]))
+        logger.info(
+            "Lags to be introduced: %s", ", ".join([str(lag) for lag in self.lags])
+        )
 
         self.data = self._sort_data_by_timestamp()
         logger.info(f"Data sorted by timestamp: {self.timestamp}")
@@ -28,7 +31,9 @@ class LagIntroducer:
         for feature, lag in zip(self.features, self.lags):
             if self.optimise_lags:
                 logger.info(f"Optimising lag for feature: {feature}")
-                optimal_lag, optimal_lag_identification_dict = self._optimal_lag_identification(feature)
+                optimal_lag, optimal_lag_identification_dict = (
+                    self._optimal_lag_identification(feature)
+                )
                 logger.info(f"Processing feature: {feature} with lag: {optimal_lag}")
                 self.data = self._introduce_lag(feature, optimal_lag)
             else:
@@ -52,8 +57,12 @@ class LagIntroducer:
         optimal_lag_via_acf = self._optimal_lag_identification_via_acf(feature)
         optimal_lag_via_pacf = self._optimal_lag_identification_via_pacf(feature)
         optimal_lag_via_ccf = self._optimal_lag_identification_via_ccf(feature)
-        optimal_lag_via_granger_causality = self._optimal_lag_identification_via_granger_causality(feature)
-        optimal_lag_via_lagged_regression = self._optimal_lag_identification_via_lagged_regression(feature)
+        optimal_lag_via_granger_causality = (
+            self._optimal_lag_identification_via_granger_causality(feature)
+        )
+        optimal_lag_via_lagged_regression = (
+            self._optimal_lag_identification_via_lagged_regression(feature)
+        )
 
         optimal_lag_dict = {
             "acf": optimal_lag_via_acf,
@@ -63,44 +72,64 @@ class LagIntroducer:
             "lagged_regression": optimal_lag_via_lagged_regression,
         }
 
-        optimal_lag = np.mean([
-            optimal_lag_via_acf,
-            optimal_lag_via_pacf,
-            optimal_lag_via_ccf,
-            optimal_lag_via_granger_causality,
-            optimal_lag_via_lagged_regression,
-        ])
+        optimal_lag = np.mean(
+            [
+                optimal_lag_via_acf,
+                optimal_lag_via_pacf,
+                optimal_lag_via_ccf,
+                optimal_lag_via_granger_causality,
+                optimal_lag_via_lagged_regression,
+            ]
+        )
         optimal_lag = int(np.round(optimal_lag))
         logger.info(f"Average optimal lag for feature {feature} is {optimal_lag}")
 
         return optimal_lag, optimal_lag_dict
 
-    def _preprocess_data_for_optimal_lag_identification(self, feature: str) -> pd.DataFrame:
+    def _preprocess_data_for_optimal_lag_identification(
+        self, feature: str
+    ) -> pd.DataFrame:
         return self.data[[self.target, feature]].ffill().bfill()
 
     def _optimal_lag_identification_via_acf(self, feature: str) -> int:
         acf_values = acf(self.data[feature], nlags=self.max_lag)
         optimal_lag = np.argmax(acf_values[1:]) + 1  # +1 because acf_values[0] is lag 0
-        logger.info(f"Optimal lag for feature {feature} is {optimal_lag} with ACF value {acf_values[optimal_lag]}")
+        logger.info(
+            f"Optimal lag for feature {feature} is {optimal_lag} with ACF value {acf_values[optimal_lag]}"
+        )
         return optimal_lag
 
     def _optimal_lag_identification_via_pacf(self, feature: str) -> int:
         pacf_values = pacf(self.data[feature], nlags=self.max_lag)
-        optimal_lag = np.argmax(pacf_values[1:]) + 1  # +1 because pacf_values[0] is lag 0
-        logger.info(f"Optimal lag for feature {feature} is {optimal_lag} with PACF value {pacf_values[optimal_lag]}")
+        optimal_lag = (
+            np.argmax(pacf_values[1:]) + 1
+        )  # +1 because pacf_values[0] is lag 0
+        logger.info(
+            f"Optimal lag for feature {feature} is {optimal_lag} with PACF value {pacf_values[optimal_lag]}"
+        )
         return optimal_lag
 
     def _optimal_lag_identification_via_ccf(self, feature: str) -> int:
-        ccf_values = ccf(self.data[feature], self.data[self.target])[:self.max_lag + 1]
-        optimal_lag = np.argmax(np.abs(ccf_values))  # Use absolute values to find the strongest correlation
-        logger.info(f"Optimal lag between feature {feature} and target {self.target} is {optimal_lag} with CCF value {ccf_values[optimal_lag]}")
+        ccf_values = ccf(self.data[feature], self.data[self.target])[: self.max_lag + 1]
+        optimal_lag = np.argmax(
+            np.abs(ccf_values)
+        )  # Use absolute values to find the strongest correlation
+        logger.info(
+            f"Optimal lag between feature {feature} and target {self.target} is {optimal_lag} with CCF value {ccf_values[optimal_lag]}"
+        )
         return optimal_lag
 
     def _optimal_lag_identification_via_granger_causality(self, feature: str) -> int:
-        test_result = grangercausalitytests(self.data[[self.target, feature]], self.max_lag, verbose=False)
-        p_values = [round(test_result[i + 1][0]["ssr_ftest"][1], 4) for i in range(self.max_lag)]
+        test_result = grangercausalitytests(
+            self.data[[self.target, feature]], self.max_lag, verbose=False
+        )
+        p_values = [
+            round(test_result[i + 1][0]["ssr_ftest"][1], 4) for i in range(self.max_lag)
+        ]
         optimal_lag = np.argmin(p_values) + 1  # +1 because lags are 1-indexed
-        logger.info(f"Optimal lag between feature {feature} and target {self.target} via Granger Causality Test is {optimal_lag} with p-value {p_values[optimal_lag-1]}")
+        logger.info(
+            f"Optimal lag between feature {feature} and target {self.target} via Granger Causality Test is {optimal_lag} with p-value {p_values[optimal_lag-1]}"
+        )
         return optimal_lag
 
     def _optimal_lag_identification_via_lagged_regression(self, feature: str) -> int:
@@ -120,5 +149,7 @@ class LagIntroducer:
                 min_mse = mse
                 optimal_lag = lag
 
-        logger.info(f"Optimal lag between feature {feature} and target {self.target} via Lagged Regression is {optimal_lag} with MSE {min_mse}")
+        logger.info(
+            f"Optimal lag between feature {feature} and target {self.target} via Lagged Regression is {optimal_lag} with MSE {min_mse}"
+        )
         return optimal_lag

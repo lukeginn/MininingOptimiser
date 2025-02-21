@@ -72,7 +72,7 @@ class MissingDataProcessor:
                 interpolate_highly_regular_interval_min=self.data_config.correct_missing_data_after_aggregation.interpolate_highly_regular_time_series.regular_interval_min,
                 replace_missing_values_with_last_known_value_backfill=self.data_config.correct_missing_data_after_aggregation.replace_missing_values_with_last_known_value.backfill,
                 timestamp=self.data_config.timestamp,
-                x=self.data_config.correct_missing_data_after_aggregation.replace_missing_values_with_x.x
+                x=self.data_config.correct_missing_data_after_aggregation.replace_missing_values_with_x.x,
             )
             data = missing_data_corrector.run()
             self.generate_artifacts_for_correcting_missing_data_post_aggregation(data)
@@ -87,7 +87,11 @@ class MissingDataProcessor:
             "custom_plots": paths.Paths.CUSTOM_PLOTS_FOR_AGGREGATED_FEATURES_PATH.value,
         }
         generate_artifacts(
-            self.general_config, self.data_config, data, "stage_2_missing_data_identified", paths_dict
+            self.general_config,
+            self.data_config,
+            data,
+            "stage_2_missing_data_identified",
+            paths_dict,
         )
 
     def generate_artifacts_for_correcting_missing_data(
@@ -99,7 +103,11 @@ class MissingDataProcessor:
             "custom_plots": paths.Paths.CUSTOM_PLOTS_FOR_MISSING_DATA_CORRECTED_PATH.value,
         }
         generate_artifacts(
-            self.general_config, self.data_config, data, "stage_5_missing_data_corrected", paths_dict
+            self.general_config,
+            self.data_config,
+            data,
+            "stage_5_missing_data_corrected",
+            paths_dict,
         )
 
     def generate_artifacts_for_correcting_missing_data_post_aggregation(

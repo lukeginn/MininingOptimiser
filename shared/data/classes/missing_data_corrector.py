@@ -4,6 +4,7 @@ import pandas as pd
 from dataclasses import dataclass, field
 from typing import List, Optional
 
+
 @dataclass
 class MissingDataCorrector:
     data: pd.DataFrame
@@ -35,7 +36,10 @@ class MissingDataCorrector:
         if self.interpolate_highly_regular_time_series:
             self.data = self._interpolate_highly_regular_time_series_features()
 
-        if self.replace_missing_values_with_x or self.replace_missing_values_with_last_known_value:
+        if (
+            self.replace_missing_values_with_x
+            or self.replace_missing_values_with_last_known_value
+        ):
             self.data = self._replace_missing_values()
 
         if self.delete_all_rows_with_missing_values:
@@ -96,7 +100,9 @@ class MissingDataCorrector:
 
     def _interpolate_highly_regular_features(self) -> pd.DataFrame:
         for feature in self.features:
-            self.data = self._interpolate_one_feature_with_high_and_regular_sparsity(feature)
+            self.data = self._interpolate_one_feature_with_high_and_regular_sparsity(
+                feature
+            )
         logger.info("Features interpolated")
         return self.data
 
@@ -118,32 +124,44 @@ class MissingDataCorrector:
             self.data[feature] = self.data[feature].fillna(method="bfill")
         else:
             self.data[feature] = self.data[feature].interpolate(
-                method=self.interpolate_method, limit_direction=self.interpolate_limit_direction
+                method=self.interpolate_method,
+                limit_direction=self.interpolate_limit_direction,
             )
 
         # Where the gap_sizes are greater than the max_gap, replace the values with the original values
-        self.data[feature] = self.data[feature].where(gap_sizes <= self.interpolate_max_gap, other=original_feature)
+        self.data[feature] = self.data[feature].where(
+            gap_sizes <= self.interpolate_max_gap, other=original_feature
+        )
 
         return self.data
 
-    def _interpolate_one_feature_with_high_and_regular_sparsity(self, feature: str) -> pd.DataFrame:
+    def _interpolate_one_feature_with_high_and_regular_sparsity(
+        self, feature: str
+    ) -> pd.DataFrame:
         # Check if the feature has regular intervals of non-missing values
         non_missing_indices = self.data[feature].dropna().index
         if len(non_missing_indices) > 1:
             intervals = non_missing_indices.to_series().diff().dropna()
             if (intervals >= self.interpolate_highly_regular_interval_min).mode().all():
-                logger.info(f"Feature {feature} has regular intervals of non-missing values")
+                logger.info(
+                    f"Feature {feature} has regular intervals of non-missing values"
+                )
 
                 # Interpolate the missing values
                 if self.interpolate_highly_regular_method == "bfill":
                     self.data[feature] = self.data[feature].fillna(method="bfill")
                 else:
                     self.data[feature] = self.data[feature].interpolate(
-                        method=self.interpolate_highly_regular_method, limit_direction=self.interpolate_highly_regular_limit_direction
+                        method=self.interpolate_highly_regular_method,
+                        limit_direction=self.interpolate_highly_regular_limit_direction,
                     )
             else:
-                logger.info(f"Feature {feature} does not have regular intervals of non-missing values")
+                logger.info(
+                    f"Feature {feature} does not have regular intervals of non-missing values"
+                )
         else:
-            logger.info(f"Feature {feature} does not have enough non-missing values to determine regular intervals")
+            logger.info(
+                f"Feature {feature} does not have enough non-missing values to determine regular intervals"
+            )
 
         return self.data

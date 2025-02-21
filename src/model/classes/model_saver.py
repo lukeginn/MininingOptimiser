@@ -3,6 +3,7 @@ from dataclasses import dataclass
 from typing import Any, Dict
 from shared.model.classes.model_exporter import ModelExporter
 
+
 @dataclass
 class ModelSaver:
     model_config: Dict[str, Any]
@@ -12,7 +13,9 @@ class ModelSaver:
         model_exporter.save(
             models=models,
             path=paths.Paths.IRON_CONCENTRATE_PERC_MODELS_FOLDER.value,
-            path_suffix=self.model_config["iron_concentrate_perc"]["model"]["model_name"],
+            path_suffix=self.model_config["iron_concentrate_perc"]["model"][
+                "model_name"
+            ],
         )
 
     def run_for_iron_concentrate_perc_feed_blend(self, models: Dict[str, Any]):
@@ -20,7 +23,9 @@ class ModelSaver:
         model_exporter.save(
             path=paths.Paths.IRON_CONCENTRATE_PERC_FEED_BLEND_MODELS_FOLDER.value,
             models=models,
-            path_suffix=self.model_config["iron_concentrate_perc"]["model"]["model_name"],
+            path_suffix=self.model_config["iron_concentrate_perc"]["model"][
+                "model_name"
+            ],
         )
 
     def run_for_silica_concentrate_perc(self, models: Dict[str, Any]):
@@ -28,7 +33,9 @@ class ModelSaver:
         model_exporter.save(
             path=paths.Paths.SILICA_CONCENTRATE_PERC_MODELS_FOLDER.value,
             models=models,
-            path_suffix=self.model_config["silica_concentrate_perc"]["model"]["model_name"],
+            path_suffix=self.model_config["silica_concentrate_perc"]["model"][
+                "model_name"
+            ],
         )
 
     def run_for_silica_concentrate_perc_feed_blend(self, models: Dict[str, Any]):
@@ -36,5 +43,7 @@ class ModelSaver:
         model_exporter.save(
             path=paths.Paths.SILICA_CONCENTRATE_PERC_FEED_BLEND_MODELS_FOLDER.value,
             models=models,
-            path_suffix=self.model_config["silica_concentrate_perc"]["model"]["model_name"],
+            path_suffix=self.model_config["silica_concentrate_perc"]["model"][
+                "model_name"
+            ],
         )

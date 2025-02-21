@@ -31,5 +31,9 @@ class DataAggregationProcessor:
             "custom_plots": paths.Paths.CUSTOM_PLOTS_FOR_AGGREGATED_FEATURES_PATH.value,
         }
         generate_artifacts(
-            self.general_config, self.data_config, data, "stage_7_rolling_aggregate_data", paths_dict
+            self.general_config,
+            self.data_config,
+            data,
+            "stage_7_rolling_aggregate_data",
+            paths_dict,
         )

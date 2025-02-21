@@ -23,7 +23,11 @@ class ShutdownFilter:
             "custom_plots": paths.Paths.CUSTOM_PLOTS_FOR_FILTERING_SHUTDOWN_PATH.value,
         }
         generate_artifacts(
-            self.general_config, self.data_config, data, "stage_10_filter_shutdowns", paths_dict
+            self.general_config,
+            self.data_config,
+            data,
+            "stage_10_filter_shutdowns",
+            paths_dict,
         )
 
     def filter_shutdowns(self, data: pd.DataFrame) -> pd.DataFrame:

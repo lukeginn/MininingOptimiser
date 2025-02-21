@@ -6,7 +6,9 @@ from src.data.reading.classes.data_reader import DataReader
 from src.data.preprocessing.classes.missing_data_processor import MissingDataProcessor
 from src.data.preprocessing.classes.outlier_processor import OutlierProcessor
 from src.data.preprocessing.classes.lags_processor import LagsProcessor
-from src.data.preprocessing.classes.data_aggregation_processor import DataAggregationProcessor
+from src.data.preprocessing.classes.data_aggregation_processor import (
+    DataAggregationProcessor,
+)
 from src.data.preprocessing.classes.feature_engineering import FeatureEngineering
 from src.data.preprocessing.classes.shutdowns import ShutdownFilter
 from src.model.classes.univariable_feature_importance_generator import (
@@ -105,8 +107,10 @@ def run_model_training_and_evaluation(
     correlation_matrix_generator.run_for_iron_concentrate_perc_feed_blend(
         data, iron_concentrate_perc_feed_blend_training_features_per_method
     )
-    iron_concentrate_perc_feed_blend_model = model_generator.run_for_iron_concentrate_perc_feed_blend(
-        data, iron_concentrate_perc_feed_blend_training_features
+    iron_concentrate_perc_feed_blend_model = (
+        model_generator.run_for_iron_concentrate_perc_feed_blend(
+            data, iron_concentrate_perc_feed_blend_training_features
+        )
     )
     model_saver.run_for_iron_concentrate_perc_feed_blend(
         iron_concentrate_perc_feed_blend_model
@@ -125,10 +129,8 @@ def run_model_training_and_evaluation(
     correlation_matrix_generator.run_for_iron_concentrate_perc(
         data, iron_concentrate_perc_training_features_per_method
     )
-    iron_concentrate_perc_model = (
-        model_generator.run_for_iron_concentrate_perc(
-            data, iron_concentrate_perc_training_features
-        )
+    iron_concentrate_perc_model = model_generator.run_for_iron_concentrate_perc(
+        data, iron_concentrate_perc_training_features
     )
     model_saver.run_for_iron_concentrate_perc(iron_concentrate_perc_model)
     partial_plots_generator.run_for_iron_concentrate_perc(
@@ -143,8 +145,10 @@ def run_model_training_and_evaluation(
     correlation_matrix_generator.run_for_silica_concentrate_perc_feed_blend(
         data, silica_concentrate_perc_feed_blend_training_features_per_method
     )
-    silica_concentrate_perc_feed_blend_model = model_generator.run_for_silica_concentrate_perc_feed_blend(
-        data, silica_concentrate_perc_feed_blend_training_features
+    silica_concentrate_perc_feed_blend_model = (
+        model_generator.run_for_silica_concentrate_perc_feed_blend(
+            data, silica_concentrate_perc_feed_blend_training_features
+        )
     )
     model_saver.run_for_silica_concentrate_perc_feed_blend(
         silica_concentrate_perc_feed_blend_model
@@ -163,10 +167,8 @@ def run_model_training_and_evaluation(
     correlation_matrix_generator.run_for_silica_concentrate_perc(
         data, silica_concentrate_perc_training_features_per_method
     )
-    silica_concentrate_perc_model = (
-        model_generator.run_for_silica_concentrate_perc(
-            data, silica_concentrate_perc_training_features
-        )
+    silica_concentrate_perc_model = model_generator.run_for_silica_concentrate_perc(
+        data, silica_concentrate_perc_training_features
     )
     model_saver.run_for_silica_concentrate_perc(silica_concentrate_perc_model)
     partial_plots_generator.run_for_silica_concentrate_perc(

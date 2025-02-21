@@ -3,12 +3,15 @@ import logging as logger
 from dataclasses import dataclass, field
 from typing import List, Optional, Union
 
+
 @dataclass
 class DataAggregator:
     data: pd.DataFrame
     timestamp: str
     features_to_aggregate: Optional[List[str]] = field(default_factory=list)
-    aggregation_types: List[str] = field(default_factory=lambda: ["mean", "std", "min", "max"])
+    aggregation_types: List[str] = field(
+        default_factory=lambda: ["mean", "std", "min", "max"]
+    )
     window: int = 144
     min_periods: int = 144
     window_selection_frequency: int = 144
@@ -49,7 +52,9 @@ class DataAggregator:
         )
 
         # Flatten the column names
-        aggregated_data.columns = ["_".join(x) for x in aggregated_data.columns.to_flat_index()]
+        aggregated_data.columns = [
+            "_".join(x) for x in aggregated_data.columns.to_flat_index()
+        ]
 
         return aggregated_data
 
@@ -70,13 +75,17 @@ class DataAggregator:
         )
 
         # Flatten the column names
-        rolling_data.columns = ["_".join(x) for x in rolling_data.columns.to_flat_index()]
+        rolling_data.columns = [
+            "_".join(x) for x in rolling_data.columns.to_flat_index()
+        ]
 
         # Combine the rolling data with the original timestamp
-        combined_data = pd.concat([self.data[self.timestamp], rolling_data], axis=1).reset_index(drop=True)
+        combined_data = pd.concat(
+            [self.data[self.timestamp], rolling_data], axis=1
+        ).reset_index(drop=True)
 
         # Filter out the first few rows with NaN values from min_periods
-        combined_data = combined_data.iloc[self.min_periods:]
+        combined_data = combined_data.iloc[self.min_periods :]
 
         return combined_data
 

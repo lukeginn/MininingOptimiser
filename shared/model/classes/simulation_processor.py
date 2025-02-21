@@ -5,6 +5,7 @@ from shared.model.classes.inference_processor import InferenceProcessor
 from dataclasses import dataclass, field
 from typing import List, Optional, Dict, Any, Tuple
 
+
 @dataclass
 class SimulationProcessor:
     model: List[Any]
@@ -23,8 +24,10 @@ class SimulationProcessor:
 
         simulation_data = self._generating_simulation_data()
 
-        simulation_results = self._generating_simulation_predictions_for_all_simulation_data(
-            simulation_data=simulation_data
+        simulation_results = (
+            self._generating_simulation_predictions_for_all_simulation_data(
+                simulation_data=simulation_data
+            )
         )
 
         simulation_results = self._merge_simulation_results_with_cluster_centers(
@@ -33,7 +36,8 @@ class SimulationProcessor:
 
         if self.informational_features is not None:
             informational_features = [
-                feature + "_historical_actuals" for feature in self.informational_features
+                feature + "_historical_actuals"
+                for feature in self.informational_features
             ]
             informational_features = [
                 feature
@@ -42,7 +46,8 @@ class SimulationProcessor:
             ]
 
             simulation_results = pd.concat(
-                [simulation_results, self.cluster_centers[informational_features]], axis=1
+                [simulation_results, self.cluster_centers[informational_features]],
+                axis=1,
             )
             # Reorder the dataset so that 'mean_historical_actuals' is the last column
             columns = [
@@ -60,7 +65,8 @@ class SimulationProcessor:
             ]
 
             controllables_features = [
-                feature + "_historical_actuals" for feature in self.controllables_features
+                feature + "_historical_actuals"
+                for feature in self.controllables_features
             ]
             simulation_results.rename(
                 columns={
@@ -83,12 +89,17 @@ class SimulationProcessor:
         features = [feature + "_historical_actuals" for feature in self.features]
 
         if self.cluster_centers is not None:
-            cluster_centers_to_simulate = self._process_cluster_centers(self.cluster_centers, features)
+            cluster_centers_to_simulate = self._process_cluster_centers(
+                self.cluster_centers, features
+            )
 
         if self.cluster_centers is not None:
             simulated_data = self._generate_simulation_data(features)
 
-        if self.cluster_centers is not None and self.feature_values_to_simulate is not None:
+        if (
+            self.cluster_centers is not None
+            and self.feature_values_to_simulate is not None
+        ):
             # Combine the cluster centers and the simulation data
             simulation_data = pd.concat(
                 [cluster_centers_to_simulate, simulated_data]
@@ -109,12 +120,16 @@ class SimulationProcessor:
         return simulation_data
 
     def _generate_simulation_data(self, features: List[str]) -> pd.DataFrame:
-        simulation_data = pd.DataFrame(self.feature_values_to_simulate, columns=features)
+        simulation_data = pd.DataFrame(
+            self.feature_values_to_simulate, columns=features
+        )
         logger.info("Simulation data generated successfully")
 
         return simulation_data
 
-    def _process_cluster_centers(self, cluster_centers: pd.DataFrame, features: List[str]) -> pd.DataFrame:
+    def _process_cluster_centers(
+        self, cluster_centers: pd.DataFrame, features: List[str]
+    ) -> pd.DataFrame:
         logger.info("Processing cluster centers")
 
         # Remove duplicate columns
@@ -130,8 +145,7 @@ class SimulationProcessor:
         return cluster_centers
 
     def _generating_simulation_predictions_for_all_simulation_data(
-        self,
-        simulation_data: pd.DataFrame
+        self, simulation_data: pd.DataFrame
     ) -> Tuple[pd.DataFrame, Optional[pd.DataFrame]]:
         results = []
         for index, one_simulation in simulation_data.iterrows():
@@ -156,15 +170,11 @@ class SimulationProcessor:
         return simulation_results
 
     def _generating_simulation_predictions(
-        self,
-        one_simulation: pd.DataFrame
+        self, one_simulation: pd.DataFrame
     ) -> Tuple[pd.DataFrame, Optional[pd.DataFrame]]:
-        inference_processor = InferenceProcessor(
-            model_choice=self.model_choice
-        )
+        inference_processor = InferenceProcessor(model_choice=self.model_choice)
         simulation_predictions = inference_processor.run(
-            models=self.model,
-            data=one_simulation[self.features]
+            models=self.model, data=one_simulation[self.features]
         )
         simulation_predictions = pd.DataFrame(simulation_predictions).T
         if self.confidence_interval:
@@ -174,7 +184,9 @@ class SimulationProcessor:
 
         return simulation_predictions
 
-    def _merge_simulation_results_with_cluster_centers(self, simulation_results: pd.DataFrame) -> pd.DataFrame:
+    def _merge_simulation_results_with_cluster_centers(
+        self, simulation_results: pd.DataFrame
+    ) -> pd.DataFrame:
 
         cluster_centers = self.cluster_centers.reset_index().rename(
             columns={"index": "cluster_number"}
@@ -186,7 +198,9 @@ class SimulationProcessor:
             cluster_centers = cluster_centers[
                 ["cluster", "row_count", "row_count_proportion"]
             ]
-            simulation_results = pd.concat([cluster_centers, simulation_results], axis=1)
+            simulation_results = pd.concat(
+                [cluster_centers, simulation_results], axis=1
+            )
 
         columns_to_modify = [
             col
@@ -211,6 +225,8 @@ class SimulationProcessor:
 
         return simulation_results
 
-    def _export_simulation_results(self, simulation_results: pd.DataFrame, path: str) -> None:
+    def _export_simulation_results(
+        self, simulation_results: pd.DataFrame, path: str
+    ) -> None:
         simulation_results.to_csv(path, index=False)
         logger.info(f"Simulation results exported to {path}")

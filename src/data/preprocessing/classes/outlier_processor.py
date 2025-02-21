@@ -35,5 +35,9 @@ class OutlierProcessor:
             "custom_plots": paths.Paths.CUSTOM_PLOTS_FOR_OUTLIERS_IDENTIFIED_PATH.value,
         }
         generate_artifacts(
-            self.general_config, self.data_config, data, "stage_3_outliers_identified", paths_dict
+            self.general_config,
+            self.data_config,
+            data,
+            "stage_3_outliers_identified",
+            paths_dict,
         )

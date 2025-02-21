@@ -3,6 +3,7 @@ import logging as logger
 from dataclasses import dataclass, field
 from typing import List, Any
 
+
 @dataclass
 class MissingDataIdentifier:
     data: pd.DataFrame
@@ -11,7 +12,9 @@ class MissingDataIdentifier:
     unique_values_identification: bool = True
     unique_values_threshold: int = 5
     explicit_missing_values: bool = True
-    explicit_missing_indicators: List[Any] = field(default_factory=lambda: [0, pd.NA, None, -999, -9999, "?"])
+    explicit_missing_indicators: List[Any] = field(
+        default_factory=lambda: [0, pd.NA, None, -999, -9999, "?"]
+    )
     repeating_values: bool = True
     repeating_values_threshold: int = 5
     repeating_values_proportion_threshold: float = 0.8
@@ -22,7 +25,11 @@ class MissingDataIdentifier:
             "Procedures to be run: %s",
             ", ".join(
                 [
-                    "Identifying unique values" if self.unique_values_identification else "",
+                    (
+                        "Identifying unique values"
+                        if self.unique_values_identification
+                        else ""
+                    ),
                     (
                         "Identifying explicit missing indicators"
                         if self.explicit_missing_values
@@ -45,7 +52,9 @@ class MissingDataIdentifier:
 
             if self.unique_values_identification:
                 if self._identify_if_the_feature_has_low_unique_values(feature):
-                    logger.info(f"Feature '{feature}' skipped due to low unique values.")
+                    logger.info(
+                        f"Feature '{feature}' skipped due to low unique values."
+                    )
                     continue
 
             if self.explicit_missing_values:
@@ -70,7 +79,9 @@ class MissingDataIdentifier:
         return False
 
     def _identify_explicit_missing_indicators(self, feature):
-        self.data[feature] = self.data[feature].replace(self.explicit_missing_indicators, pd.NA)
+        self.data[feature] = self.data[feature].replace(
+            self.explicit_missing_indicators, pd.NA
+        )
         return self.data
 
     def _identify_repeat_values(self, feature):
@@ -82,7 +93,9 @@ class MissingDataIdentifier:
         )
 
         # Calculate the proportion of repeating values in the feature
-        repeating_proportion = (self.data["repeat_count"] > self.repeating_values_threshold).mean()
+        repeating_proportion = (
+            self.data["repeat_count"] > self.repeating_values_threshold
+        ).mean()
 
         # If the proportion of repeating values is high, skip this feature
         if repeating_proportion > self.repeating_values_proportion_threshold:
@@ -97,7 +110,9 @@ class MissingDataIdentifier:
             logger.info(
                 f"Feature '{feature}' has segments with repeating values exceeding the threshold."
             )
-        self.data.loc[self.data["repeat_count"] > self.repeating_values_threshold, feature] = pd.NA
+        self.data.loc[
+            self.data["repeat_count"] > self.repeating_values_threshold, feature
+        ] = pd.NA
 
         # Drop the temporary 'repeat_count' column
         self.data.drop(columns=["repeat_count"], inplace=True)

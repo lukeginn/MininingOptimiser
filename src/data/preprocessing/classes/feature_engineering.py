@@ -24,7 +24,11 @@ class FeatureEngineering:
             "custom_plots": paths.Paths.CUSTOM_PLOTS_FOR_FEATURE_ENGINEERED_DATA_PATH.value,
         }
         generate_artifacts(
-            self.general_config, self.data_config, data, "stage_8_feature_engineered_data", paths_dict
+            self.general_config,
+            self.data_config,
+            data,
+            "stage_8_feature_engineered_data",
+            paths_dict,
         )
 
     def feature_engineering(self, data: pd.DataFrame) -> pd.DataFrame:

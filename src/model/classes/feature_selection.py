@@ -24,7 +24,9 @@ class FeatureSelection:
             )
             feature_selection_results = feature_selection_processor.run()
             training_features = feature_selection_results["training_features"]
-            training_features_per_method = feature_selection_results["training_features_per_method"]
+            training_features_per_method = feature_selection_results[
+                "training_features_per_method"
+            ]
         else:
             training_features = (
                 self.model_config.iron_concentrate_perc.model.training_features
@@ -51,7 +53,9 @@ class FeatureSelection:
             )
             feature_selection_results = feature_selection_processor.run()
             training_features = feature_selection_results["training_features"]
-            training_features_per_method = feature_selection_results["training_features_per_method"]
+            training_features_per_method = feature_selection_results[
+                "training_features_per_method"
+            ]
         else:
             training_features = (
                 self.model_config.iron_concentrate_perc.model.feed_blend_training_features
@@ -78,7 +82,9 @@ class FeatureSelection:
             )
             feature_selection_results = feature_selection_processor.run()
             training_features = feature_selection_results["training_features"]
-            training_features_per_method = feature_selection_results["training_features_per_method"]
+            training_features_per_method = feature_selection_results[
+                "training_features_per_method"
+            ]
         else:
             training_features = (
                 self.model_config.silica_concentrate_perc.model.training_features
@@ -105,7 +111,9 @@ class FeatureSelection:
             )
             feature_selection_results = feature_selection_processor.run()
             training_features = feature_selection_results["training_features"]
-            training_features_per_method = feature_selection_results["training_features_per_method"]
+            training_features_per_method = feature_selection_results[
+                "training_features_per_method"
+            ]
         else:
             training_features = (
                 self.model_config.silica_concentrate_perc.model.feed_blend_training_features

@@ -6,6 +6,7 @@ from dataclasses import dataclass, field
 from typing import List, Optional
 import pandas as pd
 
+
 @dataclass
 class OutlierIdentifier:
     data: pd.DataFrame
@@ -58,8 +59,12 @@ class OutlierIdentifier:
         return self.data
 
     def _identify_outliers_via_z_score(self, feature: str) -> pd.DataFrame:
-        z_scores = (self.data[feature] - self.data[feature].mean()) / self.data[feature].std()
-        self.data[feature] = self.data[feature].mask(abs(z_scores) > self.z_score_threshold)
+        z_scores = (self.data[feature] - self.data[feature].mean()) / self.data[
+            feature
+        ].std()
+        self.data[feature] = self.data[feature].mask(
+            abs(z_scores) > self.z_score_threshold
+        )
         return self.data
 
     def _identify_outliers_via_mad(self, feature: str) -> pd.DataFrame:
@@ -93,9 +98,13 @@ class OutlierIdentifier:
                 f"Threshold for IsolationForest must be in the range (0.0, 0.5]. Got {self.isolation_forest_threshold}. Setting to default 0.05."
             )
             self.isolation_forest_threshold = 0.001
-        isolation_forest = IsolationForest(contamination=self.isolation_forest_threshold)
+        isolation_forest = IsolationForest(
+            contamination=self.isolation_forest_threshold
+        )
         data_copy = self.data.ffill().bfill()
-        outliers = isolation_forest.fit_predict(data_copy[feature].values.reshape(-1, 1))
+        outliers = isolation_forest.fit_predict(
+            data_copy[feature].values.reshape(-1, 1)
+        )
         self.data[feature] = self.data[feature].mask(outliers == -1)
         return self.data
 

@@ -34,5 +34,9 @@ class LagsProcessor:
             "custom_plots": paths.Paths.CUSTOM_PLOTS_FOR_LAGGED_FEATURES_PATH.value,
         }
         generate_artifacts(
-            self.general_config, self.data_config, data, "stage_6_lags_introduced", paths_dict
+            self.general_config,
+            self.data_config,
+            data,
+            "stage_6_lags_introduced",
+            paths_dict,
         )

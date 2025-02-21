@@ -24,7 +24,7 @@ class CorrelationMatrixGenerator:
                 features=training_features,
                 method=self.model_config.iron_concentrate_perc.model.correlation_matrix.method,
                 csv_path=paths.Paths.IRON_CONCENTRATE_PERC_CORRELATION_MATRIX_CSV_PATH.value,
-                plotting_path=paths.Paths.IRON_CONCENTRATE_PERC_CORRELATION_MATRIX_PLOTTING_PATH.value
+                plotting_path=paths.Paths.IRON_CONCENTRATE_PERC_CORRELATION_MATRIX_PLOTTING_PATH.value,
             )
             correlation_matrix = correlation_matrix_processor.run()
             return correlation_matrix
@@ -48,7 +48,7 @@ class CorrelationMatrixGenerator:
                 features=training_features,
                 method=self.model_config.iron_concentrate_perc.model.correlation_matrix.method,
                 csv_path=paths.Paths.IRON_CONCENTRATE_PERC_FEED_BLEND_CORRELATION_MATRIX_CSV_PATH.value,
-                plotting_path=paths.Paths.IRON_CONCENTRATE_PERC_FEED_BLEND_CORRELATION_MATRIX_PLOTTING_PATH.value
+                plotting_path=paths.Paths.IRON_CONCENTRATE_PERC_FEED_BLEND_CORRELATION_MATRIX_PLOTTING_PATH.value,
             )
             correlation_matrix = correlation_matrix_processor.run()
             return correlation_matrix
@@ -70,7 +70,7 @@ class CorrelationMatrixGenerator:
                 features=training_features,
                 method=self.model_config.silica_concentrate_perc.model.correlation_matrix.method,
                 csv_path=paths.Paths.SILICA_CONCENTRATE_PERC_CORRELATION_MATRIX_CSV_PATH.value,
-                plotting_path=paths.Paths.SILICA_CONCENTRATE_PERC_CORRELATION_MATRIX_PLOTTING_PATH.value
+                plotting_path=paths.Paths.SILICA_CONCENTRATE_PERC_CORRELATION_MATRIX_PLOTTING_PATH.value,
             )
             correlation_matrix = correlation_matrix_processor.run()
             return correlation_matrix
@@ -88,13 +88,13 @@ class CorrelationMatrixGenerator:
                 training_features = training_features_per_method[-1] + [
                     self.model_config.silica_concentrate_perc.model.target
                 ]
-            
+
             correlation_matrix_processor = CorrelationMatrixProcessor(
                 data=data,
                 features=training_features,
                 method=self.model_config.silica_concentrate_perc.model.correlation_matrix.method,
                 csv_path=paths.Paths.SILICA_CONCENTRATE_PERC_FEED_BLEND_CORRELATION_MATRIX_CSV_PATH.value,
-                plotting_path=paths.Paths.SILICA_CONCENTRATE_PERC_FEED_BLEND_CORRELATION_MATRIX_PLOTTING_PATH.value
+                plotting_path=paths.Paths.SILICA_CONCENTRATE_PERC_FEED_BLEND_CORRELATION_MATRIX_PLOTTING_PATH.value,
             )
             correlation_matrix = correlation_matrix_processor.run()
             return correlation_matrix

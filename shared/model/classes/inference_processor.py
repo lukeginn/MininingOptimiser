@@ -3,6 +3,7 @@ import pandas as pd
 from dataclasses import dataclass, field
 from typing import List, Optional, Dict, Any, Tuple
 
+
 @dataclass
 class InferenceProcessor:
     model_choice: str
