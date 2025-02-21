@@ -5,7 +5,7 @@ from typing import List, Optional, Dict, Any, Tuple
 
 
 @dataclass
-class ModelExporter:
+class ModelPersistence:
 
     def save(self, models: List[Any], path: str, path_suffix: str) -> None:
         for i, model in enumerate(models):

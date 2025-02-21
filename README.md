@@ -58,18 +58,26 @@ The following time-series trends describe some of the key features in our projec
 
 ### 2. Machine Learning Model Training
 
-Here, we train various machine learning models using the preprocessed data. We experiment with different algorithms and hyperparameters to find the best-performing model for predicting the concentration of iron and silica.
+Here, we train two independent machine learning models using the preprocessed data. We experiment with different algorithms and hyperparameters to find the best-performing model for predicting both the concentration of iron and silica.
 
 Importantly, monotonicity constraints are applied to ensure that the learned trends aren't overfitting and corresponding to expected on-site trends. This process is typically done in collaboration with domain experts and carefully considered. Furthermore, monotonicity is critical during the optimisation stage, to significantly prevent the degree of local minima that can occur. It also aids in the understanding of why the optimisation arrived to its set of optimal settings for the flotation cells.
 
 The modeling steps are as follows:
 
-- **Model Training**: The `ModelTrainer` class handles loading data, splitting data, training models, hyperparameter tuning, and evaluating models. Various machine learning algorithms such as Linear Regression, Decision Trees, Random Forests, and Gradient Boosting are considered, however ultimately the Gradient Boosting algorithm was selected. This is because it produces non-linear trends, but also because it's able to model interactions between features in a non-linear maner. This non-linear interaction modelling is critical during the optimisation stage, where we try to find the optimal set of flotation settings.
-- **Model Evaluation**: The `ModelEvaluator` class handles loading models, evaluating performance on a test set using metrics such as Mean Absolute Error (MAE), Mean Squared Error (MSE), and R-squared, and generating evaluation reports.
+- **Model Training**: The `ModelTrainer` class handles loading data, splitting data, training models, hyperparameter tuning, and evaluating models. Various machine learning algorithms such as Linear Regression, Decision Trees, Random Forests, and Gradient Boosting are considered. It also generates output files and visualizations based on the predictions.
 - **Model Persistence**: The `ModelPersistence` class handles saving the trained models to disk and loading them for future use.
-- **Model Inference**: The `ModelInference` class handles loading models, making predictions on new data, and generating output files or visualizations based on the predictions.
+- **Model Inference**: The `ModelInference` class handles loading models and making predictions on new data, 
 
-These steps ensure that the models are trained, evaluated, saved, and ready for deployment in the mining optimization process.
+These steps ensure that the models are trained, evaluated, saved and ready for deployment in the mining optimization process.
+
+Ultimately the Gradient Boosting algorithm was selected. This was due to four properties: It's out-of-the-box accuracy, it's speed, it's responsivenes to monotonicity constraints and because it's able to model non-linear interactions between features. This non-linear interaction modelling is critical during the optimisation stage, where we try to find the optimal set of flotation settings.
+
+The iron concentration model and the silica concentration model produced R-squared values of 70% and 70% respectively. These are expressed visually in the following plots:
+
+| ![Model Evaluation Plot](outputs/iron_concentrate_perc_model/model_evaluation_scatter_plot.png) | ![Model Evaluation Plot](outputs/silica_concentrate_perc_model/model_evaluation_scatter_plot.png) |
+|:-------------------------------------------------------------------------------------------------:|:--------------------------------------------------------------------------------------------------:|
+
+These model accuracies are good, but not impressive. However, in the context of optimisation, model accuracy is surprisingly unimportant. Consider the thought experiment of having only one variable in a system being modelled. The model accuracy may be very low, less than 10%. However, if we have a model that is able to perfectly model this one variables impact on the system, then we can perfectly optimize this variable. Therefore, we aim to produce a model that can understand features and their interactions, more than a model that can more-accurately predict the target by partial-overfitting. As mentioned earlier, monotonicity is a key modelling step that bridges this gap and can turn a model that typically overfits, into a model that is well regularized, potentially underfitting and appopriate for optimisation.
 
 ### 3. Clustering
 
