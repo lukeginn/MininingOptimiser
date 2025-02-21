@@ -31,7 +31,7 @@ You can configure the project by editing the following files in the `config` fol
 
 ## Discussion
 
-There are five stages to this project:
+There are four stages to this project:
 
 ### 1. Data Preprocessing
 
@@ -49,24 +49,47 @@ These steps ensure that the data is cleaned, transformed, and ready for model tr
 
 ### 2. Machine Learning Model Training
 
-Here, we train various machine learning models using the preprocessed data. We experiment with different algorithms and hyperparameters to find the best-performing model for predicting the concentration of iron and silica.
+Here, we train various machine learning models using the preprocessed data. We experiment with different algorithms and hyperparameters to find the best-performing model for predicting the concentration of iron and silica. The modeling steps are as follows:
+
+- **Model Training**: The `ModelTrainer` class handles loading data, splitting data, training models, hyperparameter tuning, and evaluating models. Various machine learning algorithms such as Linear Regression, Decision Trees, Random Forests, and Gradient Boosting are used.
+- **Model Evaluation**: The `ModelEvaluator` class handles loading models, evaluating performance on a test set using metrics such as Mean Absolute Error (MAE), Mean Squared Error (MSE), and R-squared, and generating evaluation reports.
+- **Model Persistence**: The `ModelPersistence` class handles saving the trained models to disk and loading them for future use.
+- **Model Inference**: The `ModelInference` class handles loading models, making predictions on new data, and generating output files or visualizations based on the predictions.
+
+These steps ensure that the models are trained, evaluated, saved, and ready for deployment in the mining optimization process.
 
 ### 3. Clustering
 
-We use clustering techniques to group similar data points together. This helps in identifying patterns and trends in the data, which can be useful for further analysis and decision-making.
+We use clustering techniques to group similar data points together. This helps in identifying patterns and trends in the data, which can be useful for further analysis and decision-making. The clustering steps are as follows:
+
+- **Clustering Processor**: The `ClusteringProcessor` class handles loading data, selecting features, applying clustering algorithms, evaluating clusters, and generating artifacts. Various clustering algorithms such as K-Means, DBSCAN, and Agglomerative Clustering are used.
+- **Evaluating Clusters**: The quality of the clusters is evaluated using metrics such as Silhouette Score, Davies-Bouldin Index, and Inertia.
+- **Generating Artifacts**: Artifacts such as cluster labels and visualizations are generated to help understand the clustering results.
+
+These steps ensure that the data is effectively clustered, providing valuable insights for further analysis and decision-making in the mining optimization process.
 
 ### 4. Simulation and Optimisation
 
-In this final stage, we simulate different mining scenarios using the trained models and optimize the operations to achieve the best possible outcomes. This involves running simulations, analyzing results, and making adjustments to improve efficiency and productivity.
+In this final stage, we simulate different mining scenarios using the trained models and optimize the operations to achieve the best possible outcomes. This involves running simulations, analyzing results, and making adjustments to improve efficiency and productivity. The simulation and optimization steps are as follows: The simulation and optimization steps are as follows:
+
+- **Simulation Processor**: The `SimulationProcessor` class handles loading models, running simulations, analyzing results, and generating reports. This helps in predicting the outcomes of different mining scenarios.
+- **Optimization Processor**: The `OptimizationProcessor` class handles loading data and models, defining objectives, applying optimization algorithms, evaluating solutions, and generating artifacts. Various optimization algorithms such as Genetic Algorithms, Particle Swarm Optimization, and Gradient Descent are used.
+
+These steps ensure that the mining operations are effectively simulated and optimized, providing valuable insights for improving efficiency and productivity in the mining process.These steps ensure that the mining operations are effectively simulated and optimized, providing valuable insights for improving efficiency and productivity in the mining process.
 
 ## License
 
 This project is licensed under the Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License. This license only allows for downloading and sharing of the work, as long as credit is made. It cannot be changed in any way or used commercially. See the LICENSE file for more details.
 
-```plaintext
-Creative Commons Attribution-NonCommercial-NoDerivs 4.0 International Public License
+```plaintextplaintext
+Creative Commons Attribution-NonCommercial-NoDerivs 4.0 International Public LicenseCreative Commons Attribution-NonCommercial-NoDerivs 4.0 International Public License
 
-By exercising the Licensed Rights (defined below), You accept and agree to be bound by the terms and conditions of this Creative Commons Attribution-NonCommercial-NoDerivs 4.0 International Public License ("Public License"). To the extent this Public License may be interpreted as a contract, You are granted the Licensed Rights in consideration of Your acceptance of these terms and conditions, and the Licensor grants You such rights in consideration of benefits the Licensor receives from making the Licensed Material available under these terms and conditions.
+
+
+
+
+
+For the full license text, please refer to https://creativecommons.org/licenses/by-nc-nd/4.0/legalcode...By exercising the Licensed Rights (defined below), You accept and agree to be bound by the terms and conditions of this Creative Commons Attribution-NonCommercial-NoDerivs 4.0 International Public License ("Public License"). To the extent this Public License may be interpreted as a contract, You are granted the Licensed Rights in consideration of Your acceptance of these terms and conditions, and the Licensor grants You such rights in consideration of benefits the Licensor receives from making the Licensed Material available under these terms and conditions.By exercising the Licensed Rights (defined below), You accept and agree to be bound by the terms and conditions of this Creative Commons Attribution-NonCommercial-NoDerivs 4.0 International Public License ("Public License"). To the extent this Public License may be interpreted as a contract, You are granted the Licensed Rights in consideration of Your acceptance of these terms and conditions, and the Licensor grants You such rights in consideration of benefits the Licensor receives from making the Licensed Material available under these terms and conditions.
 
 ...
 
