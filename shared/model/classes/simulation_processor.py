@@ -18,27 +18,17 @@ class SimulationProcessor:
     feed_blend_and_controllables_modelling: bool = False
     controllables_features: Optional[List[str]] = None
 
-
     def run(self) -> pd.DataFrame:
         logger.info("Generating simulations")
 
-        simulation_data = self._generating_simulation_data(
-            features=self.features,
-            feature_values_to_simulate=self.feature_values_to_simulate,
-            cluster_centers=self.cluster_centers,
-        )
+        simulation_data = self._generating_simulation_data()
 
         simulation_results = self._generating_simulation_predictions_for_all_simulation_data(
-            simulation_data=simulation_data,
-            model=self.model,
-            model_choice=self.model_choice,
-            training_features=self.features,
-            confidence_interval=self.confidence_interval
+            simulation_data=simulation_data
         )
 
         simulation_results = self._merge_simulation_results_with_cluster_centers(
-            simulation_results=simulation_results,
-            cluster_centers=self.cluster_centers,
+            simulation_results=simulation_results
         )
 
         if self.informational_features is not None:
@@ -89,25 +79,23 @@ class SimulationProcessor:
 
         return simulation_results
 
-    def _generating_simulation_data(self, features: List[str], feature_values_to_simulate: Optional[Dict[str, List[float]]], cluster_centers: Optional[pd.DataFrame]) -> pd.DataFrame:
-        features = [feature + "_historical_actuals" for feature in features]
+    def _generating_simulation_data(self) -> pd.DataFrame:
+        features = [feature + "_historical_actuals" for feature in self.features]
 
-        if cluster_centers is not None:
-            cluster_centers_to_simulate = self._process_cluster_centers(cluster_centers, features)
+        if self.cluster_centers is not None:
+            cluster_centers_to_simulate = self._process_cluster_centers(self.cluster_centers, features)
 
-        if cluster_centers is not None:
-            simulated_data = self._generate_simulation_data(
-                features=features, feature_values_to_simulate=feature_values_to_simulate
-            )
+        if self.cluster_centers is not None:
+            simulated_data = self._generate_simulation_data(features)
 
-        if cluster_centers is not None and feature_values_to_simulate is not None:
+        if self.cluster_centers is not None and self.feature_values_to_simulate is not None:
             # Combine the cluster centers and the simulation data
             simulation_data = pd.concat(
                 [cluster_centers_to_simulate, simulated_data]
             ).reset_index(drop=True)
-        elif cluster_centers is not None:
+        elif self.cluster_centers is not None:
             simulation_data = cluster_centers_to_simulate
-        elif feature_values_to_simulate is not None:
+        elif self.feature_values_to_simulate is not None:
             simulation_data = simulated_data
         else:
             raise ValueError(
@@ -120,8 +108,8 @@ class SimulationProcessor:
 
         return simulation_data
 
-    def _generate_simulation_data(self, features: List[str], feature_values_to_simulate: Optional[Dict[str, List[float]]]) -> pd.DataFrame:
-        simulation_data = pd.DataFrame(feature_values_to_simulate, columns=features)
+    def _generate_simulation_data(self, features: List[str]) -> pd.DataFrame:
+        simulation_data = pd.DataFrame(self.feature_values_to_simulate, columns=features)
         logger.info("Simulation data generated successfully")
 
         return simulation_data
@@ -143,22 +131,14 @@ class SimulationProcessor:
 
     def _generating_simulation_predictions_for_all_simulation_data(
         self,
-        simulation_data: pd.DataFrame,
-        model: List[Any],
-        model_choice: str,
-        training_features: List[str],
-        confidence_interval: bool,
+        simulation_data: pd.DataFrame
     ) -> Tuple[pd.DataFrame, Optional[pd.DataFrame]]:
         results = []
         for index, one_simulation in simulation_data.iterrows():
             one_simulation = one_simulation.to_frame().T
 
             simulation_predictions = self._generating_simulation_predictions(
-                one_simulation=one_simulation,
-                model=model,
-                model_choice=model_choice,
-                training_features=training_features,
-                confidence_interval=confidence_interval
+                one_simulation=one_simulation
             )
 
             # Merge the input and the predictions
@@ -177,30 +157,26 @@ class SimulationProcessor:
 
     def _generating_simulation_predictions(
         self,
-        one_simulation: pd.DataFrame,
-        model: List[Any],
-        model_choice: str,
-        training_features: List[str],
-        confidence_interval: bool,
+        one_simulation: pd.DataFrame
     ) -> Tuple[pd.DataFrame, Optional[pd.DataFrame]]:
         inference_processor = InferenceProcessor(
-            model_choice=model_choice
+            model_choice=self.model_choice
         )
         simulation_predictions = inference_processor.run(
-            models=model,
-            data=one_simulation[training_features]
+            models=self.model,
+            data=one_simulation[self.features]
         )
         simulation_predictions = pd.DataFrame(simulation_predictions).T
-        if confidence_interval:
+        if self.confidence_interval:
             simulation_predictions.columns = ["lower", "mean", "upper"]
         else:
             simulation_predictions.columns = ["mean"]
 
         return simulation_predictions
 
-    def _merge_simulation_results_with_cluster_centers(self, simulation_results: pd.DataFrame, cluster_centers: pd.DataFrame) -> pd.DataFrame:
+    def _merge_simulation_results_with_cluster_centers(self, simulation_results: pd.DataFrame) -> pd.DataFrame:
 
-        cluster_centers = cluster_centers.reset_index().rename(
+        cluster_centers = self.cluster_centers.reset_index().rename(
             columns={"index": "cluster_number"}
         )
         if all(
