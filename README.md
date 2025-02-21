@@ -51,13 +51,13 @@ These steps ensure that the data is cleaned, transformed, and ready for model tr
 
 The following time-series trends describe some of the key features in our project:
 
-![Time-Series Plot](outputs\time_series_plots\stage_10_filtering_shutdowns\IRON_FEED_PERC_mean_time_series_plot.png)
-![Time-Series Plot](outputs\time_series_plots\stage_10_filtering_shutdowns\SILICA_FEED_PERC_mean_time_series_plot.png)
-![Time-Series Plot](outputs\time_series_plots\stage_10_filtering_shutdowns\AMINA_FLOW_mean_time_series_plot.png)
-![Time-Series Plot](outputs\time_series_plots\stage_10_filtering_shutdowns\FLOTATION_COLUMN_01_AIR_FLOW_mean_time_series_plot.png)
-![Time-Series Plot](outputs\time_series_plots\stage_10_filtering_shutdowns\FLOTATION_COLUMN_01_LEVEL_mean_time_series_plot.png)
-![Time-Series Plot](outputs\time_series_plots\stage_10_filtering_shutdowns\IRON_CONCENTRATE_PERC_mean_time_series_plot.png)
-![Time-Series Plot](outputs\time_series_plots\stage_10_filtering_shutdowns\SILICA_CONCENTRATE_PERC_mean_time_series_plot.png)
+![Time-Series Plot](outputs/time_series_plots/stage_10_filtering_shutdowns/IRON_FEED_PERC_mean_time_series_plot.png)
+![Time-Series Plot](outputs/time_series_plots/stage_10_filtering_shutdowns/SILICA_FEED_PERC_mean_time_series_plot.png)
+![Time-Series Plot](outputs/time_series_plots/stage_10_filtering_shutdowns/AMINA_FLOW_mean_time_series_plot.png)
+![Time-Series Plot](outputs/time_series_plots/stage_10_filtering_shutdowns/FLOTATION_COLUMN_01_AIR_FLOW_mean_time_series_plot.png)
+![Time-Series Plot](outputs/time_series_plots/stage_10_filtering_shutdowns/FLOTATION_COLUMN_01_LEVEL_mean_time_series_plot.png)
+![Time-Series Plot](outputs/time_series_plots/stage_10_filtering_shutdowns/IRON_CONCENTRATE_PERC_mean_time_series_plot.png)
+![Time-Series Plot](outputs/time_series_plots/stage_10_filtering_shutdowns/SILICA_CONCENTRATE_PERC_mean_time_series_plot.png)
 
 ### 2. Machine Learning Model Training
 
