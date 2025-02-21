@@ -9,7 +9,6 @@ This repository contains the code and configuration files for the Kaggle Mining 
 
 - [Introduction](#introduction)
 - [Installation](#installation)
-- [Usage](#usage)
 - [Configuration](#configuration)
 - [Results](#results)
 - [Contributing](#contributing)
@@ -26,10 +25,6 @@ To install the required dependencies, run the following command:
 ```bash
 pip install -r requirements.txt
 ```
-
-## Usage
-
-To run the project, use the following command:
 
 ## Configuration
 
