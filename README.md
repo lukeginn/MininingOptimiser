@@ -3,7 +3,7 @@
 ![Project Logo](path/to/logo.png)
 
 [![Build Status](https://img.shields.io/travis/username/repo.svg)](https://travis-ci.org/username/repo)
-[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![License](https://img.shields.io/badge/license-AGPL-blue.svg)](LICENSE)
 [![Version](https://img.shields.io/badge/version-1.0.0-brightgreen.svg)](https://github.com/username/repo/releases)
 
 This repository contains the code and configuration files for the Kaggle Mining Optimiser project. The project aims to optimize mining operations using machine learning models.
@@ -50,13 +50,13 @@ We welcome contributions! Please see our contributing guidelines for more detail
 
 ## License
 
-This project is licensed under the GNU General Public License v3.0. See the LICENSE file for more details.
+This project is licensed under the GNU Affero General Public License v3.0. See the LICENSE file for more details.
 
 And here is the content for the `LICENSE` file:
 
 ```plaintext
-GNU GENERAL PUBLIC LICENSE
-Version 3, 29 June 2007
+GNU AFFERO GENERAL PUBLIC LICENSE
+Version 3, 19 November 2007
 
 Copyright (C) 2025 Luke Ginn
 
@@ -65,4 +65,4 @@ of this license document, but changing it is not allowed.
 
 ...
 
-For the full license text, please refer to https://www.gnu.org/licenses/gpl-3.0.en.html
+For the full license text, please refer to https://www.gnu.org/licenses/agpl-3.0.en.html
