@@ -1,9 +1,9 @@
-*.csv
 *.pyc
-*.png
 shared/model/__pycache__/*
 *.pkl
 notes/*
 *.xlsx
 *.pptx
 *.zip
+*MiningProcess_Flotation_Plant_Database.csv
+*partial_dependence_data*

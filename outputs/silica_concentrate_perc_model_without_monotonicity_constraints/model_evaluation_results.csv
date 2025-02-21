@@ -1,0 +1,2 @@
+l2_regularization,learning_rate,max_bins,max_depth,max_iter,max_leaf_nodes,min_samples_leaf,monotonic_cst,rmse,mae,r2
+0.0,0.1,255,3,100,31,1,"[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]",0.32099144493514603,0.24192300701965508,0.8122879451000473

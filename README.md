@@ -1,8 +1,5 @@
 # Kaggle Mining Optimiser
 
-![Project Logo](path/to/logo.png)
-
-[![Build Status](https://img.shields.io/travis/username/repo.svg)](https://travis-ci.org/username/repo)
 [![License](https://img.shields.io/badge/license-CC--BY--NC--ND-blue.svg)](LICENSE)
 [![Version](https://img.shields.io/badge/version-1.0.0-brightgreen.svg)](https://github.com/username/repo/releases)
 
@@ -36,7 +33,7 @@ To run the project, use the following command:
 
 ## Configuration
 
-You can configure the project by editing the config.yaml file. Here is an example configuration:
+You can configure the project by editing the following files in the `config` folder: `general.yaml`, `data.yaml`, `model.yaml`, `clustering.yaml`, `simulation.yaml`, and `optimisation.yaml`.
 
 ## Results
 
