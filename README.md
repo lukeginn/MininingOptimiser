@@ -31,11 +31,13 @@ You can configure the project by editing the following files in the `config` fol
 
 ## Discussion
 
-There are four stages to this project:
+In this project we aim to build a simulation environment for a flotation unit in a mineral processing facility. Specially, we aim to optimize the iron and silica output concentrtions, given the feed inputs and flotation settings.
+
+There are four stages to this project.
 
 ### 1. Data Preprocessing
 
-In this stage, we clean and prepare the data for analysis. This includes handling missing values, normalizing data, and feature engineering to create new variables that can improve model performance. The preprocessing steps are as follows:
+In this stage, we clean and prepare the data for analysis. This includes handling missing values, interpolation, removing outliers, aggregating and feature engineering. Importantly, at each stage of the preprocessing, a series of artifacts are automatically produced: meta_data, time-series plots and histograms. This way there is a full understanding of the impact each stage has towards the final dataset. The preprocessing steps are as follows:
 
 - **Initial Preprocessing**: Standardizes column names, cleans data by replacing commas with dots, converts specific columns to datetime and numeric types, and aggregates data by grouping it from half-secondly to hourly.
 - **Missing Data Processing**: Identifies and corrects missing data by deleting rows with missing values, interpolating time series, and replacing missing values with specified values.
@@ -45,7 +47,11 @@ In this stage, we clean and prepare the data for analysis. This includes handlin
 - **Feature Engineering**: Creates new features that can improve model performance or can aid in the optimisation procedure.
 - **Shutdown Filtering**: Filters out shutdown periods from the data.
 
-These steps ensure that the data is cleaned, transformed, and ready for model training, evaluation and optimisation.
+These steps ensure that the data is cleaned, transformed, and ready for model training, evaluation, clusering, simulation and optimisation.
+
+The following time-series trends describe some of the key features in our project:
+
+
 
 ### 2. Machine Learning Model Training
 
@@ -82,14 +88,9 @@ These steps ensure that the mining operations are effectively simulated and opti
 This project is licensed under the Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License. This license only allows for downloading and sharing of the work, as long as credit is made. It cannot be changed in any way or used commercially. See the LICENSE file for more details.
 
 ```plaintextplaintext
-Creative Commons Attribution-NonCommercial-NoDerivs 4.0 International Public LicenseCreative Commons Attribution-NonCommercial-NoDerivs 4.0 International Public License
+Creative Commons Attribution-NonCommercial-NoDerivs 4.0 International Public License
 
-
-
-
-
-
-For the full license text, please refer to https://creativecommons.org/licenses/by-nc-nd/4.0/legalcode...By exercising the Licensed Rights (defined below), You accept and agree to be bound by the terms and conditions of this Creative Commons Attribution-NonCommercial-NoDerivs 4.0 International Public License ("Public License"). To the extent this Public License may be interpreted as a contract, You are granted the Licensed Rights in consideration of Your acceptance of these terms and conditions, and the Licensor grants You such rights in consideration of benefits the Licensor receives from making the Licensed Material available under these terms and conditions.By exercising the Licensed Rights (defined below), You accept and agree to be bound by the terms and conditions of this Creative Commons Attribution-NonCommercial-NoDerivs 4.0 International Public License ("Public License"). To the extent this Public License may be interpreted as a contract, You are granted the Licensed Rights in consideration of Your acceptance of these terms and conditions, and the Licensor grants You such rights in consideration of benefits the Licensor receives from making the Licensed Material available under these terms and conditions.
+By exercising the Licensed Rights (defined below), You accept and agree to be bound by the terms and conditions of this Creative Commons Attribution-NonCommercial-NoDerivs 4.0 International Public License ("Public License"). To the extent this Public License may be interpreted as a contract, You are granted the Licensed Rights in consideration of Your acceptance of these terms and conditions, and the Licensor grants You such rights in consideration of benefits the Licensor receives from making the Licensed Material available under these terms and conditions.
 
 ...
 
