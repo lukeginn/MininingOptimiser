@@ -33,7 +33,7 @@ iron_concentrate_perc:
       - 'FLOTATION_COLUMN_07_LEVEL_mean'
     model_choice: 'gbm'
     random_state: 42
-    number_of_models: 1
+    number_of_models: 100
     model_name: 'iron_concentrate_perc'
     metric: 'rmse'
     generate_feature_importance: True
@@ -54,7 +54,7 @@ iron_concentrate_perc:
       max_bins:
         - 255
       monotonic_cst:
-        - [0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0]
+        - [1,1,1,-1,1, 1,0,1,1,1, 1,1,1,1,1, 1,1,1,1,1, 1]
 
     univariable_feature_importance:
       run: True
@@ -119,7 +119,7 @@ silica_concentrate_perc:
       - 'FLOTATION_COLUMN_07_LEVEL_mean'
     model_choice: 'gbm'
     random_state: 42
-    number_of_models: 1
+    number_of_models: 100
     model_name: 'silica_concentrate_perc'
     metric: 'rmse'
     generate_feature_importance: True
@@ -140,7 +140,7 @@ silica_concentrate_perc:
       max_bins:
         - 255
       monotonic_cst:
-        - [0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0]
+        - [1,1,-1,1,-1, -1,0,-1,-1,-1, -1,-1,-1,-1,-1, -1,-1,-1,-1,-1, -1]
 
     univariable_feature_importance:
       run: True
