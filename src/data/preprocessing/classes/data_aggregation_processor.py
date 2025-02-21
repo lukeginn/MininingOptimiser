@@ -1,5 +1,5 @@
 import config.paths as paths
-from shared.data.aggregate_data import rolling_aggregate_data_via_timestamp
+from shared.data.data_aggregator import DataAggregator
 from src.utils.generate_artifacts import generate_artifacts
 from dataclasses import dataclass
 from typing import Dict, Any
@@ -7,12 +7,12 @@ import pandas as pd
 
 
 @dataclass
-class DataAggregator:
+class DataAggregationProcessor:
     general_config: Dict[str, Any]
     data_config: Dict[str, Any]
 
     def run(self, data: pd.DataFrame) -> pd.DataFrame:
-        data = rolling_aggregate_data_via_timestamp(
+        data_aggregator = DataAggregator(
             data=data,
             timestamp=self.data_config.timestamp,
             aggregation_types=self.data_config.rolling_aggregation.aggregation_types,
@@ -20,6 +20,7 @@ class DataAggregator:
             min_periods=self.data_config.rolling_aggregation.min_periods,
             window_selection_frequency=self.data_config.rolling_aggregation.window_selection_frequency,
         )
+        data = data_aggregator.rolling_aggregate()
         self.generate_artifacts_for_aggregate_data(data)
         return data
 

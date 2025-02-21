@@ -1,5 +1,5 @@
 import config.paths as paths
-from shared.data.introduce_lags import introduce_lags
+from shared.data.lag_introducer import LagIntroducer
 from src.utils.generate_artifacts import generate_artifacts
 from dataclasses import dataclass
 from typing import Dict, Any
@@ -13,7 +13,7 @@ class LagsProcessor:
 
     def run(self, data: pd.DataFrame) -> pd.DataFrame:
         if self.data_config.introduce_lags.run:
-            data = introduce_lags(
+            lag_introducer = LagIntroducer(
                 data=data,
                 timestamp=self.data_config.timestamp,
                 features=self.data_config.introduce_lags.features,
@@ -23,6 +23,7 @@ class LagsProcessor:
                 max_lag=self.data_config.introduce_lags.max_lag,
                 overwrite_existing_features=self.data_config.introduce_lags.overwrite_existing_features,
             )
+            data = lag_introducer.run()
             self.generate_artifacts_for_introduce_lags(data)
         return data
 

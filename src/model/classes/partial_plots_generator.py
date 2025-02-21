@@ -1,5 +1,5 @@
 import config.paths as paths
-from shared.model.generate_partial_plots import generate_partial_plots
+from shared.model.partial_plot_processor import PartialPlotProcessor
 from dataclasses import dataclass
 
 
@@ -8,7 +8,7 @@ class PartialPlotsGenerator:
     model_config: dict
 
     def run_for_iron_concentrate_perc(self, best_models, data, training_features):
-        generate_partial_plots(
+        partial_plot_processor = PartialPlotProcessor(
             model_choice=self.model_config.iron_concentrate_perc.model.model_choice,
             models=best_models,
             data=data[training_features],
@@ -20,11 +20,12 @@ class PartialPlotsGenerator:
             number_of_bins_in_histogram=self.model_config.iron_concentrate_perc.partial_plots.number_of_bins_in_histogram,
             grid_resolution=self.model_config.iron_concentrate_perc.partial_plots.grid_resolution,
         )
+        partial_plot_processor.run()
 
     def run_for_iron_concentrate_perc_feed_blend(
         self, best_models, data, training_features
     ):
-        generate_partial_plots(
+        partial_plot_processor = PartialPlotProcessor(
             model_choice=self.model_config.iron_concentrate_perc.model.model_choice,
             models=best_models,
             data=data[training_features],
@@ -36,9 +37,10 @@ class PartialPlotsGenerator:
             number_of_bins_in_histogram=self.model_config.iron_concentrate_perc.partial_plots.number_of_bins_in_histogram,
             grid_resolution=self.model_config.iron_concentrate_perc.partial_plots.grid_resolution,
         )
+        partial_plot_processor.run()
 
     def run_for_silica_concentrate_perc(self, best_models, data, training_features):
-        generate_partial_plots(
+        partial_plot_processor = PartialPlotProcessor(
             model_choice=self.model_config.silica_concentrate_perc.model.model_choice,
             models=best_models,
             data=data[training_features],
@@ -50,11 +52,12 @@ class PartialPlotsGenerator:
             number_of_bins_in_histogram=self.model_config.silica_concentrate_perc.partial_plots.number_of_bins_in_histogram,
             grid_resolution=self.model_config.silica_concentrate_perc.partial_plots.grid_resolution,
         )
+        partial_plot_processor.run()
 
     def run_for_silica_concentrate_perc_feed_blend(
         self, best_models, data, training_features
     ):
-        generate_partial_plots(
+        partial_plot_processor = PartialPlotProcessor(
             model_choice=self.model_config.silica_concentrate_perc.model.model_choice,
             models=best_models,
             data=data[training_features],
@@ -66,3 +69,4 @@ class PartialPlotsGenerator:
             number_of_bins_in_histogram=self.model_config.silica_concentrate_perc.partial_plots.number_of_bins_in_histogram,
             grid_resolution=self.model_config.silica_concentrate_perc.partial_plots.grid_resolution,
         )
+        partial_plot_processor.run()

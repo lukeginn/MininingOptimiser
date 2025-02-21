@@ -1,5 +1,5 @@
 import config.paths as paths
-from shared.model.generate_model import generate_model
+from shared.model.model_processor import ModelProcessor
 from dataclasses import dataclass
 
 
@@ -8,7 +8,7 @@ class ModelGenerator:
     model_config: dict
 
     def run_for_iron_concentrate_perc(self, data, training_features):
-        best_models, best_params, best_rmse, feature_importance = generate_model(
+        model_processor = ModelProcessor(
             data=data,
             target_feature=self.model_config.iron_concentrate_perc.model.target,
             training_features=training_features,
@@ -20,12 +20,13 @@ class ModelGenerator:
             evaluation_results_path=paths.Paths.IRON_CONCENTRATE_PERC_MODEL_EVALUATION_RESULTS_FILE.value,
             random_state=self.model_config.iron_concentrate_perc.model.random_state,
             n_models=self.model_config.iron_concentrate_perc.model.number_of_models,
-            path=paths.Paths.IRON_CONCENTRATE_PERC_MODEL_EVALUATION_SCATTER_PLOT.value,
+            path=paths.Paths.IRON_CONCENTRATE_PERC_MODEL_EVALUATION_SCATTER_PLOT.value
         )
-        return best_models, best_params, best_rmse, feature_importance
+        best_models, best_params, best_rmse, feature_importance = model_processor.run()
+        return best_models
 
     def run_for_iron_concentrate_perc_feed_blend(self, data, training_features):
-        best_models, best_params, best_rmse, feature_importance = generate_model(
+        model_processor = ModelProcessor(
             data=data,
             target_feature=self.model_config.iron_concentrate_perc.model.target,
             training_features=training_features,
@@ -39,10 +40,11 @@ class ModelGenerator:
             n_models=self.model_config.iron_concentrate_perc.model.number_of_models,
             path=paths.Paths.IRON_CONCENTRATE_PERC_FEED_BLEND_MODEL_EVALUATION_SCATTER_PLOT.value,
         )
-        return best_models, best_params, best_rmse, feature_importance
+        best_models, best_params, best_rmse, feature_importance = model_processor.run()
+        return best_models
 
     def run_for_silica_concentrate_perc(self, data, training_features):
-        best_models, best_params, best_rmse, feature_importance = generate_model(
+        model_processor = ModelProcessor(
             data=data,
             target_feature=self.model_config.silica_concentrate_perc.model.target,
             training_features=training_features,
@@ -56,10 +58,11 @@ class ModelGenerator:
             n_models=self.model_config.silica_concentrate_perc.model.number_of_models,
             path=paths.Paths.SILICA_CONCENTRATE_PERC_MODEL_EVALUATION_SCATTER_PLOT.value,
         )
-        return best_models, best_params, best_rmse, feature_importance
+        best_models, best_params, best_rmse, feature_importance = model_processor.run()
+        return best_models
 
     def run_for_silica_concentrate_perc_feed_blend(self, data, training_features):
-        best_models, best_params, best_rmse, feature_importance = generate_model(
+        model_processor = ModelProcessor(
             data=data,
             target_feature=self.model_config.silica_concentrate_perc.model.target,
             training_features=training_features,
@@ -73,4 +76,5 @@ class ModelGenerator:
             n_models=self.model_config.silica_concentrate_perc.model.number_of_models,
             path=paths.Paths.SILICA_CONCENTRATE_PERC_FEED_BLEND_MODEL_EVALUATION_SCATTER_PLOT.value,
         )
-        return best_models, best_params, best_rmse, feature_importance
+        best_models, best_params, best_rmse, feature_importance = model_processor.run()
+        return best_models

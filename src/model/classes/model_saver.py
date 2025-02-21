@@ -1,36 +1,40 @@
 import config.paths as paths
-from shared.model.generate_model import save_models
 from dataclasses import dataclass
-
+from typing import Any, Dict
+from shared.model.model_exporter import ModelExporter
 
 @dataclass
 class ModelSaver:
-    model_config: dict
+    model_config: Dict[str, Any]
 
-    def run_for_iron_concentrate_perc(self, best_models):
-        save_models(
-            models=best_models,
+    def run_for_iron_concentrate_perc(self, models: Dict[str, Any]):
+        model_exporter = ModelExporter()
+        model_exporter.save(
+            models=models,
             path=paths.Paths.IRON_CONCENTRATE_PERC_MODELS_FOLDER.value,
-            path_suffix=self.model_config.iron_concentrate_perc.model.model_name,
+            path_suffix=self.model_config["iron_concentrate_perc"]["model"]["model_name"],
         )
 
-    def run_for_iron_concentrate_perc_feed_blend(self, best_models):
-        save_models(
-            models=best_models,
+    def run_for_iron_concentrate_perc_feed_blend(self, models: Dict[str, Any]):
+        model_exporter = ModelExporter()
+        model_exporter.save(
             path=paths.Paths.IRON_CONCENTRATE_PERC_FEED_BLEND_MODELS_FOLDER.value,
-            path_suffix=self.model_config.iron_concentrate_perc.model.model_name,
+            models=models,
+            path_suffix=self.model_config["iron_concentrate_perc"]["model"]["model_name"],
         )
 
-    def run_for_silica_concentrate_perc(self, best_models):
-        save_models(
-            models=best_models,
+    def run_for_silica_concentrate_perc(self, models: Dict[str, Any]):
+        model_exporter = ModelExporter()
+        model_exporter.save(
             path=paths.Paths.SILICA_CONCENTRATE_PERC_MODELS_FOLDER.value,
-            path_suffix=self.model_config.silica_concentrate_perc.model.model_name,
+            models=models,
+            path_suffix=self.model_config["silica_concentrate_perc"]["model"]["model_name"],
         )
 
-    def run_for_silica_concentrate_perc_feed_blend(self, best_models):
-        save_models(
-            models=best_models,
+    def run_for_silica_concentrate_perc_feed_blend(self, models: Dict[str, Any]):
+        model_exporter = ModelExporter()
+        model_exporter.save(
             path=paths.Paths.SILICA_CONCENTRATE_PERC_FEED_BLEND_MODELS_FOLDER.value,
-            path_suffix=self.model_config.silica_concentrate_perc.model.model_name,
+            models=models,
+            path_suffix=self.model_config["silica_concentrate_perc"]["model"]["model_name"],
         )

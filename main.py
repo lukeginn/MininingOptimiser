@@ -6,7 +6,7 @@ from src.data.reading.classes.data_reader import DataReader
 from src.data.preprocessing.classes.missing_data_processor import MissingDataProcessor
 from src.data.preprocessing.classes.outlier_processor import OutlierProcessor
 from src.data.preprocessing.classes.lags_processor import LagsProcessor
-from src.data.preprocessing.classes.aggregator import DataAggregator
+from src.data.preprocessing.classes.data_aggregation_processor import DataAggregationProcessor
 from src.data.preprocessing.classes.feature_engineering import FeatureEngineering
 from src.data.preprocessing.classes.shutdowns import ShutdownFilter
 from src.model.classes.univariable_feature_importance_generator import (
@@ -38,10 +38,10 @@ def main() -> None:
     optimisation_config = setup_instance.optimisation_config
 
     data = run_data_processing(general_config, data_config)
-    models = run_model_training_and_evaluation(data, model_config)
+    model_processors = run_model_training_and_evaluation(data, model_config)
     merged_simulations, merged_feed_blend_simulations, controllables_clusters = (
         run_clustering_and_simulation(
-            data, models, clustering_config, simulation_config, model_config
+            data, model_processors, clustering_config, simulation_config, model_config
         )
     )
     run_optimisation(
@@ -63,7 +63,7 @@ def run_data_processing(
     missing_data_processor = MissingDataProcessor(general_config, data_config)
     outlier_processor = OutlierProcessor(general_config, data_config)
     lags_processor = LagsProcessor(general_config, data_config)
-    data_aggregator = DataAggregator(general_config, data_config)
+    data_aggregator = DataAggregationProcessor(general_config, data_config)
     feature_engineering = FeatureEngineering(general_config, data_config)
     shutdown_filter = ShutdownFilter(general_config, data_config)
 
@@ -105,12 +105,7 @@ def run_model_training_and_evaluation(
     correlation_matrix_generator.run_for_iron_concentrate_perc_feed_blend(
         data, iron_concentrate_perc_feed_blend_training_features_per_method
     )
-    (
-        iron_concentrate_perc_feed_blend_model,
-        best_params,
-        best_rmse,
-        feature_importance,
-    ) = model_generator.run_for_iron_concentrate_perc_feed_blend(
+    iron_concentrate_perc_feed_blend_model = model_generator.run_for_iron_concentrate_perc_feed_blend(
         data, iron_concentrate_perc_feed_blend_training_features
     )
     model_saver.run_for_iron_concentrate_perc_feed_blend(
@@ -130,7 +125,7 @@ def run_model_training_and_evaluation(
     correlation_matrix_generator.run_for_iron_concentrate_perc(
         data, iron_concentrate_perc_training_features_per_method
     )
-    iron_concentrate_perc_model, best_params, best_rmse, feature_importance = (
+    iron_concentrate_perc_model = (
         model_generator.run_for_iron_concentrate_perc(
             data, iron_concentrate_perc_training_features
         )
@@ -148,12 +143,7 @@ def run_model_training_and_evaluation(
     correlation_matrix_generator.run_for_silica_concentrate_perc_feed_blend(
         data, silica_concentrate_perc_feed_blend_training_features_per_method
     )
-    (
-        silica_concentrate_perc_feed_blend_model,
-        best_params,
-        best_rmse,
-        feature_importance,
-    ) = model_generator.run_for_silica_concentrate_perc_feed_blend(
+    silica_concentrate_perc_feed_blend_model = model_generator.run_for_silica_concentrate_perc_feed_blend(
         data, silica_concentrate_perc_feed_blend_training_features
     )
     model_saver.run_for_silica_concentrate_perc_feed_blend(
@@ -173,7 +163,7 @@ def run_model_training_and_evaluation(
     correlation_matrix_generator.run_for_silica_concentrate_perc(
         data, silica_concentrate_perc_training_features_per_method
     )
-    silica_concentrate_perc_model, best_params, best_rmse, feature_importance = (
+    silica_concentrate_perc_model = (
         model_generator.run_for_silica_concentrate_perc(
             data, silica_concentrate_perc_training_features
         )

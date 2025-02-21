@@ -1,6 +1,6 @@
 import config.paths as paths
-from shared.data.missing_data_identifier import identify_missing_data
-from shared.data.missing_data_correction import missing_data_correction
+from shared.data.missing_data_identifier import MissingDataIdentifier
+from shared.data.missing_data_corrector import MissingDataCorrector
 from src.utils.generate_artifacts import generate_artifacts
 from dataclasses import dataclass
 from typing import Dict, Any
@@ -14,9 +14,10 @@ class MissingDataProcessor:
 
     def run_identifying_missing_data(self, data: pd.DataFrame) -> pd.DataFrame:
         if self.data_config.identify_missing_data.run:
-            data = identify_missing_data(
+            missing_data_identifier = MissingDataIdentifier(
                 data=data,
                 timestamp=self.data_config.timestamp,
+                features=self.data_config.identify_missing_data.features,
                 unique_values_identification=self.data_config.identify_missing_data.unique_values.run,
                 unique_values_threshold=self.data_config.identify_missing_data.unique_values.threshold,
                 explicit_missing_values=self.data_config.identify_missing_data.explicit_missing_values.run,
@@ -25,12 +26,13 @@ class MissingDataProcessor:
                 repeating_values_threshold=self.data_config.identify_missing_data.repeating_values.threshold,
                 repeating_values_proportion_threshold=self.data_config.identify_missing_data.repeating_values.proportion_threshold,
             )
+            data = missing_data_identifier.run()
             self.generate_artifacts_for_identifying_missing_data(data)
         return data
 
     def run_correcting_missing_data(self, data: pd.DataFrame) -> pd.DataFrame:
         if self.data_config.correct_missing_data.run:
-            data = missing_data_correction(
+            missing_data_corrector = MissingDataCorrector(
                 data=data,
                 delete_all_rows_with_missing_values=self.data_config.correct_missing_data.delete_all_rows_with_missing_values.run,
                 interpolate_time_series=self.data_config.correct_missing_data.interpolate_time_series.run,
@@ -47,6 +49,7 @@ class MissingDataProcessor:
                 timestamp=self.data_config.timestamp,
                 x=self.data_config.correct_missing_data.replace_missing_values_with_x.x,
             )
+            data = missing_data_corrector.run()
             self.generate_artifacts_for_correcting_missing_data(data)
         return data
 
@@ -54,7 +57,7 @@ class MissingDataProcessor:
         self, data: pd.DataFrame
     ) -> pd.DataFrame:
         if self.data_config.correct_missing_data_after_aggregation.run:
-            data = missing_data_correction(
+            missing_data_corrector = MissingDataCorrector(
                 data=data,
                 delete_all_rows_with_missing_values=self.data_config.correct_missing_data_after_aggregation.delete_all_rows_with_missing_values.run,
                 interpolate_time_series=self.data_config.correct_missing_data_after_aggregation.interpolate_time_series.run,
@@ -69,8 +72,9 @@ class MissingDataProcessor:
                 interpolate_highly_regular_interval_min=self.data_config.correct_missing_data_after_aggregation.interpolate_highly_regular_time_series.regular_interval_min,
                 replace_missing_values_with_last_known_value_backfill=self.data_config.correct_missing_data_after_aggregation.replace_missing_values_with_last_known_value.backfill,
                 timestamp=self.data_config.timestamp,
-                x=self.data_config.correct_missing_data_after_aggregation.replace_missing_values_with_x.x,
+                x=self.data_config.correct_missing_data_after_aggregation.replace_missing_values_with_x.x
             )
+            data = missing_data_corrector.run()
             self.generate_artifacts_for_correcting_missing_data_post_aggregation(data)
         return data
 

@@ -1,5 +1,5 @@
 import config.paths as paths
-from shared.data.outlier_identifier import identify_outliers
+from shared.data.outlier_identifier import OutlierIdentifier
 from src.utils.generate_artifacts import generate_artifacts
 from dataclasses import dataclass
 from typing import Dict, Any
@@ -13,7 +13,7 @@ class OutlierProcessor:
 
     def run(self, data: pd.DataFrame) -> pd.DataFrame:
         if self.data_config.identify_outliers.run:
-            data = identify_outliers(
+            outlier_identifier = OutlierIdentifier(
                 data=data,
                 method=self.data_config.identify_outliers.method,
                 iqr_threshold=self.data_config.identify_outliers.iqr_threshold,
@@ -24,6 +24,7 @@ class OutlierProcessor:
                 isolation_forest_threshold=self.data_config.identify_outliers.isolation_forest_threshold,
                 lof_threshold=self.data_config.identify_outliers.lof_threshold,
             )
+            data = outlier_identifier.run()
             self.generate_artifacts_for_identifying_outliers(data)
         return data
 
