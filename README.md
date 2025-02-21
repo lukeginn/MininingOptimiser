@@ -50,7 +50,7 @@ We welcome contributions! Please see our contributing guidelines for more detail
 
 ## License
 
-This project is licensed under the Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License. See the LICENSE file for more details.
+This project is licensed under the Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License. This license only allows for downloading and sharing of the work, as long as credit is made. It cannot be changed in any way or used commercially. See the LICENSE file for more details.
 
 ```plaintext
 Creative Commons Attribution-NonCommercial-NoDerivs 4.0 International Public License
