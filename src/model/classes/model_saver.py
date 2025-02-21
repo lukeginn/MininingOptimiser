@@ -1,7 +1,7 @@
 import config.paths as paths
 from dataclasses import dataclass
 from typing import Any, Dict
-from shared.model.model_exporter import ModelExporter
+from shared.model.classes.model_exporter import ModelExporter
 
 @dataclass
 class ModelSaver:

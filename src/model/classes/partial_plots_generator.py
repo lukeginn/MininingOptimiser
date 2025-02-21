@@ -1,5 +1,5 @@
 import config.paths as paths
-from shared.model.partial_plot_processor import PartialPlotProcessor
+from shared.model.classes.partial_plot_processor import PartialPlotProcessor
 from dataclasses import dataclass
 
 

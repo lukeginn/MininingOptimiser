@@ -1,6 +1,6 @@
 import config.paths as paths
-from shared.data.missing_data_identifier import MissingDataIdentifier
-from shared.data.missing_data_corrector import MissingDataCorrector
+from shared.data.classes.missing_data_identifier import MissingDataIdentifier
+from shared.data.classes.missing_data_corrector import MissingDataCorrector
 from src.utils.generate_artifacts import generate_artifacts
 from dataclasses import dataclass
 from typing import Dict, Any
@@ -87,7 +87,7 @@ class MissingDataProcessor:
             "custom_plots": paths.Paths.CUSTOM_PLOTS_FOR_AGGREGATED_FEATURES_PATH.value,
         }
         generate_artifacts(
-            self.general_config, data, "stage_2_missing_data_identified", paths_dict
+            self.general_config, self.data_config, data, "stage_2_missing_data_identified", paths_dict
         )
 
     def generate_artifacts_for_correcting_missing_data(
@@ -99,7 +99,7 @@ class MissingDataProcessor:
             "custom_plots": paths.Paths.CUSTOM_PLOTS_FOR_MISSING_DATA_CORRECTED_PATH.value,
         }
         generate_artifacts(
-            self.general_config, data, "stage_5_missing_data_corrected", paths_dict
+            self.general_config, self.data_config, data, "stage_5_missing_data_corrected", paths_dict
         )
 
     def generate_artifacts_for_correcting_missing_data_post_aggregation(
@@ -112,6 +112,7 @@ class MissingDataProcessor:
         }
         generate_artifacts(
             self.general_config,
+            self.data_config,
             data,
             "stage_9_missing_data_corrected_post_aggregation",
             paths_dict,

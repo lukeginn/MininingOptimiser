@@ -1,4 +1,4 @@
-from shared.model.feature_selection_processor import FeatureSelectorProcessor
+from shared.model.classes.feature_selection_processor import FeatureSelectorProcessor
 from dataclasses import dataclass
 
 

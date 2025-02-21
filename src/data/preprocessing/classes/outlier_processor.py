@@ -1,5 +1,5 @@
 import config.paths as paths
-from shared.data.outlier_identifier import OutlierIdentifier
+from shared.data.classes.outlier_identifier import OutlierIdentifier
 from src.utils.generate_artifacts import generate_artifacts
 from dataclasses import dataclass
 from typing import Dict, Any
@@ -35,5 +35,5 @@ class OutlierProcessor:
             "custom_plots": paths.Paths.CUSTOM_PLOTS_FOR_OUTLIERS_IDENTIFIED_PATH.value,
         }
         generate_artifacts(
-            self.general_config, data, "stage_3_outliers_identified", paths_dict
+            self.general_config, self.data_config, data, "stage_3_outliers_identified", paths_dict
         )

@@ -59,7 +59,7 @@ def run_data_processing(
     general_config: Dict[str, Any], data_config: Dict[str, Any]
 ) -> Any:
     """Run the data processing steps."""
-    data_reader = DataReader(general_config)
+    data_reader = DataReader(general_config, data_config)
     missing_data_processor = MissingDataProcessor(general_config, data_config)
     outlier_processor = OutlierProcessor(general_config, data_config)
     lags_processor = LagsProcessor(general_config, data_config)

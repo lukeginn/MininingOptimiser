@@ -1,5 +1,5 @@
 import config.paths as paths
-from shared.model.simulation_processor import SimulationProcessor
+from shared.model.classes.simulation_processor import SimulationProcessor
 from dataclasses import dataclass
 from typing import List, Dict, Any
 import pandas as pd

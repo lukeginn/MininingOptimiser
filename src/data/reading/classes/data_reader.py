@@ -10,6 +10,7 @@ import pandas as pd
 @dataclass
 class DataReader:
     general_config: Dict[str, Any]
+    data_config: Dict[str, Any]
 
     def run(self) -> pd.DataFrame:
         data = read_csv(file_path=paths.Paths.DATA_FILE_1.value)
@@ -24,5 +25,5 @@ class DataReader:
             "custom_plots": paths.Paths.CUSTOM_PLOTS_FOR_RAW_DATA_PATH.value,
         }
         generate_artifacts(
-            self.general_config, data, "stage_1_data_reading", paths_dict
+            self.general_config, self.data_config, data, "stage_1_data_reading", paths_dict
         )

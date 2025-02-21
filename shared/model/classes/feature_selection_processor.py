@@ -1,7 +1,7 @@
 import numpy as np
 import logging as logger
-from shared.model.model_processor import ModelProcessor
-from shared.model.univariable_feature_importance_processor import UnivariableFeatureImportanceProcessor
+from shared.model.classes.model_processor import ModelProcessor
+from shared.model.classes.univariable_feature_importance_processor import UnivariableFeatureImportanceProcessor
 from dataclasses import dataclass, field
 from typing import List, Optional, Dict, Any
 import pandas as pd

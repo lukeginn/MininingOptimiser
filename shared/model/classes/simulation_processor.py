@@ -1,7 +1,7 @@
 import pandas as pd
 import logging as logger
 import matplotlib.pyplot as plt
-from shared.model.inference_processor import InferenceProcessor
+from shared.model.classes.inference_processor import InferenceProcessor
 from dataclasses import dataclass, field
 from typing import List, Optional, Dict, Any, Tuple
 

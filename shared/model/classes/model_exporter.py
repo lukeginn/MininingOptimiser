@@ -6,7 +6,7 @@ from typing import List, Optional, Dict, Any, Tuple
 @dataclass
 class ModelExporter:
 
-    def save(self, models, path: str, path_suffix: str) -> None:
+    def save(self, models: List[Any], path: str, path_suffix: str) -> None:
         for i, model in enumerate(models):
             full_file_path = f"{path}\\model_{path_suffix}_{i}.pkl"
             joblib.dump(model, full_file_path)

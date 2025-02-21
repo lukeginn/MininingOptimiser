@@ -1,5 +1,5 @@
 import config.paths as paths
-from shared.model.univariable_feature_importance_processor import UnivariableFeatureImportanceProcessor
+from shared.model.classes.univariable_feature_importance_processor import UnivariableFeatureImportanceProcessor
 from dataclasses import dataclass
 
 

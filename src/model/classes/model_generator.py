@@ -1,5 +1,5 @@
 import config.paths as paths
-from shared.model.model_processor import ModelProcessor
+from shared.model.classes.model_processor import ModelProcessor
 from dataclasses import dataclass
 
 

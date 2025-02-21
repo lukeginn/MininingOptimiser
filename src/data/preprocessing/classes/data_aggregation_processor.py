@@ -1,5 +1,5 @@
 import config.paths as paths
-from shared.data.data_aggregator import DataAggregator
+from shared.data.classes.data_aggregator import DataAggregator
 from src.utils.generate_artifacts import generate_artifacts
 from dataclasses import dataclass
 from typing import Dict, Any
@@ -31,5 +31,5 @@ class DataAggregationProcessor:
             "custom_plots": paths.Paths.CUSTOM_PLOTS_FOR_AGGREGATED_FEATURES_PATH.value,
         }
         generate_artifacts(
-            self.general_config, data, "stage_7_rolling_aggregate_data", paths_dict
+            self.general_config, self.data_config, data, "stage_7_rolling_aggregate_data", paths_dict
         )

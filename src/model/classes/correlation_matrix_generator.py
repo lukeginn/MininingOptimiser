@@ -1,5 +1,5 @@
 import config.paths as paths
-from shared.model.correlation_matrix_processor import CorrelationMatrixProcessor
+from shared.model.classes.correlation_matrix_processor import CorrelationMatrixProcessor
 from dataclasses import dataclass
 
 

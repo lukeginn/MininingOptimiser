@@ -1,5 +1,5 @@
 import config.paths as paths
-from shared.data.lag_introducer import LagIntroducer
+from shared.data.classes.lag_introducer import LagIntroducer
 from src.utils.generate_artifacts import generate_artifacts
 from dataclasses import dataclass
 from typing import Dict, Any
@@ -34,5 +34,5 @@ class LagsProcessor:
             "custom_plots": paths.Paths.CUSTOM_PLOTS_FOR_LAGGED_FEATURES_PATH.value,
         }
         generate_artifacts(
-            self.general_config, data, "stage_6_lags_introduced", paths_dict
+            self.general_config, self.data_config, data, "stage_6_lags_introduced", paths_dict
         )

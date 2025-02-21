@@ -8,7 +8,7 @@ from pygam.terms import TermList, SplineTerm
 import pandas as pd
 from sklearn.inspection import permutation_importance
 from sklearn.ensemble import GradientBoostingRegressor, HistGradientBoostingRegressor
-from shared.model.inference_processor import InferenceProcessor
+from shared.model.classes.inference_processor import InferenceProcessor
 from dataclasses import dataclass, field
 from typing import List, Optional, Dict, Any, Tuple
 
