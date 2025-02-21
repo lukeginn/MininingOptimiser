@@ -50,20 +50,21 @@ In this stage, we clean and prepare the data for analysis. This includes handlin
 These steps ensure that the data is cleaned, transformed, and ready for model training, evaluation, clusering, simulation and optimisation.
 
 The following time-series trends describe some of the key features in our project:
-
-![Time-Series Plot](outputs/time_series_plots/stage_10_filtering_shutdowns/IRON_FEED_PERC_mean_time_series_plot.png)
-![Time-Series Plot](outputs/time_series_plots/stage_10_filtering_shutdowns/SILICA_FEED_PERC_mean_time_series_plot.png)
-![Time-Series Plot](outputs/time_series_plots/stage_10_filtering_shutdowns/AMINA_FLOW_mean_time_series_plot.png)
-![Time-Series Plot](outputs/time_series_plots/stage_10_filtering_shutdowns/FLOTATION_COLUMN_01_AIR_FLOW_mean_time_series_plot.png)
-![Time-Series Plot](outputs/time_series_plots/stage_10_filtering_shutdowns/FLOTATION_COLUMN_01_LEVEL_mean_time_series_plot.png)
-![Time-Series Plot](outputs/time_series_plots/stage_10_filtering_shutdowns/IRON_CONCENTRATE_PERC_mean_time_series_plot.png)
-![Time-Series Plot](outputs/time_series_plots/stage_10_filtering_shutdowns/SILICA_CONCENTRATE_PERC_mean_time_series_plot.png)
+| ![Time-Series Plot](outputs/time_series_plots/stage_10_filtering_shutdowns/IRON_FEED_PERC_mean_time_series_plot.png) | ![Time-Series Plot](outputs/time_series_plots/stage_10_filtering_shutdowns/SILICA_FEED_PERC_mean_time_series_plot.png) |
+|:-------------------------------------------------------------------------------------------------:|:--------------------------------------------------------------------------------------------------:|
+| ![Time-Series Plot](outputs/time_series_plots/stage_10_filtering_shutdowns/AMINA_FLOW_mean_time_series_plot.png) | ![Time-Series Plot](outputs/time_series_plots/stage_10_filtering_shutdowns/ORE_PULP_PH_mean_time_series_plot.png) |
+| ![Time-Series Plot](outputs/time_series_plots/stage_10_filtering_shutdowns/FLOTATION_COLUMN_01_AIR_FLOW_mean_time_series_plot.png) | ![Time-Series Plot](outputs/time_series_plots/stage_10_filtering_shutdowns/FLOTATION_COLUMN_01_LEVEL_mean_time_series_plot.png) |
+| ![Time-Series Plot](outputs/time_series_plots/stage_10_filtering_shutdowns/IRON_CONCENTRATE_PERC_mean_time_series_plot.png) | ![Time-Series Plot](outputs/time_series_plots/stage_10_filtering_shutdowns/SILICA_CONCENTRATE_PERC_mean_time_series_plot.png) |
 
 ### 2. Machine Learning Model Training
 
-Here, we train various machine learning models using the preprocessed data. We experiment with different algorithms and hyperparameters to find the best-performing model for predicting the concentration of iron and silica. The modeling steps are as follows:
+Here, we train various machine learning models using the preprocessed data. We experiment with different algorithms and hyperparameters to find the best-performing model for predicting the concentration of iron and silica.
 
-- **Model Training**: The `ModelTrainer` class handles loading data, splitting data, training models, hyperparameter tuning, and evaluating models. Various machine learning algorithms such as Linear Regression, Decision Trees, Random Forests, and Gradient Boosting are used.
+Importantly, monotonicity constraints are applied to ensure that the learned trends aren't overfitting and corresponding to expected on-site trends. This process is typically done in collaboration with domain experts and carefully considered. Furthermore, monotonicity is critical during the optimisation stage, to significantly prevent the degree of local minima that can occur. It also aids in the understanding of why the optimisation arrived to its set of optimal settings for the flotation cells.
+
+The modeling steps are as follows:
+
+- **Model Training**: The `ModelTrainer` class handles loading data, splitting data, training models, hyperparameter tuning, and evaluating models. Various machine learning algorithms such as Linear Regression, Decision Trees, Random Forests, and Gradient Boosting are considered, however ultimately the Gradient Boosting algorithm was selected. This is because it produces non-linear trends, but also because it's able to model interactions between features in a non-linear maner. This non-linear interaction modelling is critical during the optimisation stage, where we try to find the optimal set of flotation settings.
 - **Model Evaluation**: The `ModelEvaluator` class handles loading models, evaluating performance on a test set using metrics such as Mean Absolute Error (MAE), Mean Squared Error (MSE), and R-squared, and generating evaluation reports.
 - **Model Persistence**: The `ModelPersistence` class handles saving the trained models to disk and loading them for future use.
 - **Model Inference**: The `ModelInference` class handles loading models, making predictions on new data, and generating output files or visualizations based on the predictions.
