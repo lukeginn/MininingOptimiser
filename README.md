@@ -72,16 +72,18 @@ These steps ensure that the models are trained, evaluated, saved and ready for d
 
 Ultimately the Gradient Boosting algorithm was selected. This was due to four properties: It's out-of-the-box accuracy, it's speed, it's responsivenes to monotonicity constraints and because it's able to model non-linear interactions between features. This non-linear interaction modelling is critical during the optimisation stage, where we try to find the optimal set of flotation settings.
 
-The iron concentration model and the silica concentration model produced R-squared values of 70% and 70% respectively. These are expressed visually in the following plots:
+The iron concentration model and the silica concentration model produced R-squared values of 69% and 72% respectively. These are expressed visually in the following plots:
 
 | ![Model Evaluation Plot](outputs/iron_concentrate_perc_model/model_evaluation_scatter_plot.png) | ![Model Evaluation Plot](outputs/silica_concentrate_perc_model/model_evaluation_scatter_plot.png) |
 |:-------------------------------------------------------------------------------------------------:|:--------------------------------------------------------------------------------------------------:|
 
-These model accuracies are good, but not impressive. However, in the context of optimisation, model accuracy is surprisingly unimportant. Consider the thought experiment of having only one variable in a system being modelled. The model accuracy may be very low, less than 10%. However, if we have a model that is able to perfectly model this one variables impact on the system, then we can perfectly optimize this variable. Therefore, we aim to produce a model that can understand features and their interactions, more than a model that can more-accurately predict the target by partial-overfitting. As mentioned earlier, monotonicity is a key modelling step that bridges this gap and can turn a model that typically overfits, into a model that is well regularized, potentially underfitting and appopriate for optimisation.
+These model accuracies are good, but not impressive. However, in the context of optimisation, model accuracy is surprisingly unimportant. Consider the thought experiment of having only one feature in a system being modelled. The model accuracy may be very low, less than 10% for example. However, if we have a model that is able to perfectly model this one features impact on the system, then we can perfectly optimize this feature. Therefore, we aim to produce a model that can understand features and their interactions, more than a model that can more-accurately predict the target by partial-overfitting. As mentioned earlier, monotonicity is a key modelling step that bridges this gap and can turn a model that typically overfits, into a model that is well regularized, potentially underfitting and appopriate for optimisation.
 
 ### 3. Clustering
 
-We use clustering techniques to group similar data points together. This helps in identifying patterns and trends in the data, which can be useful for further analysis and decision-making. The clustering steps are as follows:
+Here, the clustering and simulation steps take place. First, we create clusters for feed blends and controllable variables independently. This way we have an idea of the unique feed blends that pass through the flotation cells in the mineral processing facility. Then the controllable variables (air flow and level) in the flotation cell are clustered, so we have an idea of the unique set of settings that have historically been used to optimise the facilities outputs.
+
+ The clustering steps are as follows:
 
 - **Clustering Processor**: The `ClusteringProcessor` class handles loading data, selecting features, applying clustering algorithms, evaluating clusters, and generating artifacts. Various clustering algorithms such as K-Means, DBSCAN, and Agglomerative Clustering are used.
 - **Evaluating Clusters**: The quality of the clusters is evaluated using metrics such as Silhouette Score, Davies-Bouldin Index, and Inertia.
@@ -91,12 +93,16 @@ These steps ensure that the data is effectively clustered, providing valuable in
 
 ### 4. Simulation and Optimisation
 
-In this final stage, we simulate different mining scenarios using the trained models and optimize the operations to achieve the best possible outcomes. This involves running simulations, analyzing results, and making adjustments to improve efficiency and productivity. The simulation and optimization steps are as follows: The simulation and optimization steps are as follows:
+In this final stage, we simulate different mining scenarios using the trained models and optimize the operations to achieve the best possible outcomes. First, we combine the feed blend and controllable clusters together, such that for each unique controllable cluster, it's paired with each each unique feed blend cluster. This can result in a very large set of combinations and we must be careful in how many clusters we are producing. Secondly, we pass these cluster combinations through each of the machine learning models to predict the iron and silic concentrates. Finally, for each unique feed blend, we examine the set of predictions for the iron and silica concentrate and identify which are considered optimal. In our case, we aim to maximise the iron concentration and minimize the silica concentration. To achieve this we engineer a feature that is the iron concentration multiplied by the inverse of the silica concentration, and aim to maximise this singular variable. Now we can identify the set of flotation air flow and level settings that are optimal for each feed blend that pass through the processing facility.
 
-- **Simulation Processor**: The `SimulationProcessor` class handles loading models, running simulations, analyzing results, and generating reports. This helps in predicting the outcomes of different mining scenarios.
-- **Optimization Processor**: The `OptimizationProcessor` class handles loading data and models, defining objectives, applying optimization algorithms, evaluating solutions, and generating artifacts. Various optimization algorithms such as Genetic Algorithms, Particle Swarm Optimization, and Gradient Descent are used.
+The simulation and optimization steps are as follows: The simulation and optimization steps are as follows:
 
-These steps ensure that the mining operations are effectively simulated and optimized, providing valuable insights for improving efficiency and productivity in the mining process.These steps ensure that the mining operations are effectively simulated and optimized, providing valuable insights for improving efficiency and productivity in the mining process.
+- **Simulation Processor**: The `SimulationProcessor` class handles loading models and running simulations, by passing through cluster combinations through each machine learning model.
+- **Optimization Processor**: The `OptimizationProcessor` class handles loading simulations, defining objectives, applying constraints and optimising.
+
+These steps ensure that the mining operations are effectively simulated and optimized, providing valuable insights for improving efficiency and productivity in the mining process. These steps ensure that the mining operations are effectively simulated and optimized, providing valuable insights for improving efficiency and productivity in the mining process.
+
+Our optimisation results suggest that we can on average increase the iron and concentration percentage by 0.3% and decrease the silica concentration percentage by -0.6%.
 
 ## License
 

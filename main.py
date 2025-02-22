@@ -1,5 +1,6 @@
 import logging as logger
 import warnings
+import pandas as pd
 from typing import Any, Dict
 from src.setup.classes.setup import Setup
 from src.data.reading.classes.data_reader import DataReader
@@ -22,6 +23,8 @@ from src.model.classes.partial_plots_generator import PartialPlotsGenerator
 from src.clustering.classes.clustering import Clustering
 from src.simulating.classes.simulation_generator import SimulationGenerator
 from src.optimising.classes.cluster_optimiser import ClusterOptimiser
+from src.optimising.classes.historical_optimiser import HistoricalOptimiser
+from shared.data.functions.generate_time_series_plots import generate_time_series_plots
 
 logger.basicConfig(level=logger.INFO)
 warnings.filterwarnings("ignore")
@@ -40,16 +43,21 @@ def main() -> None:
     optimisation_config = setup_instance.optimisation_config
 
     data = run_data_processing(general_config, data_config)
-    model_processors = run_model_training_and_evaluation(data, model_config)
+    models = run_model_training_and_evaluation(data, model_config)
     merged_simulations, merged_feed_blend_simulations, controllables_clusters = (
         run_clustering_and_simulation(
-            data, model_processors, clustering_config, simulation_config, model_config
+            data, models, clustering_config, simulation_config, model_config
         )
     )
     run_optimisation(
+        data,
+        models,
         merged_simulations,
         merged_feed_blend_simulations,
         controllables_clusters,
+        general_config,
+        data_config,
+        model_config,
         clustering_config,
         optimisation_config,
     )
@@ -239,9 +247,14 @@ def run_clustering_and_simulation(
 
 
 def run_optimisation(
+    data: pd.DataFrame,
+    models: Dict[str, Any],
     merged_simulations: Any,
     merged_feed_blend_simulations: Any,
     controllables_clusters: Any,
+    general_config: Dict[str, Any],
+    data_config: Dict[str, Any],
+    model_config: Dict[str, Any],
     clustering_config: Dict[str, Any],
     optimisation_config: Dict[str, Any],
 ) -> None:
@@ -250,6 +263,17 @@ def run_optimisation(
     optimised_clusters = cluster_optimiser.run(
         merged_simulations, merged_feed_blend_simulations, controllables_clusters
     )
+
+    historical_optimiser = HistoricalOptimiser(
+        data,
+        models,
+        general_config,
+        data_config,
+        model_config,
+        clustering_config,
+    )
+    data = historical_optimiser.run(optimised_clusters)
+    historical_optimiser.generate_artifacts_for_optimised_data()
 
 
 if __name__ == "__main__":

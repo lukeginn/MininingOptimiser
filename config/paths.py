@@ -54,6 +54,9 @@ class Paths(Enum):
     TIME_SERIES_PLOTS_FOR_FILTERING_SHUTDOWN_PATH = (
         TIME_SERIES_PLOTS_PATH / "stage_10_filtering_shutdowns"
     )
+    TIME_SERIES_PLOTS_FOR_OPTIMISED_DATA_PATH = (
+        TIME_SERIES_PLOTS_PATH / "stage_11_optimised_data"
+    )
 
     HISTOGRAM_PLOTS_PATH = OUTPUTS_PATH / "histogram_plots"
     HISTOGRAM_PLOTS_FOR_RAW_DATA_PATH = HISTOGRAM_PLOTS_PATH / "stage_1_raw_data"
@@ -83,6 +86,9 @@ class Paths(Enum):
     )
     HISTOGRAM_PLOTS_FOR_FILTERING_SHUTDOWN_PATH = (
         HISTOGRAM_PLOTS_PATH / "stage_10_filtering_shutdowns"
+    )
+    HISTOGRAM_PLOTS_FOR_OPTIMISED_DATA_PATH = (
+        HISTOGRAM_PLOTS_PATH / "stage_11_optimised_data"
     )
 
     CUSTOM_PLOTS_PATH = OUTPUTS_PATH / "custom_plots"
@@ -114,6 +120,7 @@ class Paths(Enum):
     CUSTOM_PLOTS_FOR_FILTERING_SHUTDOWN_PATH = (
         CUSTOM_PLOTS_PATH / "stage_10_filtering_shutdowns"
     )
+    CUSTOM_PLOTS_FOR_OPTIMISED_DATA_PATH = CUSTOM_PLOTS_PATH / "stage_11_optimised_data"
 
     IRON_CONCENTRATE_PERC_MODELS_PATH = OUTPUTS_PATH / "iron_concentrate_perc_model"
     IRON_CONCENTRATE_PERC_CORRELATION_MATRIX_CSV_PATH = (
