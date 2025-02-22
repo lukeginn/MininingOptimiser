@@ -37,6 +37,7 @@ iron_concentrate_perc:
     model_name: 'iron_concentrate_perc'
     metric: 'rmse'
     generate_feature_importance: True
+    save: False
 
     hyperparameters:
       learning_rate: 
@@ -78,6 +79,7 @@ iron_concentrate_perc:
       method: 'kendall'
 
   partial_plots:
+    generate: False
     plot_confidence_interval: True
     plot_feature_density: True
     plot_feature_density_as_histogram: False
@@ -123,6 +125,7 @@ silica_concentrate_perc:
     model_name: 'silica_concentrate_perc'
     metric: 'rmse'
     generate_feature_importance: True
+    save: False
 
     hyperparameters:
       learning_rate: 
@@ -164,6 +167,7 @@ silica_concentrate_perc:
       method: 'kendall'
 
   partial_plots:
+    generate: False
     plot_confidence_interval: True
     plot_feature_density: True
     plot_feature_density_as_histogram: False

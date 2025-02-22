@@ -63,7 +63,7 @@ controllables_model:
     - 'SILICA_CONCENTRATE_PERC_mean'
   include_row_count_sum: True
   model_choice: 'kmeans'
-  k_means_n_clusters: 10
+  k_means_n_clusters: 100
   k_means_max_iter: 300
   dbscan_eps: 0.5
   dbscan_min_samples: 5
