@@ -132,7 +132,7 @@ The simulation and optimization steps /classes are as follows: The simulation an
 
 These steps ensure that the mining operations are effectively simulated and optimized, providing valuable insights for improving efficiency and productivity in the mining process.
 
-Overlaying the historical and optimised iron and silica concentration percentage trends. We can see, on average, there's an improvement iron concentration and silica concentration. Furthermore, we can see there is improved stability concentrations. In a mineral processing facility, stability in the output is another desirable outcome as all downstream proceesses become more stable and the grade sold on the market is of a more consistent quality. We can see this in the following trends:
+Overlaying the historical and optimised iron and silica concentration percentage trends. We can see, on average, there's an improvement iron concentration and silica concentration. Furthermore, we can see there is improved stability concentrations. In a mineral processing facility, stability in the output is another desirable outcome as all downstream processes become more stable and the grade sold on the market is of a more consistent quality. We can see this in the following trends:
 
 | ![Optimisation Plot](outputs/custom_plots/stage_11_optimised_data/iron_concentrate_perc_improvement_time_series.png) | ![Optimisation Plot](outputs/custom_plots/stage_11_optimised_data/silica_concentrate_perc_improvement_time_series.png) |
 |:-------------------------------------------------------------------------------------------------:|:--------------------------------------------------------------------------------------------------:|
