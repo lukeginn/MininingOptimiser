@@ -24,10 +24,14 @@ def create_optimal_historical_data(
     )
 
     data = _generate_historical_optimised_target(
-        data, model, model_choice, model_target, model_training_features
+        data,
+        model,
+        model_choice,
+        model_target,
+        model_training_features,
+        feed_blend_features,
+        controllable_features,
     )
-
-    data = _feature_engineer_optimised_features(data, model_target)
 
     return data
 
@@ -51,7 +55,7 @@ def _identify_closest_feed_blend_cluster(data, optimal_clusters, feed_blend_feat
 def _apply_optimal_controllable_features(data, optimal_clusters, controllable_features):
 
     for feature in controllable_features:
-        data[feature] = data["closest_feed_blend_cluster"].apply(
+        data[f"{feature}_simulations"] = data["closest_feed_blend_cluster"].apply(
             lambda x: optimal_clusters.loc[x, f"{feature}_simulations"]
         )
 
@@ -59,20 +63,34 @@ def _apply_optimal_controllable_features(data, optimal_clusters, controllable_fe
 
 
 def _generate_historical_optimised_target(
-    data, model, model_choice, model_target, model_training_features
+    data,
+    model,
+    model_choice,
+    model_target,
+    model_training_features,
+    feed_blend_features,
+    controllable_features,
 ):
     inference_processor = InferenceProcessor(model_choice=model_choice)
-    predictions = inference_processor.run(
+    historical_predictions = inference_processor.run(
         models=model,
         data=data[model_training_features],
     )
-    data[f"{model_target}_optimised"] = predictions
-
-    return data
-
-
-def _feature_engineer_optimised_features(data, model_target):
-    data[f"{model_target}_optimisation_difference"] = (
-        data[f"{model_target}_optimised"] - data[model_target]
+    optimised_predictions = inference_processor.run(
+        models=model,
+        data=data[
+            feed_blend_features
+            + [f"{feature}_simulations" for feature in controllable_features]
+        ].rename(columns=lambda x: x.replace("_simulations", "")),
     )
+
+    data[f"{model_target}_historical_predictions"] = historical_predictions
+    data[f"{model_target}_optimised_predictions"] = optimised_predictions
+    data[f"{model_target}_optimisation_uplift"] = (
+        optimised_predictions - historical_predictions
+    )
+    data[f"{model_target}_with_optimised_uplift_applied"] = (
+        data[model_target] + data[f"{model_target}_optimisation_uplift"]
+    )
+
     return data

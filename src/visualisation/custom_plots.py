@@ -16,12 +16,12 @@ def custom_plots(data, path):
 
 def optimisation_difference_time_series_plots(data, path):
 
-    if "IRON_CONCENTRATE_PERC_mean_optimisation_difference" in data.columns:
+    if "IRON_CONCENTRATE_PERC_mean_with_optimised_uplift_applied" in data.columns:
         plt.figure()
 
         plt.plot(
             data["DATE"],
-            data["IRON_CONCENTRATE_PERC_mean_optimised"],
+            data["IRON_CONCENTRATE_PERC_mean_with_optimised_uplift_applied"],
             label="Optimised",
             color="purple",
         )
@@ -40,12 +40,12 @@ def optimisation_difference_time_series_plots(data, path):
         )
         plt.close()
 
-    if "SILICA_CONCENTRATE_PERC_mean_optimisation_difference" in data.columns:
+    if "SILICA_CONCENTRATE_PERC_mean_with_optimised_uplift_applied" in data.columns:
         plt.figure()
 
         plt.plot(
             data["DATE"],
-            data["SILICA_CONCENTRATE_PERC_mean_optimised"],
+            data["SILICA_CONCENTRATE_PERC_mean_with_optimised_uplift_applied"],
             label="Optimised",
             color="purple",
         )
