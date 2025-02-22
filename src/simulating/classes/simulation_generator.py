@@ -106,6 +106,12 @@ class SimulationGenerator:
             "SILICA_CONCENTRATE_PERC_mean_simulated_predictions"
         ]
 
+        iron_concentrate_perc_simulation_results = (
+            self._feature_engineer_new_objective_function(
+                iron_concentrate_perc_simulation_results
+            )
+        )
+
         # Outputting to a csv file
         iron_concentrate_perc_simulation_results.to_csv(
             paths.Paths.FEED_BLEND_AND_CONTROLLABLES_SIMULATIONS_FILE.value, index=False
@@ -143,6 +149,17 @@ class SimulationGenerator:
         )
 
         return iron_concentrate_perc_feed_blend_simulation_results
+
+    def _feature_engineer_new_objective_function(
+        self, simulations: pd.DataFrame
+    ) -> pd.DataFrame:
+
+        simulations["IRON_AND_SILICA_CONCENTRATE_PERC_mean_simulated_predictions"] = (
+            simulations["IRON_CONCENTRATE_PERC_mean_simulated_predictions"]
+            * (1 / simulations["SILICA_CONCENTRATE_PERC_mean_simulated_predictions"])
+        )
+
+        return simulations
 
     def override_values_in_clusters(self, clusters: pd.DataFrame) -> pd.DataFrame:
         # No overrides are currently occurring

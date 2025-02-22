@@ -1,7 +1,7 @@
 random_state: 42
 export_data: False
 generate_meta_data: False
-generate_time_series_plots: False
+generate_time_series_plots: True
 generate_histogram_plots:
   run: False
   number_of_bins: 30
