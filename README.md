@@ -11,6 +11,10 @@ This repository contains the code and configuration files for the Kaggle Mining 
 - [Installation](#installation)
 - [Configuration](#configuration)
 - [Discussion](#discussion)
+    - [1. Data Preprocessing](#1-data-preprocessing)
+    - [2. Machine Learning Model Training](#2-machine-learning-model-training)
+    - [3. Clustering](#3-clustering)
+    - [4. Simulation and Optimisation](#4-simulation-and-optimisation)
 - [License](#license)
 
 ## Introduction
@@ -37,14 +41,16 @@ pip install -r requirements.txt
 
 ## Configuration
 
-The project is configured via YAML files in the config directory:
+## Configuration
 
-'general.yaml': Project-wide settings (logging, output paths).
-'data.yaml': Data loading and preprocessing parameters.
-'model.yaml': Machine learning model configuration (algorithms, hyperparameters).
-'clustering.yaml': Clustering settings (algorithms, parameters).
-'simulation.yaml': Simulation scenario definitions.
-'optimisation.yaml': Optimization objectives and constraints.
+The project is configured via YAML files in the `config` directory:
+
+- `general.yaml`: Project-wide settings (logging, output paths).
+- `data.yaml`: Data loading and preprocessing parameters.
+- `model.yaml`: Machine learning model configuration (algorithms, hyperparameters).
+- `clustering.yaml`: Clustering settings (algorithms, parameters).
+- `simulation.yaml`: Simulation scenario definitions.
+- `optimisation.yaml`: Optimization objectives and constraints.
 
 Each file allows customization of its respective pipeline stage.
 
