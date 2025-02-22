@@ -102,7 +102,16 @@ The simulation and optimization steps are as follows: The simulation and optimiz
 
 These steps ensure that the mining operations are effectively simulated and optimized, providing valuable insights for improving efficiency and productivity in the mining process. These steps ensure that the mining operations are effectively simulated and optimized, providing valuable insights for improving efficiency and productivity in the mining process.
 
-Our optimisation results suggest that we can on average increase the iron and concentration percentage by 0.3% and decrease the silica concentration percentage by -0.6%.
+The optimisation results of which are produced in the following trends. They describe if you applied the optimal flotation settings historically, the improvement as a trend in iron and silica concentrate would look like:
+
+
+| ![Optimisation Plot](outputs/time_series_plots/stage_11_optimised_data/IRON_CONCENTRATE_PERC_mean_optimisation_difference_time_series_plot.png) | ![Optimisation Plot](outputs/time_series_plots/stage_11_optimised_data/SILICA_CONCENTRATE_PERC_mean_optimisation_difference_time_series_plot.png) |
+|:-------------------------------------------------------------------------------------------------:|:--------------------------------------------------------------------------------------------------:|
+
+Overlaying the historical and optimised iron and silica concentration percentage trends, we a new story emerges. We can see, not only is an improvement in the concentration achieved, but there is improved stability in the concentration output. In a mineral processing facility, stability in the output is another desirable outcome as all downstream proceesses become more stable and the grade sold on the market is of a more consistent quality. We can see this in the following trends:
+
+| ![Optimisation Plot](outputs/custom_plots/stage_11_optimised_data/iron_concentrate_perc_improvement_time_series.png) | ![Optimisation Plot](outputs/custom_plots/stage_11_optimised_data/silica_concentrate_perc_improvement_time_series.png) |
+|:-------------------------------------------------------------------------------------------------:|:--------------------------------------------------------------------------------------------------:|
 
 ## License
 
