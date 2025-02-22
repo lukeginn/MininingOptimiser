@@ -114,8 +114,9 @@ In this project, PDPs are used to verify that the monotonicity constraints are e
 
 Here's an example of some of the most important drivers in the iron concentration model, before and after monotonicity was applied:
 
-| ![Time-Series Plot](outputs/iron_concentrate_perc_model_without_montonicity_constraints/partial_plots/plots/partial_dependence_plot_for_IRON_FEED_PERC_mean.png) | ![Time-Series Plot](outputs/iron_concentrate_perc_model/partial_plots/plots/partial_dependence_plot_for_IRON_FEED_PERC_mean.png) |
-| ![Time-Series Plot](outputs/iron_concentrate_perc_model_without_montonicity_constraints/partial_plots/plots/partial_dependence_plot_for_SILICA_FEED_PERC_mean.png) | ![Time-Series Plot](outputs/iron_concentrate_perc_model/partial_plots/plots/partial_dependence_plot_for_SILICA_FEED_PERC_mean.png) |
+| ![Partial Plots](outputs/iron_concentrate_perc_model_without_montonicity_constraints/partial_plots/plots/partial_dependence_plot_for_IRON_FEED_PERC_mean.png) | ![Partial Plots](outputs/iron_concentrate_perc_model/partial_plots/plots/partial_dependence_plot_for_IRON_FEED_PERC_mean.png) |
+|:-------------------------------------------------------------------------------------------------:|:--------------------------------------------------------------------------------------------------:|
+| ![Partial Plots](outputs/iron_concentrate_perc_model_without_montonicity_constraints/partial_plots/plots/partial_dependence_plot_for_SILICA_FEED_PERC_mean.png) | ![Partial Plots](outputs/iron_concentrate_perc_model/partial_plots/plots/partial_dependence_plot_for_SILICA_FEED_PERC_mean.png) |
 
 #### Model Evaluation
 
