@@ -33,7 +33,7 @@ iron_concentrate_perc:
       - 'FLOTATION_COLUMN_07_LEVEL_mean'
     model_choice: 'gbm'
     random_state: 42
-    number_of_models: 1
+    number_of_models: 50
     model_name: 'iron_concentrate_perc'
     metric: 'rmse'
     generate_feature_importance: True
@@ -121,7 +121,7 @@ silica_concentrate_perc:
       - 'FLOTATION_COLUMN_07_LEVEL_mean'
     model_choice: 'gbm'
     random_state: 42
-    number_of_models: 1
+    number_of_models: 50
     model_name: 'silica_concentrate_perc'
     metric: 'rmse'
     generate_feature_importance: True
