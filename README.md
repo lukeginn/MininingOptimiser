@@ -100,14 +100,31 @@ The modeling steps / classes are as follows:
 
 These steps ensure that the models are trained, evaluated, saved, and ready for deployment in the mining optimization process.
 
+#### Model Selection
+
 Ultimately, the Gradient Boosting algorithm was selected. This was because of four properties: its out-of-the-box accuracy, its speed, its responsiveness to monotonicity constraints, and its ability to model non-linear interactions between features. This non-linear interaction modeling is critical during the optimisation stage, where we try to find the optimal set of flotation settings.
+
+#### Partial Dependence Plots
+
+PDPs are created by simulating the model's predictions over a range of values for the feature(s) of interest, while keeping all other features constant. This allows us to visualize how changes in the feature(s) impact the model's predictions. PDPs are particularly useful for interpreting complex models like Gradient Boosting, as they provide insights into the model's behavior and feature interactions.
+
+To determine if monotonicity needs to be applied, we can examine the PDPs for any unexpected or non-intuitive trends. For example, if the PDP shows that increasing a feature value leads to a decrease in the predicted outcome, contrary to domain knowledge, it indicates that monotonicity constraints might be necessary.
+
+In this project, PDPs are used to verify that the monotonicity constraints are effectively capturing the expected trends and to ensure that the model's predictions are realistic and suitable for optimization.
+
+Here's an example of some of the most important drivers in the iron concentration model, before and after monotonicity was applied:
+
+| ![Time-Series Plot](outputs/iron_concentrate_perc_model_without_montonicity_constraints/partial_plots/plots/partial_dependence_plot_for_IRON_FEED_PERC_mean.png) | ![Time-Series Plot](outputs/iron_concentrate_perc_model/partial_plots/plots/partial_dependence_plot_for_IRON_FEED_PERC_mean.png) |
+| ![Time-Series Plot](outputs/iron_concentrate_perc_model_without_montonicity_constraints/partial_plots/plots/partial_dependence_plot_for_SILICA_FEED_PERC_mean.png) | ![Time-Series Plot](outputs/iron_concentrate_perc_model/partial_plots/plots/partial_dependence_plot_for_SILICA_FEED_PERC_mean.png) |
+
+#### Model Evaluation
 
 The iron concentration model and the silica concentration model produced R-squared values of 69% and 72% respectively. These are expressed visually in the following plots:
 
 | ![Model Evaluation Plot](outputs/iron_concentrate_perc_model/model_evaluation_scatter_plot.png) | ![Model Evaluation Plot](outputs/silica_concentrate_perc_model/model_evaluation_scatter_plot.png) |
 |:-------------------------------------------------------------------------------------------------:|:--------------------------------------------------------------------------------------------------:|
 
-These model accuracies are good, but not impressive. However, in the context of optimisation, model accuracy is surprisingly unimportant. Consider the thought experiment of having only one feature in a system being modelled. The model accuracy may be very low, less than 10% for example. However, if we have a model that is able to perfectly model this one feature's impact on the system, then we can perfectly optimize this feature. Therefore, we aim to produce a model that can understand features and their interactions, more than a model that can accurately predict the target by partial-overfitting. As mentioned earlier, monotonicity is a key modeling step that bridges this gap and can turn a model that typically overfits, into a model that is well regularized, potentially underfitting, and appropriate for optimisation.
+These model accuracies are good, but not impressive. However, in the context of optimization, model accuracy is surprisingly unimportant. Consider the thought experiment of having only one feature in a system being modeled. The model accuracy may be very low, less than 10% for example. However, if we have a model that is able to perfectly model this one feature's impact on the system, then we can perfectly optimize this feature. Therefore, we aim to produce a model that can understand features and their interactions, more than a model that can accurately predict the target by partial-overfitting. As mentioned earlier, monotonicity is a key modeling step that bridges this gap and can turn a model that typically overfits, into a model that is well regularized, potentially underfitting, and appropriate for optimization.
 
 ### 3. Clustering
 
@@ -132,7 +149,7 @@ The simulation and optimization steps /classes are as follows: The simulation an
 
 These steps ensure that the mining operations are effectively simulated and optimized, providing valuable insights for improving efficiency and productivity in the mining process.
 
-Overlaying the historical and optimised iron and silica concentration percentage trends. We can see, on average, there's an improvement iron concentration and silica concentration. Furthermore, we can see there is improved stability concentrations. In a mineral processing facility, stability in the output is another desirable outcome as all downstream processes become more stable and the grade sold on the market is of a more consistent quality. We can see this in the following trends:
+Overlaying the historical and optimised iron and silica concentration percentage trends. We can see, on average, there's an improved iron concentration and silica concentration. We can see this in the following trends:
 
 | ![Optimisation Plot](outputs/custom_plots/stage_11_optimised_data/iron_concentrate_perc_improvement_time_series.png) | ![Optimisation Plot](outputs/custom_plots/stage_11_optimised_data/silica_concentrate_perc_improvement_time_series.png) |
 |:-------------------------------------------------------------------------------------------------:|:--------------------------------------------------------------------------------------------------:|
