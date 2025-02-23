@@ -24,6 +24,8 @@ This repository contains the code and configuration files for the Kaggle Mining 
 
 The Kaggle Mining Optimiser addresses the critical challenge of maximizing mineral concentrate quality while ensuring process stability in mining operations. By leveraging machine learning, this project builds a simulation environment for a flotation unit, enabling the prediction and optimization of iron and silica concentrations based on feed inputs and flotation settings.
 
+The data for this project is a publicly available dataset in Kaggle, which can be found via the following link: https://www.kaggle.com/datasets/edumagalhaes/quality-prediction-in-a-mining-process
+
 This project is structured into four key stages:
 
 1.  **Data Preprocessing**: Comprehensive data cleaning and preparation, including handling missing values, outlier detection, feature engineering, and shutdown filtering, with automated artifact generation for transparency and understanding.
